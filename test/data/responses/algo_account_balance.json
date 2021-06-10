@@ -1,0 +1,12 @@
+{
+    "algorand/native/algo": {
+        "currency": {
+            "asset_path": "algorand/native/algo",
+            "symbol": "ALGO",
+            "name": "Algorand",
+            "decimals": 6,
+            "type": "native"
+        },
+        "balance": "175127831"
+    }
+}

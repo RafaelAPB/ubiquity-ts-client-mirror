@@ -1,0 +1,15 @@
+{
+    "handle": "bitcoin",
+    "source": "Ubiquity Database",
+    "genesis_number": 0,
+    "endpoints": [
+        "/account/:address/report",
+        "/account/:address/txs",
+        "/block/:id",
+        "/block/:number",
+        "/sync/block_id",
+        "/sync/block_number",
+        "/tx/:id",
+        "/txs"
+    ]
+}

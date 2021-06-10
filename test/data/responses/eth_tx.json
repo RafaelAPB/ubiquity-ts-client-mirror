@@ -1,0 +1,49 @@
+{
+    "id": "0x6821b32162ad40f979ad8e999ffbe358e5df0f54e1894d1b3fc3e01fce6a134b",
+    "coin": 60,
+    "addresses": [
+        "0x49bC2A9EE1A08dbCa7dd66629700E68AA8DB09aC",
+        "0xA090e606E30bD747d4E6245a1517EbE430F0057e",
+        "transaction_fees"
+    ],
+    "assets": [
+        "ethereum/native/eth"
+    ],
+    "date": 1622634240,
+    "height": 12554872,
+    "block_id": "0x9b519a6925c2f4118f952073d5cca342294ecea9f6b8517eb8288be61589b86a",
+    "status": "completed",
+    "operations": {
+        "fee": {
+            "type": "transfer",
+            "detail": {
+                "from": "0x49bC2A9EE1A08dbCa7dd66629700E68AA8DB09aC",
+                "to": "transaction_fees",
+                "currency": {
+                    "asset_path": "ethereum/native/eth",
+                    "symbol": "ETH",
+                    "name": "Ether",
+                    "decimals": 18,
+                    "type": "native"
+                },
+                "value": "420000000000000"
+            }
+        },
+        "native": {
+            "type": "transfer",
+            "detail": {
+                "from": "0x49bC2A9EE1A08dbCa7dd66629700E68AA8DB09aC",
+                "to": "0xA090e606E30bD747d4E6245a1517EbE430F0057e",
+                "currency": {
+                    "asset_path": "ethereum/native/eth",
+                    "symbol": "ETH",
+                    "name": "Ether",
+                    "decimals": 18,
+                    "type": "native"
+                },
+                "value": "4342450000000000"
+            }
+        }
+    },
+    "tags": []
+}

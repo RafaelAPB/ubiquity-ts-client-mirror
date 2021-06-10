@@ -1,17 +1,30 @@
-### Node Express template project
+## @
 
-This project is based on a GitLab [Project Template](https://docs.gitlab.com/ee/gitlab-basics/create-project.html).
+This generator creates TypeScript/JavaScript client that utilizes fetch-api. 
 
-Improvements can be proposed in the [original project](https://gitlab.com/gitlab-org/project-templates/express).
+### Building
 
-### CI/CD with Auto DevOps
+To build and compile the typescript sources to javascript use:
+```
+npm install
+npm run build
+```
 
-This template is compatible with [Auto DevOps](https://docs.gitlab.com/ee/topics/autodevops/).
+### Publishing
 
-If Auto DevOps is not already enabled for this project, you can [turn it on](https://docs.gitlab.com/ee/topics/autodevops/#enabling-auto-devops) in the project settings.
+First build the package then run ```npm publish```
 
-### Developing with Gitpod
+### Consuming
 
-This template has a fully-automated dev setup for [Gitpod](https://docs.gitlab.com/ee/integration/gitpod.html).
+navigate to the folder of your consuming project and run one of the following commands.
 
-If you open this project in Gitpod, you'll get all Node dependencies pre-installed and Express will open a web preview.
+_published:_
+
+```
+npm install @ --save
+```
+
+_unPublished (not recommended):_
+
+```
+npm install PATH_TO_GENERATED_PACKAGE --save

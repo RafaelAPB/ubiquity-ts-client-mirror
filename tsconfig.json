@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "target": "es5",
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "outDir": "dist",
+    "rootDir": ".",
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "types": [
+      "jest"
+    ]
+  },
+  "exclude": [
+    "dist",
+    "node_modules",
+    "example"
+  ]
+}
