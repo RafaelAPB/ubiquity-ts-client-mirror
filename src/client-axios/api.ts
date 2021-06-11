@@ -987,7 +987,6 @@ export const BlocksApiFp = function(configuration?: Configuration) {
          */
         async getBlock(platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', key: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Block>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getBlock(platform, network, key, options);
-            console.log("HERE>>>>>>>>")
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**

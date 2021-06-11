@@ -11,15 +11,10 @@
     "scripts": {
         "build-ts": "tsc",
         "build": "npm run build-ts && npm run lint",
-        "copy-static-assets": "ts-node copyStaticAssets.ts",
-        "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\" --quiet --fix",
-        "start": "npm run serve",
-        "test": "jest --forceExit --coverage --verbose",
-        "watch-test": "npm run test -- --watchAll",
-        "watch-ts": "tsc -w"
+        "start": "node app.js"
     },
     "dependencies": {
-        "axios": "^0.21.1"
+        "ubiquity-ts-client": "file:../"
       },
       "devDependencies": {
         "@types/node": "^12.11.5",

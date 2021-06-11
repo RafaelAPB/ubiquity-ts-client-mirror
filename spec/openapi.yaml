@@ -885,12 +885,19 @@ components:
       description: Coin platform handle
       schema:
         type: string
-        enum:
-          - bitcoin
-          - ethereum
-          - stellar
-          - xrp
-      example: ethereum
+      examples:
+        Bitcoin:
+          value: bitcoin
+          summary: Bitcoin
+        Ethereum:
+          value: ethereum
+          summary: Bitcoin
+        Stellar:
+          value: stellar
+          summary: Stellar
+        Ripple:
+          value: xrp
+          summary: Ripple
     network:
       name: network
       in: path
@@ -898,9 +905,11 @@ components:
       description: Which network to target. Available networks can be found with /{platform}
       schema:
         type: string
-        enum:
-          - mainnet
-      example: mainnet
+      examples:
+        Mainnet:
+          value: mainnet
+        Testnet:
+          value: testnet
     address:
       name: address
       in: path
