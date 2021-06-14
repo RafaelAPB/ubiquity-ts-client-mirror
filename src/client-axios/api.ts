@@ -376,13 +376,13 @@ export interface SmartToken {
      * @type {string}
      * @memberof SmartToken
      */
-    type?: string;
+    type: string;
     /**
      * Address of contract
      * @type {string}
      * @memberof SmartToken
      */
-    contract?: string;
+    contract: string;
 }
 /**
  * 
@@ -432,19 +432,19 @@ export interface Token {
      * @type {string}
      * @memberof Token
      */
-    type?: string;
+    type: string;
     /**
      * Token identifier
      * @type {string}
      * @memberof Token
      */
-    id?: string;
+    id: string;
     /**
      * Address that created token
      * @type {string}
      * @memberof Token
      */
-    creator?: string;
+    creator: string;
 }
 /**
  * Transfer of currency from one account to another
@@ -457,25 +457,25 @@ export interface Transfer {
      * @type {string}
      * @memberof Transfer
      */
-    from?: string;
+    from: string;
     /**
      * Receiver address
      * @type {string}
      * @memberof Transfer
      */
-    to?: string;
+    to: string;
     /**
      * 
      * @type {Currency}
      * @memberof Transfer
      */
-    currency?: Currency;
+    currency: Currency;
     /**
      * Integer string in smallest unit (Satoshis)
      * @type {string}
      * @memberof Transfer
      */
-    value?: string;
+    value: string;
 }
 /**
  * 
@@ -500,13 +500,13 @@ export interface Tx {
      * @type {Set<string>}
      * @memberof Tx
      */
-    addresses?: Set<string>;
+    addresses?: Set<string> | null;
     /**
      * List of moved assets by asset path
      * @type {Set<string>}
      * @memberof Tx
      */
-    assets?: Set<string>;
+    assets?: Set<string> | null;
     /**
      * Unix timestamp
      * @type {number}
@@ -531,6 +531,12 @@ export interface Tx {
      * @memberof Tx
      */
     status?: TxStatusEnum;
+    /**
+     * List of tags for this transaction
+     * @type {Set<string>}
+     * @memberof Tx
+     */
+    tags?: Set<string> | null;
     /**
      * Operations in this transaction (opaque keys).
      * @type {{ [key: string]: Operation; }}
@@ -615,25 +621,25 @@ export interface UtxoTransfer {
      * @type {Array<Utxo>}
      * @memberof UtxoTransfer
      */
-    inputs?: Array<Utxo>;
+    inputs: Array<Utxo>;
     /**
      * 
      * @type {Array<Utxo>}
      * @memberof UtxoTransfer
      */
-    outputs?: Array<Utxo>;
+    outputs: Array<Utxo>;
     /**
      * 
      * @type {Currency}
      * @memberof UtxoTransfer
      */
-    currency?: Currency;
+    currency: Currency;
     /**
      * Integer string in smallest unit (Satoshis)
      * @type {string}
      * @memberof UtxoTransfer
      */
-    unspent?: string;
+    unspent: string;
 }
 
 /**
@@ -645,13 +651,13 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
         /**
          * Returns the account balances for all supported currencies. 
          * @summary Balances Of Address
-         * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-         * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {string} address Account address
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getBalancesByAddress: async (platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', address: string, options: any = {}): Promise<RequestArgs> => {
+        getBalancesByAddress: async (platform: string, network: string, address: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'platform' is not null or undefined
             assertParamExists('getBalancesByAddress', 'platform', platform)
             // verify required parameter 'network' is not null or undefined
@@ -691,8 +697,8 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
         /**
          * Gets transactions that an address was involved with, from newest to oldest. This call uses pagination. 
          * @summary Transactions Of Address
-         * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-         * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {string} address Account address
          * @param {'desc' | 'asc'} [order] Pagination order
          * @param {string} [continuation] Continuation token from earlier response
@@ -700,7 +706,7 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTxsByAddress: async (platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, options: any = {}): Promise<RequestArgs> => {
+        getTxsByAddress: async (platform: string, network: string, address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'platform' is not null or undefined
             assertParamExists('getTxsByAddress', 'platform', platform)
             // verify required parameter 'network' is not null or undefined
@@ -762,21 +768,21 @@ export const AccountsApiFp = function(configuration?: Configuration) {
         /**
          * Returns the account balances for all supported currencies. 
          * @summary Balances Of Address
-         * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-         * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {string} address Account address
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getBalancesByAddress(platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', address: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<{ [key: string]: object; }>> {
+        async getBalancesByAddress(platform: string, network: string, address: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<{ [key: string]: object; }>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getBalancesByAddress(platform, network, address, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Gets transactions that an address was involved with, from newest to oldest. This call uses pagination. 
          * @summary Transactions Of Address
-         * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-         * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {string} address Account address
          * @param {'desc' | 'asc'} [order] Pagination order
          * @param {string} [continuation] Continuation token from earlier response
@@ -784,7 +790,7 @@ export const AccountsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getTxsByAddress(platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TxPage>> {
+        async getTxsByAddress(platform: string, network: string, address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TxPage>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getTxsByAddress(platform, network, address, order, continuation, limit, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -801,20 +807,20 @@ export const AccountsApiFactory = function (configuration?: Configuration, baseP
         /**
          * Returns the account balances for all supported currencies. 
          * @summary Balances Of Address
-         * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-         * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {string} address Account address
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getBalancesByAddress(platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', address: string, options?: any): AxiosPromise<{ [key: string]: object; }> {
+        getBalancesByAddress(platform: string, network: string, address: string, options?: any): AxiosPromise<{ [key: string]: object; }> {
             return localVarFp.getBalancesByAddress(platform, network, address, options).then((request) => request(axios, basePath));
         },
         /**
          * Gets transactions that an address was involved with, from newest to oldest. This call uses pagination. 
          * @summary Transactions Of Address
-         * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-         * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {string} address Account address
          * @param {'desc' | 'asc'} [order] Pagination order
          * @param {string} [continuation] Continuation token from earlier response
@@ -822,7 +828,7 @@ export const AccountsApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTxsByAddress(platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, options?: any): AxiosPromise<TxPage> {
+        getTxsByAddress(platform: string, network: string, address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, options?: any): AxiosPromise<TxPage> {
             return localVarFp.getTxsByAddress(platform, network, address, order, continuation, limit, options).then((request) => request(axios, basePath));
         },
     };
@@ -838,22 +844,22 @@ export class AccountsApi extends BaseAPI {
     /**
      * Returns the account balances for all supported currencies. 
      * @summary Balances Of Address
-     * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-     * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+     * @param {string} platform Coin platform handle
+     * @param {string} network Which network to target. Available networks can be found with /{platform}
      * @param {string} address Account address
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AccountsApi
      */
-    public getBalancesByAddress(platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', address: string, options?: any) {
+    public getBalancesByAddress(platform: string, network: string, address: string, options?: any) {
         return AccountsApiFp(this.configuration).getBalancesByAddress(platform, network, address, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Gets transactions that an address was involved with, from newest to oldest. This call uses pagination. 
      * @summary Transactions Of Address
-     * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-     * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+     * @param {string} platform Coin platform handle
+     * @param {string} network Which network to target. Available networks can be found with /{platform}
      * @param {string} address Account address
      * @param {'desc' | 'asc'} [order] Pagination order
      * @param {string} [continuation] Continuation token from earlier response
@@ -862,7 +868,7 @@ export class AccountsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof AccountsApi
      */
-    public getTxsByAddress(platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, options?: any) {
+    public getTxsByAddress(platform: string, network: string, address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, options?: any) {
         return AccountsApiFp(this.configuration).getTxsByAddress(platform, network, address, order, continuation, limit, options).then((request) => request(this.axios, this.basePath));
     }
 }
@@ -877,13 +883,13 @@ export const BlocksApiAxiosParamCreator = function (configuration?: Configuratio
         /**
          * Get a block and all its transactions by the block number or hash
          * @summary Block By Number/Hash
-         * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-         * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {string} key Block number or block hash/ID or Special identifier
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getBlock: async (platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', key: string, options: any = {}): Promise<RequestArgs> => {
+        getBlock: async (platform: string, network: string, key: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'platform' is not null or undefined
             assertParamExists('getBlock', 'platform', platform)
             // verify required parameter 'network' is not null or undefined
@@ -923,13 +929,13 @@ export const BlocksApiAxiosParamCreator = function (configuration?: Configuratio
         /**
          * Get minimal block identifier by block number or hash
          * @summary Block Identifier By Number/Hash
-         * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-         * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {string} key Block number or block hash/ID or Special identifier
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getBlockIdentifier: async (platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', key: string, options: any = {}): Promise<RequestArgs> => {
+        getBlockIdentifier: async (platform: string, network: string, key: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'platform' is not null or undefined
             assertParamExists('getBlockIdentifier', 'platform', platform)
             // verify required parameter 'network' is not null or undefined
@@ -979,26 +985,26 @@ export const BlocksApiFp = function(configuration?: Configuration) {
         /**
          * Get a block and all its transactions by the block number or hash
          * @summary Block By Number/Hash
-         * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-         * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {string} key Block number or block hash/ID or Special identifier
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getBlock(platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', key: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Block>> {
+        async getBlock(platform: string, network: string, key: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Block>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getBlock(platform, network, key, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Get minimal block identifier by block number or hash
          * @summary Block Identifier By Number/Hash
-         * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-         * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {string} key Block number or block hash/ID or Special identifier
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getBlockIdentifier(platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', key: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BlockIdentifier>> {
+        async getBlockIdentifier(platform: string, network: string, key: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BlockIdentifier>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getBlockIdentifier(platform, network, key, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -1015,25 +1021,25 @@ export const BlocksApiFactory = function (configuration?: Configuration, basePat
         /**
          * Get a block and all its transactions by the block number or hash
          * @summary Block By Number/Hash
-         * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-         * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {string} key Block number or block hash/ID or Special identifier
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getBlock(platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', key: string, options?: any): AxiosPromise<Block> {
+        getBlock(platform: string, network: string, key: string, options?: any): AxiosPromise<Block> {
             return localVarFp.getBlock(platform, network, key, options).then((request) => request(axios, basePath));
         },
         /**
          * Get minimal block identifier by block number or hash
          * @summary Block Identifier By Number/Hash
-         * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-         * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {string} key Block number or block hash/ID or Special identifier
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getBlockIdentifier(platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', key: string, options?: any): AxiosPromise<BlockIdentifier> {
+        getBlockIdentifier(platform: string, network: string, key: string, options?: any): AxiosPromise<BlockIdentifier> {
             return localVarFp.getBlockIdentifier(platform, network, key, options).then((request) => request(axios, basePath));
         },
     };
@@ -1049,28 +1055,28 @@ export class BlocksApi extends BaseAPI {
     /**
      * Get a block and all its transactions by the block number or hash
      * @summary Block By Number/Hash
-     * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-     * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+     * @param {string} platform Coin platform handle
+     * @param {string} network Which network to target. Available networks can be found with /{platform}
      * @param {string} key Block number or block hash/ID or Special identifier
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BlocksApi
      */
-    public getBlock(platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', key: string, options?: any) {
+    public getBlock(platform: string, network: string, key: string, options?: any) {
         return BlocksApiFp(this.configuration).getBlock(platform, network, key, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Get minimal block identifier by block number or hash
      * @summary Block Identifier By Number/Hash
-     * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-     * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+     * @param {string} platform Coin platform handle
+     * @param {string} network Which network to target. Available networks can be found with /{platform}
      * @param {string} key Block number or block hash/ID or Special identifier
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BlocksApi
      */
-    public getBlockIdentifier(platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', key: string, options?: any) {
+    public getBlockIdentifier(platform: string, network: string, key: string, options?: any) {
         return BlocksApiFp(this.configuration).getBlockIdentifier(platform, network, key, options).then((request) => request(this.axios, this.basePath));
     }
 }
@@ -1085,12 +1091,12 @@ export const PlatformsApiAxiosParamCreator = function (configuration?: Configura
         /**
          * Provides information about supported endpoints and generic platform information. 
          * @summary Platform Info
-         * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-         * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPlatform: async (platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', options: any = {}): Promise<RequestArgs> => {
+        getPlatform: async (platform: string, network: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'platform' is not null or undefined
             assertParamExists('getPlatform', 'platform', platform)
             // verify required parameter 'network' is not null or undefined
@@ -1137,12 +1143,12 @@ export const PlatformsApiFp = function(configuration?: Configuration) {
         /**
          * Provides information about supported endpoints and generic platform information. 
          * @summary Platform Info
-         * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-         * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getPlatform(platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PlatformDetail>> {
+        async getPlatform(platform: string, network: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PlatformDetail>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPlatform(platform, network, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -1159,12 +1165,12 @@ export const PlatformsApiFactory = function (configuration?: Configuration, base
         /**
          * Provides information about supported endpoints and generic platform information. 
          * @summary Platform Info
-         * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-         * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPlatform(platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', options?: any): AxiosPromise<PlatformDetail> {
+        getPlatform(platform: string, network: string, options?: any): AxiosPromise<PlatformDetail> {
             return localVarFp.getPlatform(platform, network, options).then((request) => request(axios, basePath));
         },
     };
@@ -1180,13 +1186,13 @@ export class PlatformsApi extends BaseAPI {
     /**
      * Provides information about supported endpoints and generic platform information. 
      * @summary Platform Info
-     * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-     * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+     * @param {string} platform Coin platform handle
+     * @param {string} network Which network to target. Available networks can be found with /{platform}
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PlatformsApi
      */
-    public getPlatform(platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', options?: any) {
+    public getPlatform(platform: string, network: string, options?: any) {
         return PlatformsApiFp(this.configuration).getPlatform(platform, network, options).then((request) => request(this.axios, this.basePath));
     }
 }
@@ -1201,12 +1207,12 @@ export const SyncApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Get current block ID
-         * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-         * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        currentBlockID: async (platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', options: any = {}): Promise<RequestArgs> => {
+        currentBlockID: async (platform: string, network: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'platform' is not null or undefined
             assertParamExists('currentBlockID', 'platform', platform)
             // verify required parameter 'network' is not null or undefined
@@ -1243,12 +1249,12 @@ export const SyncApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Get current block number
-         * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-         * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        currentBlockNumber: async (platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', options: any = {}): Promise<RequestArgs> => {
+        currentBlockNumber: async (platform: string, network: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'platform' is not null or undefined
             assertParamExists('currentBlockNumber', 'platform', platform)
             // verify required parameter 'network' is not null or undefined
@@ -1295,24 +1301,24 @@ export const SyncApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get current block ID
-         * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-         * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async currentBlockID(platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+        async currentBlockID(platform: string, network: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.currentBlockID(platform, network, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
          * @summary Get current block number
-         * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-         * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async currentBlockNumber(platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<number>> {
+        async currentBlockNumber(platform: string, network: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<number>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.currentBlockNumber(platform, network, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -1329,23 +1335,23 @@ export const SyncApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Get current block ID
-         * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-         * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        currentBlockID(platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', options?: any): AxiosPromise<string> {
+        currentBlockID(platform: string, network: string, options?: any): AxiosPromise<string> {
             return localVarFp.currentBlockID(platform, network, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Get current block number
-         * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-         * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        currentBlockNumber(platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', options?: any): AxiosPromise<number> {
+        currentBlockNumber(platform: string, network: string, options?: any): AxiosPromise<number> {
             return localVarFp.currentBlockNumber(platform, network, options).then((request) => request(axios, basePath));
         },
     };
@@ -1361,26 +1367,26 @@ export class SyncApi extends BaseAPI {
     /**
      * 
      * @summary Get current block ID
-     * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-     * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+     * @param {string} platform Coin platform handle
+     * @param {string} network Which network to target. Available networks can be found with /{platform}
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SyncApi
      */
-    public currentBlockID(platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', options?: any) {
+    public currentBlockID(platform: string, network: string, options?: any) {
         return SyncApiFp(this.configuration).currentBlockID(platform, network, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary Get current block number
-     * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-     * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+     * @param {string} platform Coin platform handle
+     * @param {string} network Which network to target. Available networks can be found with /{platform}
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SyncApi
      */
-    public currentBlockNumber(platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', options?: any) {
+    public currentBlockNumber(platform: string, network: string, options?: any) {
         return SyncApiFp(this.configuration).currentBlockNumber(platform, network, options).then((request) => request(this.axios, this.basePath));
     }
 }
@@ -1395,13 +1401,13 @@ export const TransactionsApiAxiosParamCreator = function (configuration?: Config
         /**
          * 
          * @summary Transaction By Hash
-         * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-         * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {string} id Transaction ID/Hash
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTx: async (platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', id: string, options: any = {}): Promise<RequestArgs> => {
+        getTx: async (platform: string, network: string, id: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'platform' is not null or undefined
             assertParamExists('getTx', 'platform', platform)
             // verify required parameter 'network' is not null or undefined
@@ -1441,8 +1447,8 @@ export const TransactionsApiAxiosParamCreator = function (configuration?: Config
         /**
          * Get all transactions on the platform, starting with the lastest one. Each call returns a slice of the entire list. Use the returned continuation token to get the next part.
          * @summary All Transactions
-         * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-         * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {'desc' | 'asc'} [order] Pagination order
          * @param {string} [continuation] Continuation token from earlier response
          * @param {number} [limit] Max number of items to return in a response. Defaults to 25 and is capped at 100. 
@@ -1450,7 +1456,7 @@ export const TransactionsApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTxs: async (platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options: any = {}): Promise<RequestArgs> => {
+        getTxs: async (platform: string, network: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'platform' is not null or undefined
             assertParamExists('getTxs', 'platform', platform)
             // verify required parameter 'network' is not null or undefined
@@ -1513,21 +1519,21 @@ export const TransactionsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Transaction By Hash
-         * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-         * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {string} id Transaction ID/Hash
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getTx(platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Tx>> {
+        async getTx(platform: string, network: string, id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Tx>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getTx(platform, network, id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Get all transactions on the platform, starting with the lastest one. Each call returns a slice of the entire list. Use the returned continuation token to get the next part.
          * @summary All Transactions
-         * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-         * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {'desc' | 'asc'} [order] Pagination order
          * @param {string} [continuation] Continuation token from earlier response
          * @param {number} [limit] Max number of items to return in a response. Defaults to 25 and is capped at 100. 
@@ -1535,7 +1541,7 @@ export const TransactionsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getTxs(platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TxPage>> {
+        async getTxs(platform: string, network: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TxPage>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getTxs(platform, network, order, continuation, limit, assets, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -1552,20 +1558,20 @@ export const TransactionsApiFactory = function (configuration?: Configuration, b
         /**
          * 
          * @summary Transaction By Hash
-         * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-         * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {string} id Transaction ID/Hash
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTx(platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', id: string, options?: any): AxiosPromise<Tx> {
+        getTx(platform: string, network: string, id: string, options?: any): AxiosPromise<Tx> {
             return localVarFp.getTx(platform, network, id, options).then((request) => request(axios, basePath));
         },
         /**
          * Get all transactions on the platform, starting with the lastest one. Each call returns a slice of the entire list. Use the returned continuation token to get the next part.
          * @summary All Transactions
-         * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-         * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {'desc' | 'asc'} [order] Pagination order
          * @param {string} [continuation] Continuation token from earlier response
          * @param {number} [limit] Max number of items to return in a response. Defaults to 25 and is capped at 100. 
@@ -1573,7 +1579,7 @@ export const TransactionsApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTxs(platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any): AxiosPromise<TxPage> {
+        getTxs(platform: string, network: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any): AxiosPromise<TxPage> {
             return localVarFp.getTxs(platform, network, order, continuation, limit, assets, options).then((request) => request(axios, basePath));
         },
     };
@@ -1589,22 +1595,22 @@ export class TransactionsApi extends BaseAPI {
     /**
      * 
      * @summary Transaction By Hash
-     * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-     * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+     * @param {string} platform Coin platform handle
+     * @param {string} network Which network to target. Available networks can be found with /{platform}
      * @param {string} id Transaction ID/Hash
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TransactionsApi
      */
-    public getTx(platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', id: string, options?: any) {
+    public getTx(platform: string, network: string, id: string, options?: any) {
         return TransactionsApiFp(this.configuration).getTx(platform, network, id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Get all transactions on the platform, starting with the lastest one. Each call returns a slice of the entire list. Use the returned continuation token to get the next part.
      * @summary All Transactions
-     * @param {'bitcoin' | 'ethereum' | 'stellar' | 'xrp'} platform Coin platform handle
-     * @param {'mainnet'} network Which network to target. Available networks can be found with /{platform}
+     * @param {string} platform Coin platform handle
+     * @param {string} network Which network to target. Available networks can be found with /{platform}
      * @param {'desc' | 'asc'} [order] Pagination order
      * @param {string} [continuation] Continuation token from earlier response
      * @param {number} [limit] Max number of items to return in a response. Defaults to 25 and is capped at 100. 
@@ -1613,7 +1619,7 @@ export class TransactionsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TransactionsApi
      */
-    public getTxs(platform: 'bitcoin' | 'ethereum' | 'stellar' | 'xrp', network: 'mainnet', order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any) {
+    public getTxs(platform: string, network: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any) {
         return TransactionsApiFp(this.configuration).getTxs(platform, network, order, continuation, limit, assets, options).then((request) => request(this.axios, this.basePath));
     }
 }

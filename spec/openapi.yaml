@@ -594,6 +594,7 @@ components:
           items:
             type: string
             example: "0x123456070D674D44a7F9cb4Ab272bd88fAd004b5"
+          nullable: true
         assets:
           type: array
           description: List of moved assets by asset path
@@ -601,6 +602,7 @@ components:
           items:
             type: string
             example: "ethereum/native/eth"
+          nullable: true
         date:
           type: integer
           format: int64
@@ -621,6 +623,14 @@ components:
           type: string
           description: Result status of the transaction.
           enum: [ completed, failed ]
+        tags:
+          type: array
+          description: List of tags for this transaction
+          uniqueItems: true
+          items:
+            type: string
+            example: "coinbase"
+          nullable: true
         operations:
           type: object
           description: Operations in this transaction (opaque keys).
@@ -692,6 +702,11 @@ components:
           $ref: "#/components/schemas/currency"
         value:
           $ref: "#/components/schemas/amount"
+      required:
+        - from
+        - to
+        - currency
+        - value
     utxo_transfer:
       type: object
       description: Transfer of currency in the UTXO model
@@ -708,6 +723,11 @@ components:
           $ref: "#/components/schemas/currency"
         unspent:
           $ref: "#/components/schemas/amount"
+      required:
+        - inputs
+        - outputs
+        - currency
+        - unspent
     coin:
       type: object
       properties:
@@ -780,6 +800,10 @@ components:
           type: string
           description: Address that created token
           example: "GDUKMGUGDZQK6YHYA5Z6AY2G4XDSZPSZ3SW5UN3ARVMO6QSRDWP5YLEX"
+      required:
+        - type
+        - id
+        - creator
     smart_token:
       type: object
       properties:
@@ -791,6 +815,9 @@ components:
           type: string
           description: Address of contract
           example: "0xF00Fa860473130C1df10707223E66Cb4B839B165"
+      required:
+        - type
+        - contract
     utxo:
       type: object
       description: An unspent transaction output
@@ -888,16 +915,12 @@ components:
       examples:
         Bitcoin:
           value: bitcoin
-          summary: Bitcoin
         Ethereum:
           value: ethereum
-          summary: Bitcoin
         Stellar:
           value: stellar
-          summary: Stellar
         Ripple:
           value: xrp
-          summary: Ripple
     network:
       name: network
       in: path
@@ -954,10 +977,10 @@ components:
       examples:
         Block number:
           value: 8000000
+          summary: Block number
         "Block hash/ID":
           value: "0x4e454b49dc8a2e2a229e0ce911e9fd4d2aa647de4cf6e0df40cf71bff7283330"
+          summary: Block hash or Block ID
         Special identifier:
           value: current
-
-          
-          
+          summary: Special identifier for the current block
