@@ -4,22 +4,25 @@ stages:
 - test
 - deploy
 
-
-# This is the Gradle build system for JVM applications
-# https://gradle.org/
-# https://github.com/gradle/gradle
-image: node:15-alpine
+generate:
+  image: gradle:alpine
+  stage: build
+  script:
+    - java -jar openapi-generator-cli-5.2.0.jar generate -v -i spec/openapi.yaml -c open-api-conf.yaml -g typescript-axios -o ./src/client-axios
+  cache:
+    key: "$CI_COMMIT_REF_NAME"
+    policy: push
+    paths:
+      - src/client-axios
 
 build:
   image: node:15-alpine
   stage: build
   script:
-    - make generate
     - npm install
     - npm run build
   cache:
     key: "$CI_COMMIT_REF_NAME"
-    policy: push
     paths:
       - node_modules
       - src/client-axios
