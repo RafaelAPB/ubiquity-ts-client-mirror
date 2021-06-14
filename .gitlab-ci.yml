@@ -8,10 +8,7 @@ stages:
 # This is the Gradle build system for JVM applications
 # https://gradle.org/
 # https://github.com/gradle/gradle
-image: gradle:alpine
-
-before_script:
-  - export GRADLE_USER_HOME=`pwd`/.gradle
+image: node:15-alpine
 
 build:
   image: node:15-alpine
