@@ -1,6 +1,6 @@
 {
   "name": "ubiquity-ts-client",
-  "version": "2.0.0",
+  "version": "0.0.1",
   "description": "Client for ubiquity api",
   "author": " ubiquity-ts-client",
   "license": "Unlicense",
@@ -14,36 +14,15 @@
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsc --outDir dist/",
+    "build": "./node_modules/typescript/bin/tsc --outDir dist/",
     "prepublishOnly": "npm run build",
     "test-coverage": "jest --env=node --colors --coverage test",
-    "test": "npm run tsc-test && jest --env=node",
+    "test": "npm run tsc-test && jest",
     "tslint": "tslint --project .",
-    "tsc-test": "tsc --project . --noEmit"
+    "tsc-test": "./node_modules/typescript/bin/tsc --project . --noEmit"
   },
   "dependencies": {
     "axios": "^0.21.1"
-  },
-  "jest": {
-    "preset": "jest-expo",
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "testMatch": [
-      "**/test/**/*.ts?(x)",
-      "**/?(*.)+(spec|test).ts?(x)"
-    ],
-    "moduleFileExtensions": [
-      "ts",
-      "tsx"
-    ],
-    "globals": {
-      "ts-jest": {
-        "tsConfig": {
-          "jsx": "react"
-        }
-      }
-    }
   },
   "devDependencies": {
     "@babel/plugin-syntax-jsx": "^7.14.5",
@@ -61,7 +40,7 @@
     "jest-mock-axios": "^4.4.0",
     "nodemon": "2.0.7",
     "shelljs": "0.8.4",
-    "ts-jest": "26.5.0",
+    "ts-jest": "^26.5.0",
     "ts-node": "9.1.1",
     "typescript": "^3.6.4"
   }
