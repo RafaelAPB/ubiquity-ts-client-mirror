@@ -44,6 +44,7 @@ deploy:
   image: node:15-alpine
   stage: deploy
   script:
+    - npm install
     - echo "//${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}">.npmrc
     - npm publish
   cache:
@@ -53,9 +54,6 @@ deploy:
       - node_modules
       - src/client-axios
       - dist
-
-
-
 
 include:
   - template: Jobs/Build.gitlab-ci.yml # https://gitlab.com/gitlab-org/gitlab-foss/blob/master/lib/gitlab/ci/templates/Jobs/Build.gitlab-ci.yml
