@@ -1,8 +1,8 @@
 {
-  "name": "ubiquity-ts-client",
+  "name": "@ubiquity/ubiquity-ts-client",
   "version": "0.0.1",
   "description": "Client for ubiquity api",
-  "author": " ubiquity-ts-client",
+  "author": "blockdaemon",
   "license": "Unlicense",
   "keywords": [
     "axios",
