@@ -6,7 +6,7 @@
     "noImplicitAny": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "outDir": "dist",
+    "outDir": "lib",
     "rootDir": ".",
     "lib": [
       "es6",
@@ -21,6 +21,7 @@
   },
   "exclude": [
     "dist",
+    "lib",
     "node_modules",
     "example"
   ]

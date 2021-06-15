@@ -2,5 +2,3 @@ apiPackage: api
 modelPackage: model
 httpUserAgent: ubiquity-ts-client
 npmName: ubiquity-ts-client
-#generateApiTests: "true"
-#generateModelTests: "false"
