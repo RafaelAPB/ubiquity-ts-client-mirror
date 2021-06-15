@@ -10,6 +10,8 @@ npm install
 npm run build
 ```
 
+
+
 ### Publishing
 
 First build the package then run ```npm publish```

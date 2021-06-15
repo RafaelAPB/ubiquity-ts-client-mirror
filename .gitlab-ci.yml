@@ -44,9 +44,12 @@ deploy:
   image: node:15-alpine
   stage: deploy
   script:
+    - echo "@ubiquity:registry=https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/packages/npm/">>.npmrc
+    - echo "//gitlab.com/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}">>.npmrc
+    - echo "always-auth=true">>.npmrc
     - npm install
-    - echo "//${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}">.npmrc
     - npm publish
+
   cache:
     key: "$CI_COMMIT_REF_NAME"
     policy: pull

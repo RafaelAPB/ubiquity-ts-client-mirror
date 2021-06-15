@@ -9,12 +9,13 @@ export class UbiquityClient {
     transactionsApi: TransactionsApi;
     syncApi: SyncApi;
 
-    constructor(accessToken: string, basePath=BASE_URL ) {
+    constructor(accessToken: string, basePath=BASE_URL) {
         const configuration = new Configuration({
              accessToken,
              basePath  
           });
-
+        console.log(basePath);
+        console.log(accessToken);
         this.accountsApi = new AccountsApi(configuration);
         this.blocksApi = new BlocksApi(configuration);
         this.platformsApi = new PlatformsApi(configuration);
