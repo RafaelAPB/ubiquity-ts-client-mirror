@@ -1,5 +1,4 @@
-## @
-
+## Ubiquity Typscript client
 ### Building
 
 To build and compile the typescript sources to javascript use:
