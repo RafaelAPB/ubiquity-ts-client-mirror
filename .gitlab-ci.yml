@@ -35,17 +35,14 @@ build:
     - npm run build
   cache:
     key: "$CI_COMMIT_REF_NAME"
-    policy: push
     paths:
       - node_modules
       - lib
-
 
 test:
   image: node:15-alpine
   stage: test
   script: 
-    - npm install
     - npm run test
   cache:
     key: "$CI_COMMIT_REF_NAME"
