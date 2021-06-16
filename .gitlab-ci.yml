@@ -8,7 +8,6 @@ include:
 stages:
 - generate
 - build
-- test-code
 - test
 - deploy
 
@@ -36,13 +35,14 @@ build:
     - npm run build
   cache:
     key: "$CI_COMMIT_REF_NAME"
+    policy: push
     paths:
       - node_modules
       - lib
 
 test:
   image: node:15-alpine
-  stage: test-code
+  stage: test
   script: 
     - ls
     - npm run test

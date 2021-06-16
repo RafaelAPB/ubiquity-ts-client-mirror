@@ -9,6 +9,5 @@ git_push.sh
 package.json
 tsconfig.json
 README.md
-index.ts
 .npmignore
 .gitignore
