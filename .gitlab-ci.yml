@@ -13,7 +13,7 @@ generate:
     key: "$CI_COMMIT_REF_NAME"
     policy: push
     paths:
-      - src/client-axios
+      - src/generated
 
 build:
   image: node:15-alpine
@@ -26,20 +26,21 @@ build:
     policy: pull-push
     paths:
       - node_modules
-      - src/client-axios
-      - dist
+      - src/generated
+      - lib
 
 test:
   image: node:15-alpine
   stage: test
-  script: npm run test
+  script: 
+    - npm run test
   cache:
     key: "$CI_COMMIT_REF_NAME"
     policy: pull
     paths:
       - node_modules
-      - src/client-axios
-      - dist
+      - src/generated
+      - lib
 
 deploy:
   image: node:15-alpine
@@ -48,18 +49,17 @@ deploy:
     - echo "@ubiquity:registry=https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/packages/npm/">>.npmrc
     - echo "//gitlab.com/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}">>.npmrc
     - echo "always-auth=true">>.npmrc
-    - npm install
     - npm publish
-  only:
-  - tags
-
   cache:
     key: "$CI_COMMIT_REF_NAME"
     policy: pull
     paths:
       - node_modules
-      - src/client-axios
-      - dist
+      - src/generated
+      - lib
+  only:
+  - tags
+ 
 
 include:
   - template: Jobs/Build.gitlab-ci.yml # https://gitlab.com/gitlab-org/gitlab-foss/blob/master/lib/gitlab/ci/templates/Jobs/Build.gitlab-ci.yml
