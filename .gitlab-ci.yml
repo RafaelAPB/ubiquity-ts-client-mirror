@@ -23,6 +23,7 @@ build:
     - npm run build
   cache:
     key: "$CI_COMMIT_REF_NAME"
+    policy: pull-push
     paths:
       - node_modules
       - src/client-axios
@@ -49,6 +50,8 @@ deploy:
     - echo "always-auth=true">>.npmrc
     - npm install
     - npm publish
+  only:
+  - tags
 
   cache:
     key: "$CI_COMMIT_REF_NAME"
