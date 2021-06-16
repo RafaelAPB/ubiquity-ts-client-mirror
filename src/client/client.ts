@@ -14,8 +14,6 @@ export class UbiquityClient {
              accessToken,
              basePath  
           });
-        console.log(basePath);
-        console.log(accessToken);
         this.accountsApi = new AccountsApi(configuration);
         this.blocksApi = new BlocksApi(configuration);
         this.platformsApi = new PlatformsApi(configuration);
