@@ -15,7 +15,7 @@ generate:
   image: gradle:alpine
   stage: generate
   script:
-    - java -jar openapi-generator-cli-5.2.0.jar generate  -i spec/openapi.yaml -c open-api-conf.yaml -g typescript-axios -o ./src/generated
+    - java -jar openapi-generator-cli-5.2.0.jar generate -i spec/openapi.yaml -c open-api-conf.yaml -g typescript-axios -o ./src/generated
     - git config --global user.name "Mr.Roboto 🤖"
     - git config --global user.email "mrRoboto@blockdaemon.com"
     - git add ./src/generated
@@ -39,6 +39,7 @@ build:
     paths:
       - node_modules
       - lib
+
 
 test:
   image: node:15-alpine

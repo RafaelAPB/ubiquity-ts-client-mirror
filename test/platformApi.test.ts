@@ -1,4 +1,3 @@
-
 import { UbiquityClient, NETWORKS, PROTOCOL } from "../src/client";
 import globalAxios from "axios";
 import * as btcPlatformInfo from "./data/btc_platforminfo.json";
@@ -13,15 +12,14 @@ afterEach(() => {
 
 test("fetches platform info for btc successfully data from an API", async () => {
   (globalAxios.request as any).mockImplementation(() =>
-    Promise.resolve({status:200, data: btcPlatformInfo})
+    Promise.resolve({ status: 200, data: btcPlatformInfo })
   );
 
   const platform = await client.platformsApi.getPlatform(
-      PROTOCOL.BITCOIN,
-      NETWORKS.MAIN_NET
-    );
-    
+    PROTOCOL.BITCOIN,
+    NETWORKS.MAIN_NET
+  );
+
   expect(globalAxios.request).toBeCalledTimes(1);
   expect(platform.data).toEqual(btcPlatformInfo);
 });
-
