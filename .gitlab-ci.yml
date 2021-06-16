@@ -39,9 +39,6 @@ build:
     paths:
       - node_modules
       - lib
-  except:
-    changes:
-      - spec/openapi.yaml
 
 test:
   image: node:15-alpine
@@ -55,9 +52,6 @@ test:
     paths:
       - node_modules
       - lib
-  except:
-    changes:
-      - spec/openapi.yaml
 
 deploy:
   image: node:15-alpine
@@ -75,6 +69,4 @@ deploy:
       - lib
   only:
   - tags
-  except:
-    changes:
-      - spec/openapi.yaml
+ 
