@@ -1,6 +1,14 @@
+include:
+  - template: Jobs/Build.gitlab-ci.yml # https://gitlab.com/gitlab-org/gitlab-foss/blob/master/lib/gitlab/ci/templates/Jobs/Build.gitlab-ci.yml
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/License-Scanning.gitlab-ci.yml
+  - template: Security/Secret-Detection.gitlab-ci.yml
+  - template: Security/Dependency-Scanning.gitlab-ci.yml
+
 stages:
 - generate
 - build
+- test-code
 - test
 - deploy
 
@@ -31,8 +39,7 @@ build:
 
 test:
   image: node:15-alpine
-  stage: test
-  needs: ["eslint-sast"]
+  stage: test-code
   script: 
     - npm run test
   cache:
@@ -61,10 +68,3 @@ deploy:
   only:
   - tags
  
-
-include:
-  - template: Jobs/Build.gitlab-ci.yml # https://gitlab.com/gitlab-org/gitlab-foss/blob/master/lib/gitlab/ci/templates/Jobs/Build.gitlab-ci.yml
-  - template: Security/SAST.gitlab-ci.yml
-  - template: Security/License-Scanning.gitlab-ci.yml
-  - template: Security/Secret-Detection.gitlab-ci.yml
-  - template: Security/Dependency-Scanning.gitlab-ci.yml
