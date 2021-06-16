@@ -1,5 +1,5 @@
-import { UbiquityClient, NETWORKS, PROTOCOL } from "../../src/client";
-import { BlocksApi, Block, TxPage, Tx, Configuration } from "../../src/generated";
+import { UbiquityClient, NETWORKS, PROTOCOL } from "@ubiquity/ubiquity-ts-client";
+import { BlocksApi, Block, TxPage, Tx, Configuration } from "@ubiquity/ubiquity-ts-client";
 import { AxiosResponse } from "axios";
 
 async function app(): Promise<void> {
