@@ -31,7 +31,6 @@ build:
     - npm run build
   cache:
     key: "$CI_COMMIT_REF_NAME"
-    policy: pull-push
     paths:
       - node_modules
       - src/generated
