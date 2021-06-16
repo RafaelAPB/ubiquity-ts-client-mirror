@@ -40,7 +40,8 @@ test:
   image: node:15-alpine
   stage: test-code
   script: 
-    - ls ./node_modules/
+    - ls
+    - ls ./node_modules
     - npm run test
   cache:
     key: "$CI_COMMIT_REF_NAME"
