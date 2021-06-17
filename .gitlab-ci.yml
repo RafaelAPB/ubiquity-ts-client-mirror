@@ -28,8 +28,8 @@ generate:
     - git config --global user.name "Mr.Roboto 🤖"
     - git config --global user.email "mrRoboto@blockdaemon.com"
     - git add ./src/generated
-    - git commit -m "UB-00 Updating generated code with changes from ${CI_JOB_ID}"
-    - git push http://gitlab-ci-token:${AUTH_TOKEN_UBIQUITY_TS_CLIENT}@gitlab.com/Blockdaemon/ubiquity/ubiquity-ts-client.git HEAD:master
+    - git commit -m "UB-00 Updating generated code with changes from ${CI_JOB_ID}" || true
+    - git push http://gitlab-ci-token:${AUTH_TOKEN_UBIQUITY_TS_CLIENT}@gitlab.com/Blockdaemon/ubiquity/ubiquity-ts-client.git HEAD:master || true
   only:
     refs:
       - master
