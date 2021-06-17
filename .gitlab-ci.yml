@@ -33,8 +33,9 @@ build:
   script:
     - npm install
     - npm run build
+    - echo ${CI_COMMIT_REF_NAME}
   cache:
-    key: "$CI_COMMIT_REF_NAME"
+    key: ${CI_COMMIT_REF_NAME}
     policy: push
     paths:
       - node_modules
@@ -46,7 +47,7 @@ test:
   script: 
     - npm run test
   cache:
-    key: "$CI_COMMIT_REF_NAME"
+    key: ${CI_COMMIT_REF_NAME}
     policy: pull
     paths:
       - node_modules
