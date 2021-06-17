@@ -20,8 +20,10 @@ cache:
 generate:
   image: gradle:alpine
   stage: generate
+  before_script:
+  - apk add --no-cache git
+  - git submodule update --init
   script:
-    - apk add git
     - java -jar openapi-generator-cli-5.2.0.jar generate -i spec/openapi.yaml -c open-api-conf.yaml -g typescript-axios -o ./src/generated
     - git config --global user.name "Mr.Roboto 🤖"
     - git config --global user.email "mrRoboto@blockdaemon.com"
