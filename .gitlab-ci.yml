@@ -18,9 +18,10 @@ cache:
     - lib
 
 generate:
-  image: bitnami/git
+  image: gradle:alpine
   stage: generate
   script:
+    - apk add git
     - java -jar openapi-generator-cli-5.2.0.jar generate -i spec/openapi.yaml -c open-api-conf.yaml -g typescript-axios -o ./src/generated
     - git config --global user.name "Mr.Roboto 🤖"
     - git config --global user.email "mrRoboto@blockdaemon.com"
