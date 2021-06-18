@@ -9,9 +9,8 @@
         "url": "https://gitlab.com/Blockdaemon/ubiquity/ubiquity-ts-client/"
     },
     "scripts": {
-        "build-ts": "tsc",
-        "build": "npm run build-ts && npm run lint",
-        "start": "node app.js"
+        "start": "node dist/app.js",
+        "build": "./node_modules/typescript/bin/tsc -p tsconfig.json"
     },
     "main": "./dist/index.js",
     "typings": "./dist/index.d.ts",
