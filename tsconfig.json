@@ -19,10 +19,7 @@
       "jest"
     ]
   },
-  "exclude": [
-    "dist",
-    "lib",
-    "node_modules",
-    "example"
+  "include": [
+    "src"
   ]
 }
