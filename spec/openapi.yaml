@@ -1011,12 +1011,11 @@ components:
           type: string
           default: native
       required:
+        - asset_path
         - type
     token_currency:
       type: object
       properties:
-        detail:
-          $ref: "#/components/schemas/token"
         asset_path:
           type: string
           description: Asset path of transferred currency
@@ -1036,7 +1035,10 @@ components:
         type:
           type: string
           default: token
+        detail:
+          $ref: "#/components/schemas/token"
       required:
+        - asset_path
         - type
     smart_token_currency:
       type: object
@@ -1063,6 +1065,7 @@ components:
         detail:
           $ref: "#/components/schemas/smart_token"
       required:
+        - asset_path
         - type
     token:
       type: object
