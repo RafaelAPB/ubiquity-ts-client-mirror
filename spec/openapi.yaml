@@ -2,7 +2,7 @@
 openapi: "3.0.0"
 info:
   version: 2.0.0
-  title: Ubiquity REST API 
+  title: Ubiquity REST API
   description: |
     Ubiquity provides a RESTful and uniform way to access blockchain resources,
     with a rich and reusable model across multiple cryptocurrencies.
@@ -20,7 +20,8 @@ info:
     * stellar
 
     #### Testnet
-    Testnet support coming soon
+    * bitcoin/testnet
+    * ethereum/ropsten
 
     ##### Pagination
     Certain resources contain a lot of data, more than what's practical
@@ -95,7 +96,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/balancesMap"
+                $ref: "#/components/schemas/balances_map"
         400:
           description: Bad request
           content:
@@ -133,7 +134,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/txPage"
+                $ref: "#/components/schemas/tx_page"
           links:
             Continuation:
               operationId: GetTxsByAddress
@@ -201,7 +202,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/txPage"
+                $ref: "#/components/schemas/tx_page"
           links:
             Continuation:
               operationId: GetTxs
@@ -295,7 +296,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/blockIdentifier"
+                $ref: "#/components/schemas/block_identifier"
         400:
           description: Invalid Block Number
           content:
@@ -434,6 +435,136 @@ paths:
       security:
         - bearerAuth: [ ]
 
+  /{platform}/{network}/tx/create:
+    post:
+      summary: Create an unsigned transaction
+      description: |
+        Creates an unsigned transaction for BTC and ETH.
+
+        **Note** that Ethereum currently only supports singular transaction destinations
+      operationId: TxCreate
+      tags:
+        - Transactions
+      parameters:
+        - $ref: '#/components/parameters/platform'
+        - $ref: '#/components/parameters/network'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/tx_create'
+      responses:
+        200:
+          description: An unsigned transaction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unsigned_tx'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        429:
+          $ref: '#/components/responses/TooManyRequests'
+        400:
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/error"
+              example: {
+                "type": "bad-request",
+                "code": 16396,
+                "title": "Bad Request",
+                "status": 400,
+                "detail": "only single destination transactions currently supported"
+              }
+
+
+
+  /{platform}/{network}/tx/send:
+    post:
+      summary: Submit a signed transaction
+      description: |
+        Submit a signed transaction to the network.
+
+        **Note**: A successful transaction may still be rejected on chain or not processed due to a too low fee.
+        You can monitor successful transactions through Ubiquity websockets.
+      operationId: TxSend
+      tags:
+        - Transactions
+      parameters:
+        - $ref: '#/components/parameters/platform'
+        - $ref: '#/components/parameters/network'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/signed_tx'
+      responses:
+        200:
+          description: A submitted Transaction ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tx_receipt'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        429:
+          $ref: '#/components/responses/TooManyRequests'
+        400:
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/error"
+              example: {
+                "type": "bad-request",
+                "code": 16396,
+                "title": "Bad Request",
+                "status": 400,
+                "detail": "failed to send transaction: json-rpc error #-27: Transaction already in block chain"
+              }
+  /{platform}/{network}/tx/estimate_fee:
+    get:
+      summary: Get fee estimate
+      description: |
+        Get a fee estimation in decimals from the network.
+        If supported by the platform, the number of blocks used to make
+        the estimation can be customized by the confirmed_within_blocks query parameter.
+      operationId: EstimateFee
+      tags:
+        - Transactions
+      parameters:
+        - $ref: '#/components/parameters/platform'
+        - $ref: '#/components/parameters/network'
+        - $ref: '#/components/parameters/confirmed_within_blocks'
+      responses:
+        200:
+          description: A fee estimation from bitcoin (satoshis)
+          content:
+            application/json:
+              schema:
+                type: string
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        429:
+          $ref: '#/components/responses/TooManyRequests'
+        400:
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/error"
+              example: {
+                "type": "bad-request",
+                "code": 16396,
+                "title": "Bad Request",
+                "status": 400,
+                "detail": "failed to get estimated fee: json-rpc error #-8:  : Invalid conf_target, must be between 1 and 1008"
+              }
+
+
 components:
   securitySchemes:
     bearerAuth:
@@ -507,7 +638,7 @@ components:
           description: Coin supplies with asset paths as keys
           additionalProperties:
             $ref: "#/components/schemas/supply"
-    blockIdentifier:
+    block_identifier:
       type: object
       properties:
         number:
@@ -523,7 +654,7 @@ components:
           type: string
           description: Parent block hash
           example: "0xfcf029ffd36a6714aae09dcc7acbdd8f2b96327f"
-    txPage:
+    tx_page:
       type: object
       properties:
         total:
@@ -539,7 +670,7 @@ components:
           description: Token to get the next page
           example: "8185.123"
           nullable: true
-    balancesMap:
+    balances_map:
       type: object
       description: Currency balances with asset paths as keys
       additionalProperties:
@@ -561,21 +692,6 @@ components:
           "balance": "99999"
         }
       }
-    operation:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-            - transfer
-            - utxo_transfer
-            - multi_transfer
-        detail:
-          $ref: "#/components/schemas/operationDetail"
-    operationDetail:
-      oneOf:
-        - $ref: "#/components/schemas/transfer"
-        - $ref: "#/components/schemas/utxo_transfer"
     tx:
       type: object
       properties:
@@ -652,6 +768,38 @@ components:
               }
             }
           }
+    operation:
+      type: object
+      oneOf:
+        - $ref: "#/components/schemas/transfer_operation"
+        - $ref: "#/components/schemas/multi_transfer_operation"
+      discriminator:
+        propertyName: type
+        mapping:
+          transfer: "#/components/schemas/transfer_operation"
+          multi_transfer: "#/components/schemas/multi_transfer_operation"
+    transfer_operation:
+      type: object
+      properties:
+        type:
+          type: string
+          default: transfer
+        detail:
+          $ref: "#/components/schemas/transfer"
+      required:
+        - type
+        - detail
+    multi_transfer_operation:
+      type: object
+      properties:
+        type:
+          type: string
+          default: multi_transfer
+        detail:
+          $ref: "#/components/schemas/multi_transfer"
+      required:
+        - type
+        - detail
     effect:
       type: object
       description: Effects are the state changes on an account
@@ -702,12 +850,14 @@ components:
           $ref: "#/components/schemas/currency"
         value:
           $ref: "#/components/schemas/amount"
+        fee:
+          $ref: "#/components/schemas/fee"
       required:
         - from
         - to
         - currency
         - value
-    utxo_transfer:
+    multi_transfer:
       type: object
       description: Transfer of currency in the UTXO model
       properties:
@@ -721,13 +871,31 @@ components:
             $ref: "#/components/schemas/utxo"
         currency:
           $ref: "#/components/schemas/currency"
+        total_in:
+          $ref: "#/components/schemas/amount"
+        total_out:
+          $ref: "#/components/schemas/amount"
         unspent:
           $ref: "#/components/schemas/amount"
       required:
         - inputs
         - outputs
         - currency
+        - total_in
+        - total_out
         - unspent
+    currency:
+      type: object
+      oneOf:
+        - $ref: "#/components/schemas/native_currency"
+        - $ref: "#/components/schemas/token_currency"
+        - $ref: "#/components/schemas/smart_token_currency"
+      discriminator:
+        propertyName: type
+        mapping:
+          native: "#/components/schemas/native_currency"
+          token: "#/components/schemas/token_currency"
+          smart_token: "#/components/schemas/smart_token_currency"
     coin:
       type: object
       properties:
@@ -754,7 +922,7 @@ components:
         sample_address:
           type: string
           description: Random address seen on chain (optional)
-    currency:
+    base_currency:
       type: object
       properties:
         asset_path:
@@ -773,18 +941,42 @@ components:
           type: integer
           description: Decimal places right to the comma
           example: 18
+      required:
+        - asset_path
+    native_currency: # in that case currency detail is null
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/base_currency" # Inherits base_currency
+      properties:
         type:
           type: string
-          enum:
-            - native
-            - token
-            - smart_token
+          default: native
+      required:
+        - type
+    token_currency:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/base_currency" # Inherits base_currency
+      properties:
         detail:
-          $ref: "#/components/schemas/currencyDetail"
-    currencyDetail:
-      oneOf:
-        - $ref: "#/components/schemas/token"
-        - $ref: "#/components/schemas/smart_token"
+          $ref: "#/components/schemas/token"
+        type:
+          type: string
+          default: token
+      required:
+        - type
+    smart_token_currency:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/base_currency" # Inherits base_currency
+      properties:
+        type:
+          type: string
+          default: smart_token
+        detail:
+          $ref: "#/components/schemas/smart_token"
+      required:
+        - type
     token:
       type: object
       properties:
@@ -803,7 +995,6 @@ components:
       required:
         - type
         - id
-        - creator
     smart_token:
       type: object
       properties:
@@ -818,6 +1009,18 @@ components:
       required:
         - type
         - contract
+    fee:
+      type: object
+      properties:
+        amount:
+          $ref: "#/components/schemas/amount"
+        destination:
+          type: string
+          description: Destination
+          example: E.g. address
+      required:
+        - amount
+        - destination
     utxo:
       type: object
       description: An unspent transaction output
@@ -881,6 +1084,76 @@ components:
           type: string
           description: Coins created at this block
           example: "0"
+    tx_create:
+      type: object
+      properties:
+        from:
+          type: string
+          description: The source UTXO or account ID for the originating funds
+          example: "31c129468975e4ef41135a405000e6428a399a03d023b6627eed4cb95faf19ca"
+        to:
+          type: array
+          description: A list of recipients
+          items:
+            $ref: "#/components/schemas/tx_destination"
+        index:
+          type: integer
+          description: The UTXO index or the account Nonce
+          example: 5
+        fee:
+          description: The fee you are willing to pay (required only for Ethereum) for the transaction
+          type: string
+          example: "21000"
+      required:
+        - from
+        - to
+        - index
+    tx_destination:
+      type: object
+      description: A list of recipients
+      properties:
+        destination:
+          type: string
+          example: "mkHS9ne12qx9pS9VojpwU5xtRd4T7X7ZUt"
+        amount:
+          description: The amount you wish to transfer
+          type: string
+          example: "0.0001"
+      required:
+        - destination
+        - amount
+    unsigned_tx:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The transaction ID
+          example: "0x711fbebdf0c7bcf352dbd6fa7064d12e1f0fed5ddb2e562df742252287b1f5b1"
+        unsigned_tx:
+          type: string
+          description: The transaction data needed to sign
+          example: "e909843b9aca008252089481b7e08f65bdf5648606c89998a9cc81643976478601d1a94a200080808080"
+      required:
+        - id
+        - unsigned_tx
+    signed_tx:
+      type: object
+      properties:
+        tx:
+          type: string
+          description: The signed TX
+          example: "0100000001ca19af5fb94ced7e62b623d0039a398a42e60050405a1341efe475894629c131010000008b483045022100d77b002b3142013b3f825a730f5bc3ead2014266f07ba4449269af0cf6f086310220365bca1d616ba86fac42ad69efd5f92c5ed6cf16f27ebf5ab55010efc72c219d014104417eb0abe69db2eca63c84eb44266c29c24973dc81cde16ca86c9d923630cb5f797bae7d7fab13498e06146111356eb271da74add05ebda8f72ff2b2878fddb7ffffffff0410270000000000001976a914344a0f48ca150ec2b903817660b9b68b13a6702688ac204e0000000000001976a914344a0f48ca150ec2b903817660b9b68b13a6702688ac30750000000000001976a914344a0f48ca150ec2b903817660b9b68b13a6702688ac48710000000000001976a914d6fa8814924b480fa7ff903b5ef61100ab4d92fe88ac00000000"
+      required:
+        - tx
+    tx_receipt:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The transaction ID
+          example: "9c8ac345b443dd10a418ea0beaa320ef233dbae5590be2a11ac090e0e9839c1c"
+      required:
+        - id
     error:
       type: object
       properties:
@@ -983,4 +1256,16 @@ components:
           summary: Block hash or Block ID
         Special identifier:
           value: current
-          summary: Special identifier for the current block
+          summary: Special identifier for the current bloc
+    confirmed_within_blocks:
+      name: confirmed_within_blocks
+      in: query
+      required: false
+      description: |
+        The number of blocks you would like the transaction to be processed within.
+        Lower numbers produce higher fees.
+      schema:
+        type: number
+        default: 10
+
+
