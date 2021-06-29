@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Ubiquity REST API
- * Ubiquity provides a RESTful and uniform way to access blockchain resources, with a rich and reusable model across multiple cryptocurrencies.  [Documentation](https://app.blockdaemon.com/docs/ubiquity)  ### Protocols #### Mainnet The following protocols are currently supported: * bitcoin * ethereum * polkadot * xrp * algorand * stellar  #### Testnet Testnet support coming soon  ##### Pagination Certain resources contain a lot of data, more than what\'s practical to return for a single request. With the help of pagination, the data is split across multiple responses. Each response returns a subset of the items requested and a continuation token.  To get the next batch of items, copy the returned continuation token to the continuation query parameter and repeat the request with the new URL. In case no continuation token is returned, there is no more data available. 
+ * Ubiquity provides a RESTful and uniform way to access blockchain resources, with a rich and reusable model across multiple cryptocurrencies.  [Documentation](https://app.blockdaemon.com/docs/ubiquity)  ### Protocols #### Mainnet The following protocols are currently supported: * bitcoin * ethereum * polkadot * xrp * algorand * stellar  #### Testnet * bitcoin/testnet * ethereum/ropsten  ##### Pagination Certain resources contain a lot of data, more than what\'s practical to return for a single request. With the help of pagination, the data is split across multiple responses. Each response returns a subset of the items requested and a continuation token.  To get the next batch of items, copy the returned continuation token to the continuation query parameter and repeat the request with the new URL. In case no continuation token is returned, there is no more data available. 
  *
  * The version of the OpenAPI document: 2.0.0
  * Contact: support@blockdaemon.com
@@ -51,6 +51,37 @@ export interface BalanceChange {
      * @memberof BalanceChange
      */
     currency?: Currency;
+}
+/**
+ * 
+ * @export
+ * @interface BaseCurrency
+ */
+export interface BaseCurrency {
+    /**
+     * Asset path of transferred currency
+     * @type {string}
+     * @memberof BaseCurrency
+     */
+    asset_path: string;
+    /**
+     * Currency symbol
+     * @type {string}
+     * @memberof BaseCurrency
+     */
+    symbol?: string;
+    /**
+     * Name of currency
+     * @type {string}
+     * @memberof BaseCurrency
+     */
+    name?: string;
+    /**
+     * Decimal places right to the comma
+     * @type {number}
+     * @memberof BaseCurrency
+     */
+    decimals?: number;
 }
 /**
  * 
@@ -170,64 +201,10 @@ export interface Coin {
     sample_address?: string;
 }
 /**
- * 
- * @export
- * @interface Currency
- */
-export interface Currency {
-    /**
-     * Asset path of transferred currency
-     * @type {string}
-     * @memberof Currency
-     */
-    asset_path?: string;
-    /**
-     * Currency symbol
-     * @type {string}
-     * @memberof Currency
-     */
-    symbol?: string;
-    /**
-     * Name of currency
-     * @type {string}
-     * @memberof Currency
-     */
-    name?: string;
-    /**
-     * Decimal places right to the comma
-     * @type {number}
-     * @memberof Currency
-     */
-    decimals?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof Currency
-     */
-    type?: CurrencyTypeEnum;
-    /**
-     * 
-     * @type {CurrencyDetail}
-     * @memberof Currency
-     */
-    detail?: CurrencyDetail;
-}
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum CurrencyTypeEnum {
-    Native = 'native',
-    Token = 'token',
-    SmartToken = 'smart_token'
-}
-
-/**
- * @type CurrencyDetail
+ * @type Currency
  * @export
  */
-export type CurrencyDetail = SmartToken | Token;
+export type Currency = NativeCurrency | SmartTokenCurrency | TokenCurrency;
 
 /**
  * Effects are the state changes on an account
@@ -241,6 +218,25 @@ export interface Effect {
      * @memberof Effect
      */
     balance_changes?: { [key: string]: BalanceChange; };
+}
+/**
+ * 
+ * @export
+ * @interface Fee
+ */
+export interface Fee {
+    /**
+     * Integer string in smallest unit (Satoshis)
+     * @type {string}
+     * @memberof Fee
+     */
+    amount: string;
+    /**
+     * Destination
+     * @type {string}
+     * @memberof Fee
+     */
+    destination: string;
 }
 /**
  * 
@@ -280,40 +276,109 @@ export interface ModelError {
     detail?: string;
 }
 /**
+ * Transfer of currency in the UTXO model
+ * @export
+ * @interface MultiTransfer
+ */
+export interface MultiTransfer {
+    /**
+     * 
+     * @type {Array<Utxo>}
+     * @memberof MultiTransfer
+     */
+    inputs: Array<Utxo>;
+    /**
+     * 
+     * @type {Array<Utxo>}
+     * @memberof MultiTransfer
+     */
+    outputs: Array<Utxo>;
+    /**
+     * 
+     * @type {Currency}
+     * @memberof MultiTransfer
+     */
+    currency: Currency;
+    /**
+     * Integer string in smallest unit (Satoshis)
+     * @type {string}
+     * @memberof MultiTransfer
+     */
+    total_in: string;
+    /**
+     * Integer string in smallest unit (Satoshis)
+     * @type {string}
+     * @memberof MultiTransfer
+     */
+    total_out: string;
+    /**
+     * Integer string in smallest unit (Satoshis)
+     * @type {string}
+     * @memberof MultiTransfer
+     */
+    unspent: string;
+}
+/**
  * 
  * @export
- * @interface Operation
+ * @interface MultiTransferOperation
  */
-export interface Operation {
+export interface MultiTransferOperation {
     /**
      * 
      * @type {string}
-     * @memberof Operation
+     * @memberof MultiTransferOperation
      */
-    type?: OperationTypeEnum;
+    type: string;
     /**
      * 
-     * @type {OperationDetail}
-     * @memberof Operation
+     * @type {MultiTransfer}
+     * @memberof MultiTransferOperation
      */
-    detail?: OperationDetail;
+    detail: MultiTransfer;
 }
-
 /**
-    * @export
-    * @enum {string}
-    */
-export enum OperationTypeEnum {
-    Transfer = 'transfer',
-    UtxoTransfer = 'utxo_transfer',
-    MultiTransfer = 'multi_transfer'
+ * 
+ * @export
+ * @interface NativeCurrency
+ */
+export interface NativeCurrency {
+    /**
+     * 
+     * @type {string}
+     * @memberof NativeCurrency
+     */
+    type: string;
+    /**
+     * Asset path of transferred currency
+     * @type {string}
+     * @memberof NativeCurrency
+     */
+    asset_path: string;
+    /**
+     * Currency symbol
+     * @type {string}
+     * @memberof NativeCurrency
+     */
+    symbol?: string;
+    /**
+     * Name of currency
+     * @type {string}
+     * @memberof NativeCurrency
+     */
+    name?: string;
+    /**
+     * Decimal places right to the comma
+     * @type {number}
+     * @memberof NativeCurrency
+     */
+    decimals?: number;
 }
-
 /**
- * @type OperationDetail
+ * @type Operation
  * @export
  */
-export type OperationDetail = Transfer | UtxoTransfer;
+export type Operation = MultiTransferOperation | TransferOperation;
 
 /**
  * 
@@ -368,6 +433,19 @@ export interface PlatformEndpoint {
 /**
  * 
  * @export
+ * @interface SignedTx
+ */
+export interface SignedTx {
+    /**
+     * The signed TX
+     * @type {string}
+     * @memberof SignedTx
+     */
+    tx: string;
+}
+/**
+ * 
+ * @export
  * @interface SmartToken
  */
 export interface SmartToken {
@@ -383,6 +461,49 @@ export interface SmartToken {
      * @memberof SmartToken
      */
     contract: string;
+}
+/**
+ * 
+ * @export
+ * @interface SmartTokenCurrency
+ */
+export interface SmartTokenCurrency {
+    /**
+     * 
+     * @type {string}
+     * @memberof SmartTokenCurrency
+     */
+    type: string;
+    /**
+     * 
+     * @type {SmartToken}
+     * @memberof SmartTokenCurrency
+     */
+    detail?: SmartToken;
+    /**
+     * Asset path of transferred currency
+     * @type {string}
+     * @memberof SmartTokenCurrency
+     */
+    asset_path: string;
+    /**
+     * Currency symbol
+     * @type {string}
+     * @memberof SmartTokenCurrency
+     */
+    symbol?: string;
+    /**
+     * Name of currency
+     * @type {string}
+     * @memberof SmartTokenCurrency
+     */
+    name?: string;
+    /**
+     * Decimal places right to the comma
+     * @type {number}
+     * @memberof SmartTokenCurrency
+     */
+    decimals?: number;
 }
 /**
  * 
@@ -444,7 +565,50 @@ export interface Token {
      * @type {string}
      * @memberof Token
      */
-    creator: string;
+    creator?: string;
+}
+/**
+ * 
+ * @export
+ * @interface TokenCurrency
+ */
+export interface TokenCurrency {
+    /**
+     * 
+     * @type {Token}
+     * @memberof TokenCurrency
+     */
+    detail?: Token;
+    /**
+     * 
+     * @type {string}
+     * @memberof TokenCurrency
+     */
+    type: string;
+    /**
+     * Asset path of transferred currency
+     * @type {string}
+     * @memberof TokenCurrency
+     */
+    asset_path: string;
+    /**
+     * Currency symbol
+     * @type {string}
+     * @memberof TokenCurrency
+     */
+    symbol?: string;
+    /**
+     * Name of currency
+     * @type {string}
+     * @memberof TokenCurrency
+     */
+    name?: string;
+    /**
+     * Decimal places right to the comma
+     * @type {number}
+     * @memberof TokenCurrency
+     */
+    decimals?: number;
 }
 /**
  * Transfer of currency from one account to another
@@ -476,6 +640,31 @@ export interface Transfer {
      * @memberof Transfer
      */
     value: string;
+    /**
+     * 
+     * @type {Fee}
+     * @memberof Transfer
+     */
+    fee?: Fee;
+}
+/**
+ * 
+ * @export
+ * @interface TransferOperation
+ */
+export interface TransferOperation {
+    /**
+     * 
+     * @type {string}
+     * @memberof TransferOperation
+     */
+    type: string;
+    /**
+     * 
+     * @type {Transfer}
+     * @memberof TransferOperation
+     */
+    detail: Transfer;
 }
 /**
  * 
@@ -563,6 +752,56 @@ export enum TxStatusEnum {
 /**
  * 
  * @export
+ * @interface TxCreate
+ */
+export interface TxCreate {
+    /**
+     * The source UTXO or account ID for the originating funds
+     * @type {string}
+     * @memberof TxCreate
+     */
+    from: string;
+    /**
+     * A list of recipients
+     * @type {Array<TxDestination>}
+     * @memberof TxCreate
+     */
+    to: Array<TxDestination>;
+    /**
+     * The UTXO index or the account Nonce
+     * @type {number}
+     * @memberof TxCreate
+     */
+    index: number;
+    /**
+     * The fee you are willing to pay (required only for Ethereum) for the transaction
+     * @type {string}
+     * @memberof TxCreate
+     */
+    fee?: string;
+}
+/**
+ * A list of recipients
+ * @export
+ * @interface TxDestination
+ */
+export interface TxDestination {
+    /**
+     * 
+     * @type {string}
+     * @memberof TxDestination
+     */
+    destination: string;
+    /**
+     * The amount you wish to transfer
+     * @type {string}
+     * @memberof TxDestination
+     */
+    amount: string;
+}
+/**
+ * 
+ * @export
  * @interface TxPage
  */
 export interface TxPage {
@@ -584,6 +823,38 @@ export interface TxPage {
      * @memberof TxPage
      */
     continuation?: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface TxReceipt
+ */
+export interface TxReceipt {
+    /**
+     * The transaction ID
+     * @type {string}
+     * @memberof TxReceipt
+     */
+    id: string;
+}
+/**
+ * 
+ * @export
+ * @interface UnsignedTx
+ */
+export interface UnsignedTx {
+    /**
+     * The transaction ID
+     * @type {string}
+     * @memberof UnsignedTx
+     */
+    id: string;
+    /**
+     * The transaction data needed to sign
+     * @type {string}
+     * @memberof UnsignedTx
+     */
+    unsigned_tx: string;
 }
 /**
  * An unspent transaction output
@@ -609,37 +880,6 @@ export interface Utxo {
      * @memberof Utxo
      */
     value?: string;
-}
-/**
- * Transfer of currency in the UTXO model
- * @export
- * @interface UtxoTransfer
- */
-export interface UtxoTransfer {
-    /**
-     * 
-     * @type {Array<Utxo>}
-     * @memberof UtxoTransfer
-     */
-    inputs: Array<Utxo>;
-    /**
-     * 
-     * @type {Array<Utxo>}
-     * @memberof UtxoTransfer
-     */
-    outputs: Array<Utxo>;
-    /**
-     * 
-     * @type {Currency}
-     * @memberof UtxoTransfer
-     */
-    currency: Currency;
-    /**
-     * Integer string in smallest unit (Satoshis)
-     * @type {string}
-     * @memberof UtxoTransfer
-     */
-    unspent: string;
 }
 
 /**
@@ -1399,6 +1639,49 @@ export class SyncApi extends BaseAPI {
 export const TransactionsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * Get a fee estimation in decimals from the network. If supported by the platform, the number of blocks used to make the estimation can be customized by the confirmed_within_blocks query parameter. 
+         * @summary Get fee estimate
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {number} [confirmedWithinBlocks] The number of blocks you would like the transaction to be processed within. Lower numbers produce higher fees. 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        estimateFee: async (platform: string, network: string, confirmedWithinBlocks?: number, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'platform' is not null or undefined
+            assertParamExists('estimateFee', 'platform', platform)
+            // verify required parameter 'network' is not null or undefined
+            assertParamExists('estimateFee', 'network', network)
+            const localVarPath = `/{platform}/{network}/tx/estimate_fee`
+                .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
+                .replace(`{${"network"}}`, encodeURIComponent(String(network)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (confirmedWithinBlocks !== undefined) {
+                localVarQueryParameter['confirmed_within_blocks'] = confirmedWithinBlocks;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 
          * @summary Transaction By Hash
          * @param {string} platform Coin platform handle
@@ -1506,6 +1789,94 @@ export const TransactionsApiAxiosParamCreator = function (configuration?: Config
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * Creates an unsigned transaction for BTC and ETH.  **Note** that Ethereum currently only supports singular transaction destinations 
+         * @summary Create an unsigned transaction
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {TxCreate} txCreate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        txCreate: async (platform: string, network: string, txCreate: TxCreate, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'platform' is not null or undefined
+            assertParamExists('txCreate', 'platform', platform)
+            // verify required parameter 'network' is not null or undefined
+            assertParamExists('txCreate', 'network', network)
+            // verify required parameter 'txCreate' is not null or undefined
+            assertParamExists('txCreate', 'txCreate', txCreate)
+            const localVarPath = `/{platform}/{network}/tx/create`
+                .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
+                .replace(`{${"network"}}`, encodeURIComponent(String(network)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(txCreate, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Submit a signed transaction to the network.  **Note**: A successful transaction may still be rejected on chain or not processed due to a too low fee. You can monitor successful transactions through Ubiquity websockets. 
+         * @summary Submit a signed transaction
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {SignedTx} signedTx 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        txSend: async (platform: string, network: string, signedTx: SignedTx, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'platform' is not null or undefined
+            assertParamExists('txSend', 'platform', platform)
+            // verify required parameter 'network' is not null or undefined
+            assertParamExists('txSend', 'network', network)
+            // verify required parameter 'signedTx' is not null or undefined
+            assertParamExists('txSend', 'signedTx', signedTx)
+            const localVarPath = `/{platform}/{network}/tx/send`
+                .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
+                .replace(`{${"network"}}`, encodeURIComponent(String(network)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(signedTx, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -1516,6 +1887,19 @@ export const TransactionsApiAxiosParamCreator = function (configuration?: Config
 export const TransactionsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = TransactionsApiAxiosParamCreator(configuration)
     return {
+        /**
+         * Get a fee estimation in decimals from the network. If supported by the platform, the number of blocks used to make the estimation can be customized by the confirmed_within_blocks query parameter. 
+         * @summary Get fee estimate
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {number} [confirmedWithinBlocks] The number of blocks you would like the transaction to be processed within. Lower numbers produce higher fees. 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async estimateFee(platform: string, network: string, confirmedWithinBlocks?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.estimateFee(platform, network, confirmedWithinBlocks, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
         /**
          * 
          * @summary Transaction By Hash
@@ -1545,6 +1929,32 @@ export const TransactionsApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getTxs(platform, network, order, continuation, limit, assets, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * Creates an unsigned transaction for BTC and ETH.  **Note** that Ethereum currently only supports singular transaction destinations 
+         * @summary Create an unsigned transaction
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {TxCreate} txCreate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async txCreate(platform: string, network: string, txCreate: TxCreate, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UnsignedTx>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.txCreate(platform, network, txCreate, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Submit a signed transaction to the network.  **Note**: A successful transaction may still be rejected on chain or not processed due to a too low fee. You can monitor successful transactions through Ubiquity websockets. 
+         * @summary Submit a signed transaction
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {SignedTx} signedTx 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async txSend(platform: string, network: string, signedTx: SignedTx, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TxReceipt>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.txSend(platform, network, signedTx, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -1555,6 +1965,18 @@ export const TransactionsApiFp = function(configuration?: Configuration) {
 export const TransactionsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = TransactionsApiFp(configuration)
     return {
+        /**
+         * Get a fee estimation in decimals from the network. If supported by the platform, the number of blocks used to make the estimation can be customized by the confirmed_within_blocks query parameter. 
+         * @summary Get fee estimate
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {number} [confirmedWithinBlocks] The number of blocks you would like the transaction to be processed within. Lower numbers produce higher fees. 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        estimateFee(platform: string, network: string, confirmedWithinBlocks?: number, options?: any): AxiosPromise<string> {
+            return localVarFp.estimateFee(platform, network, confirmedWithinBlocks, options).then((request) => request(axios, basePath));
+        },
         /**
          * 
          * @summary Transaction By Hash
@@ -1582,6 +2004,30 @@ export const TransactionsApiFactory = function (configuration?: Configuration, b
         getTxs(platform: string, network: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any): AxiosPromise<TxPage> {
             return localVarFp.getTxs(platform, network, order, continuation, limit, assets, options).then((request) => request(axios, basePath));
         },
+        /**
+         * Creates an unsigned transaction for BTC and ETH.  **Note** that Ethereum currently only supports singular transaction destinations 
+         * @summary Create an unsigned transaction
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {TxCreate} txCreate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        txCreate(platform: string, network: string, txCreate: TxCreate, options?: any): AxiosPromise<UnsignedTx> {
+            return localVarFp.txCreate(platform, network, txCreate, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Submit a signed transaction to the network.  **Note**: A successful transaction may still be rejected on chain or not processed due to a too low fee. You can monitor successful transactions through Ubiquity websockets. 
+         * @summary Submit a signed transaction
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {SignedTx} signedTx 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        txSend(platform: string, network: string, signedTx: SignedTx, options?: any): AxiosPromise<TxReceipt> {
+            return localVarFp.txSend(platform, network, signedTx, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -1592,6 +2038,20 @@ export const TransactionsApiFactory = function (configuration?: Configuration, b
  * @extends {BaseAPI}
  */
 export class TransactionsApi extends BaseAPI {
+    /**
+     * Get a fee estimation in decimals from the network. If supported by the platform, the number of blocks used to make the estimation can be customized by the confirmed_within_blocks query parameter. 
+     * @summary Get fee estimate
+     * @param {string} platform Coin platform handle
+     * @param {string} network Which network to target. Available networks can be found with /{platform}
+     * @param {number} [confirmedWithinBlocks] The number of blocks you would like the transaction to be processed within. Lower numbers produce higher fees. 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TransactionsApi
+     */
+    public estimateFee(platform: string, network: string, confirmedWithinBlocks?: number, options?: any) {
+        return TransactionsApiFp(this.configuration).estimateFee(platform, network, confirmedWithinBlocks, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary Transaction By Hash
@@ -1621,6 +2081,34 @@ export class TransactionsApi extends BaseAPI {
      */
     public getTxs(platform: string, network: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any) {
         return TransactionsApiFp(this.configuration).getTxs(platform, network, order, continuation, limit, assets, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Creates an unsigned transaction for BTC and ETH.  **Note** that Ethereum currently only supports singular transaction destinations 
+     * @summary Create an unsigned transaction
+     * @param {string} platform Coin platform handle
+     * @param {string} network Which network to target. Available networks can be found with /{platform}
+     * @param {TxCreate} txCreate 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TransactionsApi
+     */
+    public txCreate(platform: string, network: string, txCreate: TxCreate, options?: any) {
+        return TransactionsApiFp(this.configuration).txCreate(platform, network, txCreate, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Submit a signed transaction to the network.  **Note**: A successful transaction may still be rejected on chain or not processed due to a too low fee. You can monitor successful transactions through Ubiquity websockets. 
+     * @summary Submit a signed transaction
+     * @param {string} platform Coin platform handle
+     * @param {string} network Which network to target. Available networks can be found with /{platform}
+     * @param {SignedTx} signedTx 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TransactionsApi
+     */
+    public txSend(platform: string, network: string, signedTx: SignedTx, options?: any) {
+        return TransactionsApiFp(this.configuration).txSend(platform, network, signedTx, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
