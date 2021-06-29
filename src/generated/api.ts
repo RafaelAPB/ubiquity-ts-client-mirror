@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Ubiquity REST API
- * Ubiquity provides a RESTful and uniform way to access blockchain resources, with a rich and reusable model across multiple cryptocurrencies.  [Documentation](https://app.blockdaemon.com/docs/ubiquity)  ### Protocols #### Mainnet The following protocols are currently supported: * bitcoin * ethereum * polkadot * xrp * algorand * stellar  #### Testnet * bitcoin/testnet * ethereum/ropsten  ##### Pagination Certain resources contain a lot of data, more than what\'s practical to return for a single request. With the help of pagination, the data is split across multiple responses. Each response returns a subset of the items requested and a continuation token.  To get the next batch of items, copy the returned continuation token to the continuation query parameter and repeat the request with the new URL. In case no continuation token is returned, there is no more data available. 
+ * Ubiquity provides a RESTful and uniform way to access blockchain resources, with a rich and reusable model across multiple cryptocurrencies.  [Documentation](https://app.blockdaemon.com/docs/ubiquity)  ### Protocols #### Mainnet The following protocols are currently supported: * bitcoin * ethereum * polkadot * xrp * algorand * stellar * dogecoin  #### Testnet * bitcoin/testnet * ethereum/ropsten * dogecoin/testnet  ##### Pagination Certain resources contain a lot of data, more than what\'s practical to return for a single request. With the help of pagination, the data is split across multiple responses. Each response returns a subset of the items requested and a continuation token.  To get the next batch of items, copy the returned continuation token to the continuation query parameter and repeat the request with the new URL. In case no continuation token is returned, there is no more data available. 
  *
  * The version of the OpenAPI document: 2.0.0
  * Contact: support@blockdaemon.com
@@ -21,6 +21,49 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from './base';
 
+/**
+ * 
+ * @export
+ * @interface AlgorandMeta
+ */
+export interface AlgorandMeta {
+    /**
+     * 
+     * @type {string}
+     * @memberof AlgorandMeta
+     */
+    type?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AlgorandMeta
+     */
+    sender_reward?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AlgorandMeta
+     */
+    recipient_reward?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AlgorandMeta
+     */
+    close?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AlgorandMeta
+     */
+    close_amount?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AlgorandMeta
+     */
+    close_reward?: string;
+}
 /**
  * Change of balance of a currency
  * @export
@@ -430,6 +473,117 @@ export interface PlatformEndpoint {
      */
     example?: string;
 }
+/**
+ * 
+ * @export
+ * @interface Report
+ */
+export interface Report {
+    /**
+     * Transaction items
+     * @type {Array<ReportField>}
+     * @memberof Report
+     */
+    fields: Array<ReportField>;
+    /**
+     * The number of transactions in the report
+     * @type {number}
+     * @memberof Report
+     */
+    items: number;
+}
+/**
+ * 
+ * @export
+ * @interface ReportField
+ */
+export interface ReportField {
+    /**
+     * The protocol the address relates to
+     * @type {string}
+     * @memberof ReportField
+     */
+    protocol: string;
+    /**
+     * The wallet/account the transaction occurred
+     * @type {string}
+     * @memberof ReportField
+     */
+    address: string;
+    /**
+     * The currency symbol
+     * @type {string}
+     * @memberof ReportField
+     */
+    currency: string;
+    /**
+     * The ID of the event within a transaction
+     * @type {string}
+     * @memberof ReportField
+     */
+    event_id: string;
+    /**
+     * The block number the transaction occurred on
+     * @type {number}
+     * @memberof ReportField
+     */
+    block: number;
+    /**
+     * The unix timestamp when the transaction was added to a block
+     * @type {number}
+     * @memberof ReportField
+     */
+    timestamp: number;
+    /**
+     * The transaction ID
+     * @type {string}
+     * @memberof ReportField
+     */
+    hash: string;
+    /**
+     * The action type e.g. Transfer, Deposit, Staking Reward etc..
+     * @type {string}
+     * @memberof ReportField
+     */
+    action: string;
+    /**
+     * The amount of currency involved in the transaction (smallest unit)
+     * @type {string}
+     * @memberof ReportField
+     */
+    value: string;
+    /**
+     * The address where the funds originated
+     * @type {string}
+     * @memberof ReportField
+     */
+    sender_address: string;
+    /**
+     * How much was charged as a fee for processing the transaction
+     * @type {string}
+     * @memberof ReportField
+     */
+    fee: string;
+    /**
+     * The number of decimals in one coin, used to convert smallest unit to 1 whole coin if needed
+     * @type {number}
+     * @memberof ReportField
+     */
+    decimals: number;
+    /**
+     * 
+     * @type {ReportFieldMeta}
+     * @memberof ReportField
+     */
+    meta?: ReportFieldMeta | null;
+}
+/**
+ * @type ReportFieldMeta
+ * Additional metadata bespoke to specific protocols
+ * @export
+ */
+export type ReportFieldMeta = AlgorandMeta;
+
 /**
  * 
  * @export
@@ -935,6 +1089,62 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             };
         },
         /**
+         * Returns account activity 
+         * @summary A financial report for an address between a time period. Default timescale is within the last 30 days
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} address Account address
+         * @param {number} [from] Unix Timestamp from where to start
+         * @param {number} [to] Unix Timestamp from where to end
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getReportByAddress: async (platform: string, network: string, address: string, from?: number, to?: number, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'platform' is not null or undefined
+            assertParamExists('getReportByAddress', 'platform', platform)
+            // verify required parameter 'network' is not null or undefined
+            assertParamExists('getReportByAddress', 'network', network)
+            // verify required parameter 'address' is not null or undefined
+            assertParamExists('getReportByAddress', 'address', address)
+            const localVarPath = `/{platform}/{network}/account/{address}/report`
+                .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
+                .replace(`{${"network"}}`, encodeURIComponent(String(network)))
+                .replace(`{${"address"}}`, encodeURIComponent(String(address)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (from !== undefined) {
+                localVarQueryParameter['from'] = from;
+            }
+
+            if (to !== undefined) {
+                localVarQueryParameter['to'] = to;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Gets transactions that an address was involved with, from newest to oldest. This call uses pagination. 
          * @summary Transactions Of Address
          * @param {string} platform Coin platform handle
@@ -1019,6 +1229,21 @@ export const AccountsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
+         * Returns account activity 
+         * @summary A financial report for an address between a time period. Default timescale is within the last 30 days
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} address Account address
+         * @param {number} [from] Unix Timestamp from where to start
+         * @param {number} [to] Unix Timestamp from where to end
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getReportByAddress(platform: string, network: string, address: string, from?: number, to?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Report>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getReportByAddress(platform, network, address, from, to, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * Gets transactions that an address was involved with, from newest to oldest. This call uses pagination. 
          * @summary Transactions Of Address
          * @param {string} platform Coin platform handle
@@ -1057,6 +1282,20 @@ export const AccountsApiFactory = function (configuration?: Configuration, baseP
             return localVarFp.getBalancesByAddress(platform, network, address, options).then((request) => request(axios, basePath));
         },
         /**
+         * Returns account activity 
+         * @summary A financial report for an address between a time period. Default timescale is within the last 30 days
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} address Account address
+         * @param {number} [from] Unix Timestamp from where to start
+         * @param {number} [to] Unix Timestamp from where to end
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getReportByAddress(platform: string, network: string, address: string, from?: number, to?: number, options?: any): AxiosPromise<Report> {
+            return localVarFp.getReportByAddress(platform, network, address, from, to, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Gets transactions that an address was involved with, from newest to oldest. This call uses pagination. 
          * @summary Transactions Of Address
          * @param {string} platform Coin platform handle
@@ -1093,6 +1332,22 @@ export class AccountsApi extends BaseAPI {
      */
     public getBalancesByAddress(platform: string, network: string, address: string, options?: any) {
         return AccountsApiFp(this.configuration).getBalancesByAddress(platform, network, address, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Returns account activity 
+     * @summary A financial report for an address between a time period. Default timescale is within the last 30 days
+     * @param {string} platform Coin platform handle
+     * @param {string} network Which network to target. Available networks can be found with /{platform}
+     * @param {string} address Account address
+     * @param {number} [from] Unix Timestamp from where to start
+     * @param {number} [to] Unix Timestamp from where to end
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountsApi
+     */
+    public getReportByAddress(platform: string, network: string, address: string, from?: number, to?: number, options?: any) {
+        return AccountsApiFp(this.configuration).getReportByAddress(platform, network, address, from, to, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
