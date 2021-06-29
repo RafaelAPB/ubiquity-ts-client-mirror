@@ -360,7 +360,7 @@ export interface NativeCurrency {
      * @type {string}
      * @memberof NativeCurrency
      */
-    asset_path?: string;
+    asset_path: string;
     /**
      * Currency symbol
      * @type {string}
@@ -596,7 +596,7 @@ export interface SmartTokenCurrency {
      * @type {string}
      * @memberof SmartTokenCurrency
      */
-    asset_path?: string;
+    asset_path: string;
     /**
      * Currency symbol
      * @type {string}
@@ -697,17 +697,11 @@ export interface Token {
  */
 export interface TokenCurrency {
     /**
-     * 
-     * @type {Token}
-     * @memberof TokenCurrency
-     */
-    detail?: Token;
-    /**
      * Asset path of transferred currency
      * @type {string}
      * @memberof TokenCurrency
      */
-    asset_path?: string;
+    asset_path: string;
     /**
      * Currency symbol
      * @type {string}
@@ -732,6 +726,12 @@ export interface TokenCurrency {
      * @memberof TokenCurrency
      */
     type: string;
+    /**
+     * 
+     * @type {Token}
+     * @memberof TokenCurrency
+     */
+    detail?: Token;
 }
 /**
  * Transfer of currency from one account to another
