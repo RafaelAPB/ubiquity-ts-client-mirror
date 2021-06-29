@@ -609,7 +609,7 @@ paths:
         200:
           description: A fee estimation from bitcoin (satoshis)
           content:
-            application/json:
+            text/plain:
               schema:
                 type: string
         401:
@@ -988,7 +988,7 @@ components:
         sample_address:
           type: string
           description: Random address seen on chain (optional)
-    base_currency:
+    native_currency: # in that case currency detail is null
       type: object
       properties:
         asset_path:
@@ -1007,13 +1007,6 @@ components:
           type: integer
           description: Decimal places right to the comma
           example: 18
-      required:
-        - asset_path
-    native_currency: # in that case currency detail is null
-      type: object
-      allOf:
-        - $ref: "#/components/schemas/base_currency" # Inherits base_currency
-      properties:
         type:
           type: string
           default: native
@@ -1021,11 +1014,25 @@ components:
         - type
     token_currency:
       type: object
-      allOf:
-        - $ref: "#/components/schemas/base_currency" # Inherits base_currency
       properties:
         detail:
           $ref: "#/components/schemas/token"
+        asset_path:
+          type: string
+          description: Asset path of transferred currency
+          example: "ethereum/native/eth"
+        symbol:
+          type: string
+          description: Currency symbol
+          example: "ETH"
+        name:
+          type: string
+          description: Name of currency
+          example: Ether
+        decimals:
+          type: integer
+          description: Decimal places right to the comma
+          example: 18
         type:
           type: string
           default: token
@@ -1033,9 +1040,23 @@ components:
         - type
     smart_token_currency:
       type: object
-      allOf:
-        - $ref: "#/components/schemas/base_currency" # Inherits base_currency
       properties:
+        asset_path:
+          type: string
+          description: Asset path of transferred currency
+          example: "ethereum/native/eth"
+        symbol:
+          type: string
+          description: Currency symbol
+          example: "ETH"
+        name:
+          type: string
+          description: Name of currency
+          example: Ether
+        decimals:
+          type: integer
+          description: Decimal places right to the comma
+          example: 18
         type:
           type: string
           default: smart_token
