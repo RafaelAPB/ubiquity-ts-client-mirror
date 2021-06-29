@@ -98,37 +98,6 @@ export interface BalanceChange {
 /**
  * 
  * @export
- * @interface BaseCurrency
- */
-export interface BaseCurrency {
-    /**
-     * Asset path of transferred currency
-     * @type {string}
-     * @memberof BaseCurrency
-     */
-    asset_path: string;
-    /**
-     * Currency symbol
-     * @type {string}
-     * @memberof BaseCurrency
-     */
-    symbol?: string;
-    /**
-     * Name of currency
-     * @type {string}
-     * @memberof BaseCurrency
-     */
-    name?: string;
-    /**
-     * Decimal places right to the comma
-     * @type {number}
-     * @memberof BaseCurrency
-     */
-    decimals?: number;
-}
-/**
- * 
- * @export
  * @interface Block
  */
 export interface Block {
@@ -387,17 +356,11 @@ export interface MultiTransferOperation {
  */
 export interface NativeCurrency {
     /**
-     * 
-     * @type {string}
-     * @memberof NativeCurrency
-     */
-    type: string;
-    /**
      * Asset path of transferred currency
      * @type {string}
      * @memberof NativeCurrency
      */
-    asset_path: string;
+    asset_path?: string;
     /**
      * Currency symbol
      * @type {string}
@@ -416,6 +379,12 @@ export interface NativeCurrency {
      * @memberof NativeCurrency
      */
     decimals?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof NativeCurrency
+     */
+    type: string;
 }
 /**
  * @type Operation
@@ -623,23 +592,11 @@ export interface SmartToken {
  */
 export interface SmartTokenCurrency {
     /**
-     * 
-     * @type {string}
-     * @memberof SmartTokenCurrency
-     */
-    type: string;
-    /**
-     * 
-     * @type {SmartToken}
-     * @memberof SmartTokenCurrency
-     */
-    detail?: SmartToken;
-    /**
      * Asset path of transferred currency
      * @type {string}
      * @memberof SmartTokenCurrency
      */
-    asset_path: string;
+    asset_path?: string;
     /**
      * Currency symbol
      * @type {string}
@@ -658,6 +615,18 @@ export interface SmartTokenCurrency {
      * @memberof SmartTokenCurrency
      */
     decimals?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof SmartTokenCurrency
+     */
+    type: string;
+    /**
+     * 
+     * @type {SmartToken}
+     * @memberof SmartTokenCurrency
+     */
+    detail?: SmartToken;
 }
 /**
  * 
@@ -734,17 +703,11 @@ export interface TokenCurrency {
      */
     detail?: Token;
     /**
-     * 
-     * @type {string}
-     * @memberof TokenCurrency
-     */
-    type: string;
-    /**
      * Asset path of transferred currency
      * @type {string}
      * @memberof TokenCurrency
      */
-    asset_path: string;
+    asset_path?: string;
     /**
      * Currency symbol
      * @type {string}
@@ -763,6 +726,12 @@ export interface TokenCurrency {
      * @memberof TokenCurrency
      */
     decimals?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof TokenCurrency
+     */
+    type: string;
 }
 /**
  * Transfer of currency from one account to another
