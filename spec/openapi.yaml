@@ -18,10 +18,12 @@ info:
     * xrp
     * algorand
     * stellar
+    * dogecoin
 
     #### Testnet
     * bitcoin/testnet
     * ethereum/ropsten
+    * dogecoin/testnet
 
     ##### Pagination
     Certain resources contain a lot of data, more than what's practical
@@ -168,6 +170,56 @@ paths:
                 "status": 403,
                 "detail": "The used continuation token is invalid."
               }
+        429:
+          $ref: '#/components/responses/TooManyRequests'
+      security:
+        - bearerAuth: [ ]
+
+  /{platform}/{network}/account/{address}/report:
+    get:
+      summary: A financial report for an address between a time period. Default timescale is within the last 30 days
+      operationId: GetReportByAddress
+      description: |
+        Returns account activity
+      tags:
+        - Accounts
+      parameters:
+        - $ref: '#/components/parameters/platform'
+        - $ref: '#/components/parameters/network'
+        - $ref: '#/components/parameters/address'
+        - name: from
+          in: query
+          description: Unix Timestamp from where to start
+          schema:
+            type: integer
+          example: 961846434
+        - name: to
+          in: query
+          description: Unix Timestamp from where to end
+          schema:
+            type: integer
+          example: 1119612834
+      responses:
+        200:
+          description: Account Activity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/report"
+            text/csv:
+              schema:
+                type: string
+                example: |
+                  Protocol,PublicAddress,Currency,EventID,Block,BlockTimestamp,BlockTime,Hash,Action,Value,SenderAddress,TransactionFee,SenderReward,RecipientReward,Close,CloseAmount,CloseReward
+                  Algorand,GXL2EQ6JV54MTMP2IXOTF5CJLS7GAWMRDZMOY7JZAPO72AQRDDYGD6OX3E,ALGO,RNEYUT3MRYGT5ENSLIC7LGJCJMW6BXNS6SAW7A25DTYRW4TFJ5JA,8986217,1599745403,2020-09-10 13:43:23 +0000 UTC,RNEYUT3MRYGT5ENSLIC7LGJCJMW6BXNS6SAW7A25DTYRW4TFJ5JA,pay,1,T3BYUTYZCWV7UVK7IFYPC2UKH5VNBGVP4PUKSUBF5F6GQ244Y4I2XUWCQM,0.001,0.000003,0,,0,0
+        400:
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/error"
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
         429:
           $ref: '#/components/responses/TooManyRequests'
       security:
@@ -1177,6 +1229,121 @@ components:
           type: string
           description: Long error description
           example: "The requested address is invalid on this platform"
+    report:
+      type: object
+      properties:
+        fields:
+          type: array
+          description: Transaction items
+          items:
+            $ref: "#/components/schemas/report_field"
+        items:
+          type: integer
+          description: The number of transactions in the report
+          example: 1
+      required:
+        - fields
+        - items
+    report_field:
+      type: object
+      properties:
+        protocol:
+          type: string
+          description: The protocol the address relates to
+          example: "Algorand"
+        address:
+          type: string
+          description: The wallet/account the transaction occurred
+          example: "GXL2EQ6JV54MTMP2IXOTF5CJLS7GAWMRDZMOY7JZAPO72AQRDDYGD6OX3E"
+        currency:
+          type: string
+          description: The currency symbol
+          example: "ALGO"
+        event_id:
+          type: string
+          description: The ID of the event within a transaction
+          example: "RNEYUT3MRYGT5ENSLIC7LGJCJMW6BXNS6SAW7A25DTYRW4TFJ5JA"
+        block:
+          type: integer
+          format: int64
+          description: The block number the transaction occurred on
+          example: 8986217
+        timestamp:
+          type: integer
+          format: int32
+          description: The unix timestamp when the transaction was added to a block
+          example: 1599745403
+        hash:
+          type: string
+          description: The transaction ID
+          example: RNEYUT3MRYGT5ENSLIC7LGJCJMW6BXNS6SAW7A25DTYRW4TFJ5JA
+        action:
+          type: string
+          description: The action type e.g. Transfer, Deposit, Staking Reward etc..
+          example: pay
+        value:
+          type: string
+          description: The amount of currency involved in the transaction (smallest unit)
+          example: "1000000"
+        sender_address:
+          type: string
+          description: The address where the funds originated
+          example: "T3BYUTYZCWV7UVK7IFYPC2UKH5VNBGVP4PUKSUBF5F6GQ244Y4I2XUWCQM"
+        fee:
+          type: string
+          description: How much was charged as a fee for processing the transaction
+          example: "1000"
+        decimals:
+          type: integer
+          format: int32
+          description: The number of decimals in one coin, used to convert smallest unit to 1 whole coin if needed
+          example: 6
+        meta:
+          $ref: "#/components/schemas/report_field_meta"
+      required:
+        - action
+        - address
+        - block
+        - currency
+        - decimals
+        - event_id
+        - fee
+        - hash
+        - protocol
+        - sender_address
+        - timestamp
+        - value
+    report_field_meta:
+      description: Additional metadata bespoke to specific protocols
+      nullable: true
+      oneOf:
+        - $ref: "#/components/schemas/algorand_meta"
+      discriminator:
+        propertyName: type
+        mapping:
+          algorand_meta: "#/components/schemas/algorand_meta"
+    algorand_meta:
+      type: object
+      properties:
+        type:
+          type: string
+          default: algorand_meta
+        sender_reward:
+          type: string
+          example: "121176"
+        recipient_reward:
+          type: string
+          example: "0"
+        close:
+          type: string
+          example: "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4"
+        close_amount:
+          type: string
+          example: "0"
+        close_reward:
+          type: string
+          example: "0"
+
   parameters:
     platform:
       in: path
@@ -1267,5 +1434,3 @@ components:
       schema:
         type: number
         default: 10
-
-
