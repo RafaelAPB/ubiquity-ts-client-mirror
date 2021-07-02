@@ -1477,5 +1477,5 @@ components:
         The number of blocks you would like the transaction to be processed within.
         Lower numbers produce higher fees.
       schema:
-        type: number
+        type: integer
         default: 10
