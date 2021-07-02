@@ -544,6 +544,8 @@ paths:
                 "status": 400,
                 "detail": "only single destination transactions currently supported"
               }
+      security:
+        - bearerAuth: [ ]
 
 
 
@@ -591,6 +593,9 @@ paths:
                 "status": 400,
                 "detail": "failed to send transaction: json-rpc error #-27: Transaction already in block chain"
               }
+      security:
+        - bearerAuth: [ ]
+
   /{platform}/{network}/tx/estimate_fee:
     get:
       summary: Get fee estimate
@@ -629,6 +634,8 @@ paths:
                 "status": 400,
                 "detail": "failed to get estimated fee: json-rpc error #-8:  : Invalid conf_target, must be between 1 and 1008"
               }
+      security:
+        - bearerAuth: [ ]
 
 
 components:
