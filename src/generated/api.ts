@@ -344,6 +344,12 @@ export interface MultiTransferOperation {
     type: string;
     /**
      * 
+     * @type {string}
+     * @memberof MultiTransferOperation
+     */
+    event?: string;
+    /**
+     * 
      * @type {MultiTransfer}
      * @memberof MultiTransferOperation
      */
@@ -782,6 +788,12 @@ export interface TransferOperation {
      * @memberof TransferOperation
      */
     type: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransferOperation
+     */
+    event?: string;
     /**
      * 
      * @type {Transfer}
