@@ -859,6 +859,8 @@ components:
         type:
           type: string
           default: transfer
+        event:
+          type: string
         detail:
           $ref: "#/components/schemas/transfer"
       required:
@@ -870,6 +872,8 @@ components:
         type:
           type: string
           default: multi_transfer
+        event:
+          type: string
         detail:
           $ref: "#/components/schemas/multi_transfer"
       required:
