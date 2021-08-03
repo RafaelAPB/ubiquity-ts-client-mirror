@@ -56,6 +56,44 @@ tags:
   - name: Platforms
 
 paths:
+  /:
+    get:
+      summary: Platforms overview
+      operationId: GetPlatforms
+      tags:
+        - Platforms
+      description: >
+        Provides a list of supported platforms and networks.
+      responses:
+        200:
+          description: Platforms overview
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/platforms_overview"
+              example: {
+                "platforms": [
+                  {
+                    "handle": "algorand",
+                    "network": "mainnet"
+                  },
+                  {
+                    "handle": "bitcoin",
+                    "network": "mainnet"
+                  },
+                  {
+                    "handle": "bitcoin",
+                    "network": "testnet"
+                  }
+                ]
+              }
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        429:
+          $ref: '#/components/responses/TooManyRequests'
+      security:
+        - bearerAuth: [ ]
+
   /{platform}/{network}:
     get:
       summary: Platform Info
@@ -1171,6 +1209,21 @@ components:
         example:
           type: string
           example: /ethereum/tx/0x12389528398
+    platforms_overview:
+      type: object
+      properties:
+        platforms:
+          type: array
+          description: List of items each describing a pair of supported platform and network.
+          items:
+            type: object
+            properties:
+              platform:
+                type: string
+                example: "bitcoin"
+              network:
+                type: string
+                example: "mainnet"
     supply:
       type: object
       properties:
