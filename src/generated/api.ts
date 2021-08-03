@@ -451,6 +451,38 @@ export interface PlatformEndpoint {
 /**
  * 
  * @export
+ * @interface PlatformsOverview
+ */
+export interface PlatformsOverview {
+    /**
+     * List of items each describing a pair of supported platform and network.
+     * @type {Array<PlatformsOverviewPlatforms>}
+     * @memberof PlatformsOverview
+     */
+    platforms?: Array<PlatformsOverviewPlatforms>;
+}
+/**
+ * 
+ * @export
+ * @interface PlatformsOverviewPlatforms
+ */
+export interface PlatformsOverviewPlatforms {
+    /**
+     * 
+     * @type {string}
+     * @memberof PlatformsOverviewPlatforms
+     */
+    platform?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PlatformsOverviewPlatforms
+     */
+    network?: string;
+}
+/**
+ * 
+ * @export
  * @interface Report
  */
 export interface Report {
@@ -1606,6 +1638,40 @@ export const PlatformsApiAxiosParamCreator = function (configuration?: Configura
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * Provides a list of supported platforms and networks. 
+         * @summary Platforms overview
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPlatforms: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -1626,6 +1692,16 @@ export const PlatformsApiFp = function(configuration?: Configuration) {
          */
         async getPlatform(platform: string, network: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PlatformDetail>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPlatform(platform, network, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Provides a list of supported platforms and networks. 
+         * @summary Platforms overview
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getPlatforms(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PlatformsOverview>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPlatforms(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -1649,6 +1725,15 @@ export const PlatformsApiFactory = function (configuration?: Configuration, base
         getPlatform(platform: string, network: string, options?: any): AxiosPromise<PlatformDetail> {
             return localVarFp.getPlatform(platform, network, options).then((request) => request(axios, basePath));
         },
+        /**
+         * Provides a list of supported platforms and networks. 
+         * @summary Platforms overview
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPlatforms(options?: any): AxiosPromise<PlatformsOverview> {
+            return localVarFp.getPlatforms(options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -1670,6 +1755,17 @@ export class PlatformsApi extends BaseAPI {
      */
     public getPlatform(platform: string, network: string, options?: any) {
         return PlatformsApiFp(this.configuration).getPlatform(platform, network, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Provides a list of supported platforms and networks. 
+     * @summary Platforms overview
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PlatformsApi
+     */
+    public getPlatforms(options?: any) {
+        return PlatformsApiFp(this.configuration).getPlatforms(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
