@@ -685,13 +685,13 @@ components:
       scheme: bearer
       bearerFormat: Opaque
       description: |
-        `Authorization: Bearer <Token>` header must be set on all API requests.
+        `Authorization: Bearer <Token>` header must be set to authenticate API requests.
         You can create tokens in the "API Keys" tab of your organization.
     apiKeyAuth:
       type: apiKey
       description: |
-        `?apiKey=<Token>` or `/apiKey-<Token>` - you can pass your token either in a query param `apiKey` or by proving
-        a path param with suffix `/apiKey-` at the end of URL path. You can create tokens in the "API Keys" tab of your organization.
+        A query param `?apiKey=<Token>` also can be used to authenticate API requests.
+        You can create tokens in the "API Keys" tab of your organization.
       name: apiKey
       in: query
   responses:
