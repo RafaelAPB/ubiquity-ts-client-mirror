@@ -472,7 +472,7 @@ export interface PlatformsOverviewPlatforms {
      * @type {string}
      * @memberof PlatformsOverviewPlatforms
      */
-    platform?: string;
+    handle?: string;
     /**
      * 
      * @type {string}
