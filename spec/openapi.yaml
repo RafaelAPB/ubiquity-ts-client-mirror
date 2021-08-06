@@ -31,7 +31,7 @@ info:
     Certain resources contain a lot of data, more than what's practical
     to return for a single request.
     With the help of pagination, the data is split across multiple responses.
-    Each response returns a subset of the items requested and a continuation token.
+    Each response returns a subset of the items requested, and a continuation token.
 
     To get the next batch of items, copy the returned continuation token
     to the continuation query parameter and repeat the request with the new URL.
