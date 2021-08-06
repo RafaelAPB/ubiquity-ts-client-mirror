@@ -1218,7 +1218,7 @@ components:
           items:
             type: object
             properties:
-              platform:
+              handle:
                 type: string
                 example: "bitcoin"
               network:
