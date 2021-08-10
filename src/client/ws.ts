@@ -7,7 +7,6 @@ import WebSocket, {
 import { Block, BlockIdentifier, Tx } from "../generated";
 import { WS_BASE_URL } from "./constants";
 
-
 type TxItem = {
   subID: number;
   channel: string;
@@ -39,14 +38,18 @@ type BlockIdentifierHandler = (
 ) => void;
 type Handler = TxHandler | BlockHandler | BlockIdentifierHandler;
 
+type Sub = {
+  id: number;
+  subID?: number;
+  type: string;
+  details: any;
+  handler: Handler;
+};
 
 export class UbiWebsocketClient {
   private ws: Websocket;
-  private subscriptions: Array<{
-    type: string;
-    details: any;
-    handler: Handler;
-  }> = [];
+  private id = 0;
+  private subscriptions: Array<Sub> = [];
 
   private handlers = new Map<number, Handler>();
 
@@ -76,29 +79,22 @@ export class UbiWebsocketClient {
       .build();
   }
 
-  private sendSubscribe(id: number, type: string, details = {}) {
-    this.ws?.send(
-      JSON.stringify({
-        id: 1,
-        method: "ubiquity.subscribe",
-        params: {
-          channel: type,
-          detail: details,
-        },
-      })
-    );
-  }
-
   private resubscribe() {
     this.handlers.clear();
-    this.subscriptions.forEach((sub, index) =>
-      this.sendSubscribe(index, sub.type, sub.details)
+    this.subscriptions.forEach((sub) =>
+      this.subscribe(sub.type, sub.details, sub.handler)
     );
   }
 
-  private subscribe(type: string, details = {}, handler: Handler): void {
-    const l = this.subscriptions.push({ type, details, handler });
-    const id = l - 1;
+  private getRequestId(): number {
+    this.id = (this.id + 1) % 10000;
+    return this.id;
+  }
+
+  public subscribe(type: string, details = {}, handler: Handler): Sub {
+    const id = this.getRequestId();
+    const sub: Sub = { id, type, details, handler };
+    this.subscriptions.push(sub);
 
     // add listener for subscribe result that will add the message handler when the subID is recieved
     const waitForResult = (instance: Websocket, ev: MessageEvent) => {
@@ -110,12 +106,57 @@ export class UbiWebsocketClient {
         }
         // add handler to match subid
         this.handlers.set(ev.data.result.subID, handler);
+        sub.subID = ev.data.result.subID;
       }
     };
 
     this.ws?.addEventListener(WebsocketEvents.message, waitForResult);
-    this.sendSubscribe(id, type, details);
+    this.ws?.send(
+      JSON.stringify({
+        id: id,
+        method: "ubiquity.subscribe",
+        params: {
+          channel: type,
+          detail: details,
+        },
+      })
+    );
+
+    return sub;
   }
 
- 
+  private unsubscribe(subscription: Sub): void {
+    const id = this.getRequestId();
+
+    // add listener for unsubscribe result that will clean up everything
+    const waitForResult = (instance: Websocket, ev: MessageEvent) => {
+      if ("ubiquity.unsubscribe" === ev.data?.method && ev.data.id === id) {
+        instance.removeEventListener(WebsocketEvents.message, waitForResult);
+        if (ev.data.result === undefined || !ev.data.result) {
+          // log an error
+          return;
+        }
+        // remove sub from the list
+        const index = this.subscriptions.indexOf(subscription, 0);
+        if (index > -1) {
+          this.subscriptions.splice(index, 1);
+        }
+
+        // remove the handler from
+        this.handlers.delete(subscription.subID);
+      }
+    };
+
+    this.ws?.addEventListener(WebsocketEvents.message, waitForResult);
+    this.ws?.send(
+      JSON.stringify({
+        id: id,
+        method: "ubiquity.unsubscribe",
+        params: {
+          channel: "ubiquity.txs",
+          subID: 123,
+        },
+      })
+    );
+  }
 }
