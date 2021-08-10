@@ -125,7 +125,7 @@ export class UbiWebsocketClient {
     return sub;
   }
 
-  private unsubscribe(subscription: Sub): void {
+  public unsubscribe(subscription: Sub): void {
     const id = this.getRequestId();
 
     // add listener for unsubscribe result that will clean up everything

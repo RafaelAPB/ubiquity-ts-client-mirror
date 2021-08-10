@@ -22,7 +22,6 @@ export const SPECIAL_IDENTIFIERS = {
   CURRENT: "current",
 };
 
-
 export const WS_CHANNELS = {
   TX: "ubiquity.txs",
   BLOCK: "ubiquity.block",

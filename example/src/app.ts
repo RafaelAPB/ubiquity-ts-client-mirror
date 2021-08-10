@@ -1,4 +1,4 @@
-import { UbiquityClient, NETWORKS, PROTOCOL } from "@ubiquity/ubiquity-ts-client";
+import { UbiquityClient, NETWORKS, PROTOCOL, WS_CHANNELS } from "@ubiquity/ubiquity-ts-client";
 import { BlocksApi, Block, TxPage, Tx, Configuration } from "@ubiquity/ubiquity-ts-client";
 import { AxiosResponse } from "axios";
 
@@ -91,19 +91,6 @@ async function app(): Promise<void> {
     .then((syncData: AxiosResponse<Tx>) => console.log(syncData.data))
     .catch((e: any) => console.log(`error code::${e.response.status} url::${e.config.url}`));
 
-
-  // The generated clients can be used directly for lower level control or in the case of early stage features
-  const configuration = new Configuration({accessToken: "Auth Token Here", basePath: "https://ubiquity.api.blockdaemon.com/v2"})
- 
-  const blockApi = new BlocksApi(configuration);
-  blockApi
-    .getBlock(
-      PROTOCOL.BITCOIN,
-      NETWORKS.MAIN_NET,
-      "00000000000000000001a031c7ff632e6a8c1d95852468aaa17d8cacde17b6de"
-    )
-    .then((r: AxiosResponse<Block>) => console.log(r.data))
-    .catch((e: any) => console.log(`error code::${e.response.status} url::${e.config.url}`));
 }
 
 app();
