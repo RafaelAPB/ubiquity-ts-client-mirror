@@ -1,15 +1,5 @@
-import {
-  UbiquityClient,
-  NETWORKS,
-  PROTOCOL,
-  WS_CHANNELS,
-} from "@ubiquity/ubiquity-ts-client";
-import {
-  UbiquityWsClient,
-  Block,
-  BlockIdentifier, 
-  Tx,
-} from "@ubiquity/ubiquity-ts-client";
+import { UbiquityClient, NETWORKS, PROTOCOL, WS_CHANNELS} from "@ubiquity/ubiquity-ts-client";
+import { UbiquityWsClient, Block, BlockIdentifier, Tx } from "@ubiquity/ubiquity-ts-client";
 
 async function wsApp(): Promise<void> {
   // To create a client supply an access token
