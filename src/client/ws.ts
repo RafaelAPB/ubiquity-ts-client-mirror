@@ -30,10 +30,10 @@ export type BlockIdentifierItem = {
 
 export type Item = TxItem | BlockItem | BlockIdentifierItem;
 
-export type TxHandler = (instance: UbiWebsocketClient, event: TxItem) => void;
-export type BlockHandler = (instance: UbiWebsocketClient, event: BlockItem) => void;
+export type TxHandler = (instance: UbiWebsocket, event: TxItem) => void;
+export type BlockHandler = (instance: UbiWebsocket, event: BlockItem) => void;
 export type BlockIdentifierHandler = (
-  instance: UbiWebsocketClient,
+  instance: UbiWebsocket,
   event: BlockIdentifierItem
 ) => void;
 export type Handler = TxHandler | BlockHandler | BlockIdentifierHandler;
@@ -46,7 +46,7 @@ export type Sub = {
   handler: Handler;
 };
 
-export class UbiWebsocketClient {
+export class UbiWebsocket {
   private ws: Websocket;
   private id = 0;
   private subscriptions: Array<Sub> = [];

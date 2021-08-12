@@ -1,5 +1,4 @@
-import { UbiquityClient, NETWORKS, PROTOCOL, WS_CHANNELS} from "@ubiquity/ubiquity-ts-client";
-import { UbiquityWsClient, Block, BlockIdentifier, Tx } from "@ubiquity/ubiquity-ts-client";
+import { UbiWebsocket, UbiquityClient, NETWORKS, PROTOCOL, WS_CHANNELS, BlockIdentifierItem, BlockItem, TxItem} from "@ubiquity/ubiquity-ts-client";
 
 async function wsApp(): Promise<void> {
   // To create a client supply an access token
@@ -11,14 +10,14 @@ async function wsApp(): Promise<void> {
 
   const blocksub = ws.subscribe(
     WS_CHANNELS.BLOCK,
-    (ws: UbiquityWsClient, block: Block) => {
+    (_ws: UbiWebsocket, block: BlockItem) => {
       console.log(block);
     }
   );
 
   const blockIdentSub = ws.subscribe(
     WS_CHANNELS.BLOCK_IDENTIFIERS,
-    (ws: UbiquityWsClient, ident: BlockIdentifier) => {
+    (ws: UbiWebsocket, ident: BlockIdentifierItem) => {
       console.log(ident);
       ws.unsubscribe(blockIdentSub);
     }
@@ -26,11 +25,11 @@ async function wsApp(): Promise<void> {
 
   const txSub = ws.subscribe(
     WS_CHANNELS.TX,
-    { addresses: ["0x78c115F1c8B7D0804FbDF3CF7995B030c512ee78"] },
-    (ws: UbiquityWsClient, tx: Tx) => {
+    (ws: UbiWebsocket, tx: TxItem) => {
       console.log(tx);
       ws.unsubscribe(txSub);
-    }
+    },
+    { addresses: ["0x78c115F1c8B7D0804FbDF3CF7995B030c512ee78"] }
   );
 }
 

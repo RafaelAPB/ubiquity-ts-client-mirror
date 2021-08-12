@@ -7,7 +7,7 @@ import {
   Configuration,
 } from "../generated";
 import { BASE_URL, WS_BASE_URL } from "./constants";
-import { UbiWebsocketClient } from "./ws"; 
+import { UbiWebsocket } from "./ws"; 
 
 export class UbiquityClient {
   accountsApi: AccountsApi;
@@ -17,7 +17,7 @@ export class UbiquityClient {
   syncApi: SyncApi;
 
   ws: {
-    connect: (platform: string, network: string)=> UbiWebsocketClient;
+    connect: (platform: string, network: string)=> UbiWebsocket;
   };
 
 
@@ -33,7 +33,7 @@ export class UbiquityClient {
     this.syncApi = new SyncApi(configuration);
 
     this.ws = {
-      connect: (platform: string, network: string) => new UbiWebsocketClient(platform, network, accessToken, wsBasePath)
+      connect: (platform: string, network: string) => new UbiWebsocket(platform, network, accessToken, wsBasePath)
     };
 
   }
