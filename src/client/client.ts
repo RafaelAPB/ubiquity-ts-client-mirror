@@ -7,7 +7,7 @@ import {
   Configuration,
 } from "../generated";
 import { BASE_URL, WS_BASE_URL } from "./constants";
-import { UbiWebsocket } from "./ws"; 
+import { UbiWebsocket } from "./ubi-ws"; 
 
 export class UbiquityClient {
   accountsApi: AccountsApi;

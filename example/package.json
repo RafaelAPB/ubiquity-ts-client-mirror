@@ -15,8 +15,9 @@
     "main": "./dist/index.js",
     "typings": "./dist/index.d.ts",
     "dependencies": {
-        "@ubiquity/ubiquity-ts-client": "0.0.1"
-    },
+        "@ubiquity/ubiquity-ts-client": "file:../",
+        "ws": "^7.5.3"   
+     },
     "devDependencies": {
         "@types/eslint": "7.2.6",
         "@types/jest": "26.0.22",

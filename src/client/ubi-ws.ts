@@ -1,11 +1,6 @@
-import   {
-  ExponentialBackoff,
-  Websocket,
-  WebsocketBuilder,
-  WebsocketEvents,
-} from "websocket-ts";
 import { Block, BlockIdentifier, Tx } from "../generated";
 import { WS_BASE_URL } from "./constants";
+import WebSocket from "isomorphic-ws";
 
 export type TxItem = {
   subID: number;
@@ -47,11 +42,13 @@ export type Sub = {
 };
 
 export class UbiWebsocket {
-  private ws: Websocket;
+  private ws: WebSocket;
   private id = 0;
   private subscriptions: Array<Sub> = [];
-
+  private reconnectTime = 5000;
   private handlers = new Map<number, Handler>();
+  private url: string;
+  private closedByUser = false;
 
   constructor(
     platform: string,
@@ -59,30 +56,53 @@ export class UbiWebsocket {
     accessToken: string,
     basePath = WS_BASE_URL
   ) {
-    const localVarPath = "/{platform}/{network}/websocket?auth={token}"
+    const localVarPath = "{platform}/{network}/websocket?apiKey={token}"
       .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
       .replace(`{${"network"}}`, encodeURIComponent(String(network)))
       .replace(`{${"token"}}`, encodeURIComponent(String(accessToken)));
+    
+ 
+    this.url = basePath + localVarPath;
+    console.log(this.url);
+    this.ws = new WebSocket(this.url);
+    this.connect();
+  }
 
-    this.ws = new WebsocketBuilder(basePath + localVarPath)
-      .onOpen(() =>{
-        this.handlers.clear();
-        this.subscriptions.forEach((sub) =>
-          this.subscribe(sub.type, sub.detail, sub.handler)
-        );
-      })
-      .onMessage((instance: Websocket, ev: MessageEvent) => {
-        const e = JSON.parse(ev.data);
-        if ("ubiquity.subscription" === e.method) {
-          e.params.items.forEach((element: Item) => {
-            if (this.handlers.has(element.subID)) {
-              this.handlers.get(element.subID)(this, element);
-            }
-          });
-        }
-      })
-      .withBackoff(new ExponentialBackoff(100, 8))
-      .build();
+  private connect(): void {
+    this.ws = new WebSocket(this.url);
+    console.log(this.ws);
+    this.ws.addEventListener("open", () => {
+      this.handlers.clear();
+      this.subscriptions.forEach((sub) =>
+        this.subscribe(sub.type, sub.detail, sub.handler)
+      );
+    });
+
+    this.ws.addEventListener("message", (ev: WebSocket.MessageEvent) => {
+      const e = JSON.parse(ev.data.toString());
+      if ("ubiquity.subscription" === e.method) {
+        e.params.items.forEach((element: Item) => {
+          if (this.handlers.has(element.subID)) {
+            this.handlers.get(element.subID)(this, element);
+          }
+        });
+      }
+    });
+
+    this.ws.addEventListener("error", (_ev: WebSocket.ErrorEvent) => {
+      console.log(this.ws);
+      if (this.closedByUser) {
+        setTimeout(() => {
+          // retry connection after waiting out the backoff-interval
+          this.connect();
+        }, this.reconnectTime);
+      }
+    });
+  }
+
+  public close(code?: number, reason?: string): void {
+    this.closedByUser = true;
+    this.ws?.close(code, reason);
   }
 
   private getRequestId(): number {
@@ -90,16 +110,16 @@ export class UbiWebsocket {
     return this.id;
   }
 
-  public subscribe(type: string,  handler: Handler, detail = {}): Sub {
+  public subscribe(type: string, handler: Handler, detail = {}): Sub {
     const id = this.getRequestId();
     const sub: Sub = { id, type, detail, handler };
     this.subscriptions.push(sub);
 
     // add listener for subscribe result that will add the message handler when the subID is recieved
-    const waitForResult = (instance: Websocket, ev: MessageEvent) => {
-      const e = JSON.parse(ev.data);
-      if ( e.id === id) {
-        instance.removeEventListener(WebsocketEvents.message, waitForResult);
+    const waitForResult = (ev: WebSocket.MessageEvent) => {
+      const e = JSON.parse(ev.data.toString());
+      if (e.id === id) {
+        this.ws.removeEventListener("message", waitForResult);
         if (e.result === undefined) {
           // log an error
           return;
@@ -110,7 +130,7 @@ export class UbiWebsocket {
       }
     };
 
-    this.ws?.addEventListener(WebsocketEvents.message, waitForResult);
+    this.ws?.addEventListener("message", waitForResult);
     this.ws?.send(
       JSON.stringify({
         id: id,
@@ -129,10 +149,10 @@ export class UbiWebsocket {
     const id = this.getRequestId();
 
     // add listener for unsubscribe result that will clean up everything
-    const waitForResult = (instance: Websocket, ev: MessageEvent) => {
-      const e = JSON.parse(ev.data);
-      if ( e.id === id) {
-        instance.removeEventListener(WebsocketEvents.message, waitForResult);
+    const waitForResult = (ev: WebSocket.MessageEvent) => {
+      const e = JSON.parse(ev.data.toString());
+      if (e.id === id) {
+        this.ws.removeEventListener("message", waitForResult);
         if (e.result === undefined || !e.result) {
           // log an error
           return;
@@ -148,7 +168,7 @@ export class UbiWebsocket {
       }
     };
 
-    this.ws?.addEventListener(WebsocketEvents.message, waitForResult);
+    this.ws?.addEventListener("message", waitForResult);
     this.ws?.send(
       JSON.stringify({
         id: id,
