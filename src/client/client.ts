@@ -7,7 +7,7 @@ import {
   Configuration,
 } from "../generated";
 import { BASE_URL, WS_BASE_URL } from "./constants";
-import { UbiWebsocket } from "./ubi-ws"; 
+import { UbiWebsocket } from "./ubiWs"; 
 
 export class UbiquityClient {
   accountsApi: AccountsApi;
@@ -15,29 +15,25 @@ export class UbiquityClient {
   platformsApi: PlatformsApi;
   transactionsApi: TransactionsApi;
   syncApi: SyncApi;
-
-  ws: {
-    connect: (platform: string, network: string)=> UbiWebsocket;
-  };
-
+  configuration: Configuration;
+  wsBasePath: string
 
   constructor(accessToken: string, basePath = BASE_URL, wsBasePath = WS_BASE_URL) {
-    const configuration = new Configuration({
+    this.wsBasePath = wsBasePath;
+    this.configuration = new Configuration({
       accessToken,
       basePath,
     });
-    this.accountsApi = new AccountsApi(configuration);
-    this.blocksApi = new BlocksApi(configuration);
-    this.platformsApi = new PlatformsApi(configuration);
-    this.transactionsApi = new TransactionsApi(configuration);
-    this.syncApi = new SyncApi(configuration);
-
-    this.ws = {
-      connect: (platform: string, network: string) => new UbiWebsocket(platform, network, accessToken, wsBasePath)
-    };
-
+    this.accountsApi = new AccountsApi(this.configuration);
+    this.blocksApi = new BlocksApi(this.configuration);
+    this.platformsApi = new PlatformsApi(this.configuration);
+    this.transactionsApi = new TransactionsApi(this.configuration);
+    this.syncApi = new SyncApi(this.configuration);
   }
 
+    public websocket(platform: string, network: string):UbiWebsocket {
+      return new UbiWebsocket(platform, network, this.configuration?.accessToken?.toString(), this.wsBasePath);
+    }
 }    
 
 

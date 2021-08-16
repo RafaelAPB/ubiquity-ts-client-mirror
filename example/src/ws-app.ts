@@ -1,4 +1,6 @@
-import { UbiWebsocket, UbiquityClient, NETWORKS, PROTOCOL, WS_CHANNELS, BlockIdentifierItem, BlockItem, TxItem} from "@ubiquity/ubiquity-ts-client";
+import { UbiWebsocket, UbiquityClient, NETWORKS, PROTOCOL, WS_CHANNELS, BlockIdentifierItem, BlockItem, TxItem, Subscription} from "@ubiquity/ubiquity-ts-client";
+
+let ws: UbiWebsocket;
 
 async function wsApp(): Promise<void> {
   // To create a client supply an access token
@@ -6,31 +8,57 @@ async function wsApp(): Promise<void> {
   const client = new UbiquityClient("---> Auth Token Here");
 
   // Call the connect function to create a new websocket
-  const ws = client.ws.connect(PROTOCOL.ETHEREUM, NETWORKS.MAIN_NET);
+  ws = client.websocket(PROTOCOL.ETHEREUM, NETWORKS.MAIN_NET);
+  await ws.connect();
 
-  const blocksub = ws.subscribe(
-    WS_CHANNELS.BLOCK,
-    (_ws: UbiWebsocket, block: BlockItem) => {
+  // listen for new blocks
+  const blocksub: Subscription= {
+    type:    WS_CHANNELS.BLOCK,
+    handler: (_ws: UbiWebsocket, block: BlockItem) => {
       console.log(block);
     }
-  );
+  }
+  await ws.subscribe(blocksub);
 
-  const blockIdentSub = ws.subscribe(
-    WS_CHANNELS.BLOCK_IDENTIFIERS,
-    (ws: UbiWebsocket, ident: BlockIdentifierItem) => {
+  // listen for new blocks identifiers
+  const blockIdentSub: Subscription= {
+    type:    WS_CHANNELS.BLOCK_IDENTIFIERS,
+    handler:     (ws: UbiWebsocket, ident: BlockIdentifierItem) => {
       console.log(ident);
-      ws.unsubscribe(blockIdentSub);
     }
-  );
+  }
+  await ws.subscribe(blockIdentSub);
 
-  const txSub = ws.subscribe(
-    WS_CHANNELS.TX,
-    (ws: UbiWebsocket, tx: TxItem) => {
+  // listen for new transactions filtering based on address and unsubscribing once one new transaction recieved
+  const txSub: Subscription= {
+    type:    WS_CHANNELS.TX,
+    handler: (ws: UbiWebsocket, tx: TxItem) => {
       console.log(tx);
       ws.unsubscribe(txSub);
     },
-    { addresses: ["0x78c115F1c8B7D0804FbDF3CF7995B030c512ee78"] }
-  );
+    detail: { addresses: ["0x78c115F1c8B7D0804FbDF3CF7995B030c512ee78"] }
+  }
+  await ws.subscribe(txSub);
 }
 
-wsApp();
+
+function sleep(ms: number) {
+  return new Promise( (resolve) => {
+    setTimeout(resolve, ms);
+  });
+} 
+
+
+wsApp().then(() => {
+  console.log("finally");
+});
+
+
+sleep(60000).then(() => {
+  console.log("waiting");
+}).catch(err => {
+  console.log(err);
+}).finally(()=>{
+  ws.close();
+});
+ 

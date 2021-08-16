@@ -1,5 +1,5 @@
 export const BASE_URL = "https://ubiquity.api.blockdaemon.com/v2";
-export const WS_BASE_URL = "wss://ubiquity.api.blockdaemon.com/v2/";
+export const WS_BASE_URL = "wss://ubiquity.api.blockdaemon.com/v2";
 
 
 export const NETWORKS = {
