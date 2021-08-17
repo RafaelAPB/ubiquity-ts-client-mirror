@@ -131,8 +131,7 @@ export class UbiWebsocket {
     return this.id;
   }
 
-  public subscribe(subscription: Subscription
-  ): Promise<Subscription> {
+  public subscribe(subscription: Subscription): Promise<Subscription> {
     return new Promise<Subscription>((resolve, reject) => {
       if (WebSocket.OPEN !== this.rawWs.readyState) {
         reject(new Error("Websocket is not open"));
@@ -182,7 +181,7 @@ export class UbiWebsocket {
             detail: subscription.detail,
           },
         };
-
+ 
         this.rawWs?.addEventListener("message", waitForResult);
         this.rawWs?.send(JSON.stringify(subscribe));
       }),
