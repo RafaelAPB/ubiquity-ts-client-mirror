@@ -60,7 +60,7 @@ function sleep(ms: number) {
 }
 
 wsApp().then(() => {
-  sleep(10000)
+  sleep(60000)
     .then(() => {
       console.log("Done");
       ws.terminate();

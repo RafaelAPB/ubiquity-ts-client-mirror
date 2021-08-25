@@ -16,8 +16,10 @@
     "typings": "./dist/index.d.ts",
     "dependencies": {
         "@ubiquity/ubiquity-ts-client": "file:../",
-        "ws": "^7.5.3"   
-     },
+        "execa": "^4.1.0",
+        "kind-of": "^6.0.3",
+        "ws": "^7.5.3"
+    },
     "devDependencies": {
         "@types/eslint": "7.2.6",
         "@types/jest": "26.0.22",
