@@ -24,6 +24,6 @@ export const SPECIAL_IDENTIFIERS = {
 
 export const WS_CHANNELS = {
   TX: "ubiquity.txs",
-  BLOCK: "ubiquity.block",
+  BLOCK: "ubiquity.blocks",
   BLOCK_IDENTIFIERS: "ubiquity.block_identifiers",
 };

@@ -42,8 +42,8 @@ export type Subscription = {
 };
 
 export class UbiWebsocket {
-  public reconnectTime = 5000;
-  public timeout = 10000;
+  public reconnectTime = 10000;
+  public timeout = 30000;
   public onError = (ev: WebSocket.ErrorEvent): void =>
     console.error(
       "Websocket encountered an error code::%s message::%s, the websocket will be retried in %sms ",
@@ -116,14 +116,16 @@ export class UbiWebsocket {
     ]);
   }
 
-  public close(code?: number, reason?: string): void {
+  public close(code = 1000 , reason?: string): void {
     this.closedByUser = true;
-    this.rawWs?.close(code, reason);
+    this.rawWs.close(code, reason);
+    this.rawWs.removeAllListeners();
   }
 
   public terminate( ): void {
     this.closedByUser = true;
-    this.rawWs?.terminate();
+    this.rawWs.terminate();
+    this.rawWs.removeAllListeners();
   }
  
   private getRequestId(): number {
@@ -173,15 +175,18 @@ export class UbiWebsocket {
           }
         };
 
-        const subscribe = {
+        const subscribe: any = {
           id: subscription.id,
           method: "ubiquity.subscribe",
           params: {
             channel: subscription.type,
-            detail: subscription.detail,
+
           },
         };
- 
+
+        if(subscription.detail){
+          subscribe.params.detail = subscription.detail;
+        }
         this.rawWs?.addEventListener("message", waitForResult);
         this.rawWs?.send(JSON.stringify(subscribe));
       }),

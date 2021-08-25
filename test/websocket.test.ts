@@ -95,7 +95,7 @@ test("Websocket subscribe/unsubscribe/subscription happy path", async () => {
       method: "ubiquity.unsubscribe",
       id: 2,
       params: {
-        channel: "ubiquity.block",
+        channel: "ubiquity.blocks",
         subID: 123,
       },
     });

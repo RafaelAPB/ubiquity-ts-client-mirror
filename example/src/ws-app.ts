@@ -15,7 +15,7 @@ let ws: UbiWebsocket;
 async function wsApp(): Promise<UbiWebsocket> {
   // To create a client supply an access token
   // Optionally a different base path can be provided
-  const client = new UbiquityClient("Auth token");
+  const client = new UbiquityClient("---> Auth Token Here");
 
   // Call the connect function to create a new websocket
   ws = client.websocket(PROTOCOL.ETHEREUM, NETWORKS.MAIN_NET);
@@ -25,16 +25,16 @@ async function wsApp(): Promise<UbiWebsocket> {
   const blocksub: Subscription = {
     type: WS_CHANNELS.BLOCK,
     handler: (_ws: UbiWebsocket, block: BlockItem) => {
-      console.log(block);
+      console.log("Got block %s", block.content.id);
     },
   };
   await ws.subscribe(blocksub);
-
+  
   // listen for new blocks identifiers
   const blockIdentSub: Subscription = {
     type: WS_CHANNELS.BLOCK_IDENTIFIERS,
     handler: (ws: UbiWebsocket, ident: BlockIdentifierItem) => {
-      console.log(ident);
+      console.log("Got block identity %s", ident.content.id);
     },
   };
   await ws.subscribe(blockIdentSub);
@@ -43,10 +43,10 @@ async function wsApp(): Promise<UbiWebsocket> {
   const txSub: Subscription = {
     type: WS_CHANNELS.TX,
     handler: (ws: UbiWebsocket, tx: TxItem) => {
-      console.log(tx);
+      console.log("Got Tx %s", tx.content.id);
       ws.unsubscribe(txSub);
     },
-    detail: { addresses: ["0x78c115F1c8B7D0804FbDF3CF7995B030c512ee78"] },
+    detail: { addresses: ["0xeB2629a2734e272Bcc07BDA959863f316F4bD4Cf"]},
   };
   await ws.subscribe(txSub);
 
@@ -60,14 +60,13 @@ function sleep(ms: number) {
 }
 
 wsApp().then(() => {
-  sleep(60000)
+  sleep(10000)
     .then(() => {
-      console.log("waiting");
+      console.log("Done");
+      ws.terminate();
     })
     .catch((err) => {
       console.log(err);
-    })
-    .finally(() => {
       ws.close();
     });
 });
