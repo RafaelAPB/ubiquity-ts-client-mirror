@@ -162,3 +162,65 @@ blockApi
     console.log(`error code::${e.response.status} url::${e.config.url}`)
   );
 ```
+
+
+## Websocket 
+### Blocks
+```typescript
+  const client = new UbiquityClient("---> Auth Token Here");
+
+  // Call the connect function to create a new websocket
+  const ws = client.ws.connect(PROTOCOL.ETHEREUM, NETWORKS.MAIN_NET);
+
+  const blocksub: Subscription= {
+    type:    WS_CHANNELS.BLOCK,
+    handler: (_ws: UbiWebsocket, block: BlockItem) => {
+      console.log(block);
+    }
+  };
+  
+  ws.subscribe(blocksub).then()=>{
+      ws.unsubscribe(blocksub);
+  };
+```
+
+### Block Identifiers
+```typescript
+  const blockIdentSub: Subscription = {
+    type:     WS_CHANNELS.BLOCK_IDENTIFIERS,
+    handler:  (ws: UbiquityWsClient, ident: BlockIdentifier) => {
+      console.log(ident);
+      ws.unsubscribe(blockIdentSub);
+    }
+  };
+
+  ws.subscribe(blockIdentSub);  
+```
+
+### Tx
+```typescript
+  const txSub: Subscription = {
+    type:     WS_CHANNELS.TX,
+    handler:  (ws: UbiquityWsClient, tx: Tx) => {
+      console.log(tx);
+    }
+  };
+
+  ws.subscribe(txSub);
+}
+```
+
+The messages received may also be filtered based on address.
+```typescript
+  const txSub: Subscription = {
+    type:     WS_CHANNELS.TX,
+    handler:  (ws: UbiquityWsClient, tx: Tx) => {
+      console.log(tx);
+    },
+    detail: { addresses: ["0x78c115F1c8B7D0804FbDF3CF7995B030c512ee78"] }
+  };
+
+  ws.subscribe(txSub);
+}
+```
+

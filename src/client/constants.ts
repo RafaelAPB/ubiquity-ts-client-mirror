@@ -1,4 +1,6 @@
 export const BASE_URL = "https://ubiquity.api.blockdaemon.com/v2";
+export const WS_BASE_URL = "wss://ubiquity.api.blockdaemon.com/v2";
+
 
 export const NETWORKS = {
   MAIN_NET: "mainnet",
@@ -18,4 +20,10 @@ export const PROTOCOL = {
 
 export const SPECIAL_IDENTIFIERS = {
   CURRENT: "current",
+};
+
+export const WS_CHANNELS = {
+  TX: "ubiquity.txs",
+  BLOCK: "ubiquity.blocks",
+  BLOCK_IDENTIFIERS: "ubiquity.block_identifiers",
 };
