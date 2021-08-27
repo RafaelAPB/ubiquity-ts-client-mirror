@@ -21,11 +21,28 @@ info:
     * dogecoin
     * oasis
     * stacks
+    * near
 
     #### Testnet
     * bitcoin/testnet
     * ethereum/ropsten
     * dogecoin/testnet
+
+    #### Native
+    Ubiquity provides native access to all Blockchain nodes it supports.
+    To access native functionality, use the protocol without the v2 prefix
+    * bitcoin/(mainnet | testnet) - [RPC Documentation](https://developer.bitcoin.org/reference/rpc/)
+    * ethereum/(mainnet | ropsten) - [RPC Documentation](https://ethereum.org/en/developers/docs/apis/json-rpc/)
+    * polkadot/mainnet - [Sidecar API Documentation](https://paritytech.github.io/substrate-api-sidecar/dist/)
+    * polkadot/mainnet/http-rpc - [Polkadot RPC Documentation](https://polkadot.js.org/docs/substrate/rpc/)
+    * algorand/mainnet - [Algod API Documentation](https://developer.algorand.org/docs/reference/rest-apis/algod/v1/)
+    * stellar/mainnet - [Stellar Horizon API Documentation](https://developers.stellar.org/api)
+    * dogecoin/(mainnet | testnet) - [Dogecoin API Documentaion](https://developer.bitcoin.org/reference/rpc/)
+    * oasis/mainnet - [Oasis Rosetta Gateway Documentation](https://www.rosetta-api.org/docs/api_identifiers.html#network-identifier)
+    * stacks/mainnet - [Stacks API Documentation](https://blockstack.github.io/stacks-blockchain-api/)
+    * near/mainnet - [NEAR RPC Documentation](https://docs.near.org/docs/api/rpc)
+
+    A full URL example: https://ubiquity.api.blockdaemon.com/**bitcoin/mainnet**
 
     ##### Pagination
     Certain resources contain a lot of data, more than what's practical
@@ -54,6 +71,9 @@ tags:
   - name: Blocks
   - name: Transactions
   - name: Platforms
+
+security:
+  - bearerAuth: []
 
 paths:
   /:
@@ -91,8 +111,6 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         429:
           $ref: '#/components/responses/TooManyRequests'
-      security:
-        - bearerAuth: [ ]
 
   /{platform}/{network}:
     get:
@@ -117,8 +135,6 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         429:
           $ref: '#/components/responses/TooManyRequests'
-      security:
-        - bearerAuth: [ ]
 
   /{platform}/{network}/account/{address}:
     get:
@@ -149,8 +165,6 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         429:
           $ref: '#/components/responses/TooManyRequests'
-      security:
-        - bearerAuth: [ ]
 
   /{platform}/{network}/account/{address}/txs:
     get:
@@ -212,8 +226,6 @@ paths:
               }
         429:
           $ref: '#/components/responses/TooManyRequests'
-      security:
-        - bearerAuth: [ ]
 
   /{platform}/{network}/account/{address}/report:
     get:
@@ -276,9 +288,6 @@ paths:
                 "detail": "current query size is too large for this account. try reducing query range (from, to)"
               }
 
-      security:
-        - bearerAuth: [ ]
-
   /{platform}/{network}/txs:
     get:
       summary: All Transactions
@@ -331,8 +340,6 @@ paths:
               }
         429:
           $ref: '#/components/responses/TooManyRequests'
-      security:
-        - bearerAuth: [ ]
 
   /{platform}/{network}/block/{key}:
     get:
@@ -382,8 +389,6 @@ paths:
               }
         429:
           $ref: '#/components/responses/TooManyRequests'
-      security:
-        - bearerAuth: [ ]
 
   /{platform}/{network}/block_identifier/{key}:
     get:
@@ -433,8 +438,6 @@ paths:
               }
         429:
           $ref: '#/components/responses/TooManyRequests'
-      security:
-        - bearerAuth: [ ]
 
   /{platform}/{network}/tx/{id}:
     get:
@@ -489,8 +492,6 @@ paths:
               }
         429:
           $ref: '#/components/responses/TooManyRequests'
-      security:
-        - bearerAuth: [ ]
 
   /{platform}/{network}/sync/block_number:
     get:
@@ -514,8 +515,6 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         429:
           $ref: '#/components/responses/TooManyRequests'
-      security:
-        - bearerAuth: [ ]
 
   /{platform}/{network}/sync/block_id:
     get:
@@ -538,8 +537,6 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         429:
           $ref: '#/components/responses/TooManyRequests'
-      security:
-        - bearerAuth: [ ]
 
   /{platform}/{network}/tx/create:
     post:
@@ -584,10 +581,6 @@ paths:
                 "status": 400,
                 "detail": "only single destination transactions currently supported"
               }
-      security:
-        - bearerAuth: [ ]
-
-
 
   /{platform}/{network}/tx/send:
     post:
@@ -633,8 +626,6 @@ paths:
                 "status": 400,
                 "detail": "failed to send transaction: json-rpc error #-27: Transaction already in block chain"
               }
-      security:
-        - bearerAuth: [ ]
 
   /{platform}/{network}/tx/estimate_fee:
     get:
@@ -674,9 +665,6 @@ paths:
                 "status": 400,
                 "detail": "failed to get estimated fee: json-rpc error #-8:  : Invalid conf_target, must be between 1 and 1008"
               }
-      security:
-        - bearerAuth: [ ]
-
 
 components:
   securitySchemes:
