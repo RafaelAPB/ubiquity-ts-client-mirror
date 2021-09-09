@@ -538,50 +538,6 @@ paths:
         429:
           $ref: '#/components/responses/TooManyRequests'
 
-  /{platform}/{network}/tx/create:
-    post:
-      summary: Create an unsigned transaction
-      description: |
-        Creates an unsigned transaction for BTC and ETH.
-
-        **Note** that Ethereum currently only supports singular transaction destinations
-      operationId: TxCreate
-      tags:
-        - Transactions
-      parameters:
-        - $ref: '#/components/parameters/platform'
-        - $ref: '#/components/parameters/network'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/tx_create'
-      responses:
-        200:
-          description: An unsigned transaction
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/unsigned_tx'
-        401:
-          $ref: '#/components/responses/UnauthorizedError'
-        429:
-          $ref: '#/components/responses/TooManyRequests'
-        400:
-          description: Bad Request
-          content:
-            application/problem+json:
-              schema:
-                $ref: "#/components/schemas/error"
-              example: {
-                "type": "bad-request",
-                "code": 16396,
-                "title": "Bad Request",
-                "status": 400,
-                "detail": "only single destination transactions currently supported"
-              }
-
   /{platform}/{network}/tx/send:
     post:
       summary: Submit a signed transaction
@@ -1235,30 +1191,6 @@ components:
           type: string
           description: Coins created at this block
           example: "0"
-    tx_create:
-      type: object
-      properties:
-        from:
-          type: string
-          description: The source UTXO or account ID for the originating funds
-          example: "31c129468975e4ef41135a405000e6428a399a03d023b6627eed4cb95faf19ca"
-        to:
-          type: array
-          description: A list of recipients
-          items:
-            $ref: "#/components/schemas/tx_destination"
-        index:
-          type: integer
-          description: The UTXO index or the account Nonce
-          example: 5
-        fee:
-          description: The fee you are willing to pay (required only for Ethereum) for the transaction
-          type: string
-          example: "21000"
-      required:
-        - from
-        - to
-        - index
     tx_destination:
       type: object
       description: A list of recipients
@@ -1273,20 +1205,6 @@ components:
       required:
         - destination
         - amount
-    unsigned_tx:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The transaction ID
-          example: "0x711fbebdf0c7bcf352dbd6fa7064d12e1f0fed5ddb2e562df742252287b1f5b1"
-        unsigned_tx:
-          type: string
-          description: The transaction data needed to sign
-          example: "e909843b9aca008252089481b7e08f65bdf5648606c89998a9cc81643976478601d1a94a200080808080"
-      required:
-        - id
-        - unsigned_tx
     signed_tx:
       type: object
       properties:
