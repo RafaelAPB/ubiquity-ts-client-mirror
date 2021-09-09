@@ -917,37 +917,6 @@ export enum TxStatusEnum {
 }
 
 /**
- * 
- * @export
- * @interface TxCreate
- */
-export interface TxCreate {
-    /**
-     * The source UTXO or account ID for the originating funds
-     * @type {string}
-     * @memberof TxCreate
-     */
-    from: string;
-    /**
-     * A list of recipients
-     * @type {Array<TxDestination>}
-     * @memberof TxCreate
-     */
-    to: Array<TxDestination>;
-    /**
-     * The UTXO index or the account Nonce
-     * @type {number}
-     * @memberof TxCreate
-     */
-    index: number;
-    /**
-     * The fee you are willing to pay (required only for Ethereum) for the transaction
-     * @type {string}
-     * @memberof TxCreate
-     */
-    fee?: string;
-}
-/**
  * A list of recipients
  * @export
  * @interface TxDestination
@@ -1003,25 +972,6 @@ export interface TxReceipt {
      * @memberof TxReceipt
      */
     id: string;
-}
-/**
- * 
- * @export
- * @interface UnsignedTx
- */
-export interface UnsignedTx {
-    /**
-     * The transaction ID
-     * @type {string}
-     * @memberof UnsignedTx
-     */
-    id: string;
-    /**
-     * The transaction data needed to sign
-     * @type {string}
-     * @memberof UnsignedTx
-     */
-    unsigned_tx: string;
 }
 /**
  * An unspent transaction output
@@ -2126,54 +2076,6 @@ export const TransactionsApiAxiosParamCreator = function (configuration?: Config
             };
         },
         /**
-         * Creates an unsigned transaction for BTC and ETH.  **Note** that Ethereum currently only supports singular transaction destinations 
-         * @summary Create an unsigned transaction
-         * @param {string} platform Coin platform handle
-         * @param {string} network Which network to target. Available networks can be found with /{platform}
-         * @param {TxCreate} txCreate 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        txCreate: async (platform: string, network: string, txCreate: TxCreate, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'platform' is not null or undefined
-            assertParamExists('txCreate', 'platform', platform)
-            // verify required parameter 'network' is not null or undefined
-            assertParamExists('txCreate', 'network', network)
-            // verify required parameter 'txCreate' is not null or undefined
-            assertParamExists('txCreate', 'txCreate', txCreate)
-            const localVarPath = `/{platform}/{network}/tx/create`
-                .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
-                .replace(`{${"network"}}`, encodeURIComponent(String(network)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearerAuth required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(txCreate, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
          * Submit a signed transaction to the network.  **Note**: A successful transaction may still be rejected on chain or not processed due to a too low fee. You can monitor successful transactions through Ubiquity websockets. 
          * @summary Submit a signed transaction
          * @param {string} platform Coin platform handle
@@ -2274,19 +2176,6 @@ export const TransactionsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Creates an unsigned transaction for BTC and ETH.  **Note** that Ethereum currently only supports singular transaction destinations 
-         * @summary Create an unsigned transaction
-         * @param {string} platform Coin platform handle
-         * @param {string} network Which network to target. Available networks can be found with /{platform}
-         * @param {TxCreate} txCreate 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async txCreate(platform: string, network: string, txCreate: TxCreate, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UnsignedTx>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.txCreate(platform, network, txCreate, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
          * Submit a signed transaction to the network.  **Note**: A successful transaction may still be rejected on chain or not processed due to a too low fee. You can monitor successful transactions through Ubiquity websockets. 
          * @summary Submit a signed transaction
          * @param {string} platform Coin platform handle
@@ -2347,18 +2236,6 @@ export const TransactionsApiFactory = function (configuration?: Configuration, b
          */
         getTxs(platform: string, network: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any): AxiosPromise<TxPage> {
             return localVarFp.getTxs(platform, network, order, continuation, limit, assets, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Creates an unsigned transaction for BTC and ETH.  **Note** that Ethereum currently only supports singular transaction destinations 
-         * @summary Create an unsigned transaction
-         * @param {string} platform Coin platform handle
-         * @param {string} network Which network to target. Available networks can be found with /{platform}
-         * @param {TxCreate} txCreate 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        txCreate(platform: string, network: string, txCreate: TxCreate, options?: any): AxiosPromise<UnsignedTx> {
-            return localVarFp.txCreate(platform, network, txCreate, options).then((request) => request(axios, basePath));
         },
         /**
          * Submit a signed transaction to the network.  **Note**: A successful transaction may still be rejected on chain or not processed due to a too low fee. You can monitor successful transactions through Ubiquity websockets. 
@@ -2425,20 +2302,6 @@ export class TransactionsApi extends BaseAPI {
      */
     public getTxs(platform: string, network: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any) {
         return TransactionsApiFp(this.configuration).getTxs(platform, network, order, continuation, limit, assets, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Creates an unsigned transaction for BTC and ETH.  **Note** that Ethereum currently only supports singular transaction destinations 
-     * @summary Create an unsigned transaction
-     * @param {string} platform Coin platform handle
-     * @param {string} network Which network to target. Available networks can be found with /{platform}
-     * @param {TxCreate} txCreate 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof TransactionsApi
-     */
-    public txCreate(platform: string, network: string, txCreate: TxCreate, options?: any) {
-        return TransactionsApiFp(this.configuration).txCreate(platform, network, txCreate, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
