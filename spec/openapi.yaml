@@ -630,12 +630,12 @@ components:
       bearerFormat: Opaque
       description: |
         `Authorization: Bearer <Token>` header must be set to authenticate API requests.
-        You can create tokens in the "API Keys" tab of your organization.
+        You can create tokens in the "Configure" tab of your API access area.
     apiKeyAuth:
       type: apiKey
       description: |
         A query param `?apiKey=<Token>` also can be used to authenticate API requests.
-        You can create tokens in the "API Keys" tab of your organization.
+        You can create tokens in the "Configure" tab of your API access area.
       name: apiKey
       in: query
   responses:
