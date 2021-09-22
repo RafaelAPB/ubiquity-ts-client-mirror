@@ -5,6 +5,7 @@ export const WS_BASE_URL = "wss://ubiquity.api.blockdaemon.com/v2";
 export const NETWORKS = {
   MAIN_NET: "mainnet",
   TEST_NET: "testnet",
+  ROPSTEN: "ropsten",
 };
 
 export const PROTOCOL = {

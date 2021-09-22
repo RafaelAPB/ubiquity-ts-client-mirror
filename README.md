@@ -163,6 +163,126 @@ blockApi
   );
 ```
 
+## Working with transactions
+### Transaction creation and signing
+Transactions can be created and signed directly from the SDK.
+Currently supported platforms are Bitcoin and Ethereum.
+To create and sign a transaction that sends 0.0001 BTC (10000 satoshis) with a 0.00001 BTC (1000 satoshis) fee from an account to another in Bitcoin's testnet:
+
+```typescript
+import { btcTransaction, createAndSign, NETWORKS } from "@ubiquity/ubiquity-ts-client";
+
+const privateKey = "<privateKey>";
+
+const input = [
+  {
+    hash: "<input transaction>",
+    index: <input transaction index>
+  }
+];
+
+const fee = 1000;
+const outputs = [
+  {
+    address: "<destination address>",
+    amount: 10000
+  }
+];
+
+async function main() {
+  const rawSignedTx = await createAndSign(input, outputs, privateKey, btcTransaction, { network: NETWORKS.TEST_NET });
+
+  console.log("Raw signed transaction:", rawSignedTx.tx);
+}
+
+main().catch(console.error);
+
+```
+
+For Bitcoin an unsigned transaction can also be created with the function `TransactionCreation.create`.
+
+To create and sign a transaction that sends 1 ETH and pays 21000 gas as fee from an account to another:
+
+```typescript
+import { createAndSign, ethTransaction, NETWORKS } from "@ubiquity/ubiquity-ts-client";
+
+const privateKey = "<privateKey>";
+
+const input = [
+  {
+    hash: "", // for ETH input hash is not needed
+    index: <nonce>
+  }
+];
+
+const fee = 21000;
+const gasPrice = 1509999997;
+const outputs = [
+  {
+    address: "<destination address>",
+    amount: 10 ** 18
+  }
+];
+
+async function main() {
+  const rawSignedTx = await createAndSign(input, outputs, privateKey, ethTransaction, {
+    fee: fee,
+    gasPrice,
+    network: NETWORKS.ROPSTEN
+  });
+
+  console.log("Raw signed transaction:", rawSignedTx.tx);
+}
+
+main().catch(console.error);
+
+```
+For Ethereum only transactions with a single output are currently supported.
+
+### Broadcasting signed transactions
+
+After a transaction is created and signed, it can be broadcasted through Ubiquity's `/tx/send` endpoint, that is interfaced through the `txSend` method:
+
+```typescript
+...
+
+async function main() {
+  const apiClient = new UbiquityClient("Auth Token Here");
+  console.log("Sending transaction to the network...");
+  const txSendResponse = await apiClient.transactionsApi.txSend(PROTOCOL.BITCOIN, NETWORKS.TEST_NET, rawSignedTx);
+
+  console.log("Transaction id: ", txSendResponse.data.id);
+
+}
+
+main().catch(console.error)
+```
+
+### Estimating fees
+
+Ubiquity's `/tx/estimate_fee` endpoint returns an estimation of the fee value required for transactions to be pushed to the network.
+It can be used through the `estimateFee` method:
+
+For Ethereum, this endpoint returns the average gas price obtained from the network.
+
+```typescript
+...
+
+async function main() {
+  const apiClient = new UbiquityClient("Auth Token Here");
+  
+  // For bitcoin, the 'confirmedWithinBlocks' parameter (defaults to 10) specifies
+  //   the number of blocks the transaction would be processed within, which
+  //   reflects in different fee values
+  const confirmedWithinBlocks = 15;
+  const feeResponse = await apiClient.transactionsApi.estimateFee(PROTOCOL.BITCOIN, NETWORKS.TEST_NET, confirmedWithinBlocks);
+
+  console.log("Transaction id: ", feeResponse.data.id);
+
+}
+
+main().catch(console.error)
+```
 
 ## Websocket 
 ### Blocks
