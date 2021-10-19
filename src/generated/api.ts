@@ -24,6 +24,19 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 /**
  * 
  * @export
+ * @interface AccountsObj
+ */
+export interface AccountsObj {
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof AccountsObj
+     */
+    addresses?: Array<string>;
+}
+/**
+ * 
+ * @export
  * @interface AlgorandMeta
  */
 export interface AlgorandMeta {
@@ -1011,10 +1024,11 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
          * @param {string} platform Coin platform handle
          * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {string} address Account address
+         * @param {string} [assets] Comma-separated list of asset paths to filter. If the list is empty, or all elements are empty, this filter has no effect.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getBalancesByAddress: async (platform: string, network: string, address: string, options: any = {}): Promise<RequestArgs> => {
+        getBalancesByAddress: async (platform: string, network: string, address: string, assets?: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'platform' is not null or undefined
             assertParamExists('getBalancesByAddress', 'platform', platform)
             // verify required parameter 'network' is not null or undefined
@@ -1040,11 +1054,68 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            if (assets !== undefined) {
+                localVarQueryParameter['assets'] = assets;
+            }
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns the balances of accounts for all supported currencies. 
+         * @summary Balances Of Addresses
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {AccountsObj} accountsObj 
+         * @param {string} [assets] Comma-separated list of asset paths to filter. If the list is empty, or all elements are empty, this filter has no effect.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBalancesByAddresses: async (platform: string, network: string, accountsObj: AccountsObj, assets?: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'platform' is not null or undefined
+            assertParamExists('getBalancesByAddresses', 'platform', platform)
+            // verify required parameter 'network' is not null or undefined
+            assertParamExists('getBalancesByAddresses', 'network', network)
+            // verify required parameter 'accountsObj' is not null or undefined
+            assertParamExists('getBalancesByAddresses', 'accountsObj', accountsObj)
+            const localVarPath = `/{platform}/{network}/accounts`
+                .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
+                .replace(`{${"network"}}`, encodeURIComponent(String(network)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (assets !== undefined) {
+                localVarQueryParameter['assets'] = assets;
+            }
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(accountsObj, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1116,10 +1187,11 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
          * @param {'desc' | 'asc'} [order] Pagination order
          * @param {string} [continuation] Continuation token from earlier response
          * @param {number} [limit] Max number of items to return in a response. Defaults to 25 and is capped at 100. 
+         * @param {string} [assets] Comma-separated list of asset paths to filter. If the list is empty, or all elements are empty, this filter has no effect.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTxsByAddress: async (platform: string, network: string, address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, options: any = {}): Promise<RequestArgs> => {
+        getTxsByAddress: async (platform: string, network: string, address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'platform' is not null or undefined
             assertParamExists('getTxsByAddress', 'platform', platform)
             // verify required parameter 'network' is not null or undefined
@@ -1157,6 +1229,10 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
                 localVarQueryParameter['limit'] = limit;
             }
 
+            if (assets !== undefined) {
+                localVarQueryParameter['assets'] = assets;
+            }
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
@@ -1184,11 +1260,26 @@ export const AccountsApiFp = function(configuration?: Configuration) {
          * @param {string} platform Coin platform handle
          * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {string} address Account address
+         * @param {string} [assets] Comma-separated list of asset paths to filter. If the list is empty, or all elements are empty, this filter has no effect.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getBalancesByAddress(platform: string, network: string, address: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<{ [key: string]: object; }>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getBalancesByAddress(platform, network, address, options);
+        async getBalancesByAddress(platform: string, network: string, address: string, assets?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<{ [key: string]: object; }>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getBalancesByAddress(platform, network, address, assets, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Returns the balances of accounts for all supported currencies. 
+         * @summary Balances Of Addresses
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {AccountsObj} accountsObj 
+         * @param {string} [assets] Comma-separated list of asset paths to filter. If the list is empty, or all elements are empty, this filter has no effect.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getBalancesByAddresses(platform: string, network: string, accountsObj: AccountsObj, assets?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<{ [key: string]: { [key: string]: object; }; }>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getBalancesByAddresses(platform, network, accountsObj, assets, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1215,11 +1306,12 @@ export const AccountsApiFp = function(configuration?: Configuration) {
          * @param {'desc' | 'asc'} [order] Pagination order
          * @param {string} [continuation] Continuation token from earlier response
          * @param {number} [limit] Max number of items to return in a response. Defaults to 25 and is capped at 100. 
+         * @param {string} [assets] Comma-separated list of asset paths to filter. If the list is empty, or all elements are empty, this filter has no effect.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getTxsByAddress(platform: string, network: string, address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TxPage>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getTxsByAddress(platform, network, address, order, continuation, limit, options);
+        async getTxsByAddress(platform: string, network: string, address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TxPage>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getTxsByAddress(platform, network, address, order, continuation, limit, assets, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -1238,11 +1330,25 @@ export const AccountsApiFactory = function (configuration?: Configuration, baseP
          * @param {string} platform Coin platform handle
          * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {string} address Account address
+         * @param {string} [assets] Comma-separated list of asset paths to filter. If the list is empty, or all elements are empty, this filter has no effect.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getBalancesByAddress(platform: string, network: string, address: string, options?: any): AxiosPromise<{ [key: string]: object; }> {
-            return localVarFp.getBalancesByAddress(platform, network, address, options).then((request) => request(axios, basePath));
+        getBalancesByAddress(platform: string, network: string, address: string, assets?: string, options?: any): AxiosPromise<{ [key: string]: object; }> {
+            return localVarFp.getBalancesByAddress(platform, network, address, assets, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Returns the balances of accounts for all supported currencies. 
+         * @summary Balances Of Addresses
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {AccountsObj} accountsObj 
+         * @param {string} [assets] Comma-separated list of asset paths to filter. If the list is empty, or all elements are empty, this filter has no effect.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBalancesByAddresses(platform: string, network: string, accountsObj: AccountsObj, assets?: string, options?: any): AxiosPromise<{ [key: string]: { [key: string]: object; }; }> {
+            return localVarFp.getBalancesByAddresses(platform, network, accountsObj, assets, options).then((request) => request(axios, basePath));
         },
         /**
          * Returns account activity 
@@ -1267,11 +1373,12 @@ export const AccountsApiFactory = function (configuration?: Configuration, baseP
          * @param {'desc' | 'asc'} [order] Pagination order
          * @param {string} [continuation] Continuation token from earlier response
          * @param {number} [limit] Max number of items to return in a response. Defaults to 25 and is capped at 100. 
+         * @param {string} [assets] Comma-separated list of asset paths to filter. If the list is empty, or all elements are empty, this filter has no effect.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTxsByAddress(platform: string, network: string, address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, options?: any): AxiosPromise<TxPage> {
-            return localVarFp.getTxsByAddress(platform, network, address, order, continuation, limit, options).then((request) => request(axios, basePath));
+        getTxsByAddress(platform: string, network: string, address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any): AxiosPromise<TxPage> {
+            return localVarFp.getTxsByAddress(platform, network, address, order, continuation, limit, assets, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1289,12 +1396,28 @@ export class AccountsApi extends BaseAPI {
      * @param {string} platform Coin platform handle
      * @param {string} network Which network to target. Available networks can be found with /{platform}
      * @param {string} address Account address
+     * @param {string} [assets] Comma-separated list of asset paths to filter. If the list is empty, or all elements are empty, this filter has no effect.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AccountsApi
      */
-    public getBalancesByAddress(platform: string, network: string, address: string, options?: any) {
-        return AccountsApiFp(this.configuration).getBalancesByAddress(platform, network, address, options).then((request) => request(this.axios, this.basePath));
+    public getBalancesByAddress(platform: string, network: string, address: string, assets?: string, options?: any) {
+        return AccountsApiFp(this.configuration).getBalancesByAddress(platform, network, address, assets, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Returns the balances of accounts for all supported currencies. 
+     * @summary Balances Of Addresses
+     * @param {string} platform Coin platform handle
+     * @param {string} network Which network to target. Available networks can be found with /{platform}
+     * @param {AccountsObj} accountsObj 
+     * @param {string} [assets] Comma-separated list of asset paths to filter. If the list is empty, or all elements are empty, this filter has no effect.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountsApi
+     */
+    public getBalancesByAddresses(platform: string, network: string, accountsObj: AccountsObj, assets?: string, options?: any) {
+        return AccountsApiFp(this.configuration).getBalancesByAddresses(platform, network, accountsObj, assets, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1322,12 +1445,13 @@ export class AccountsApi extends BaseAPI {
      * @param {'desc' | 'asc'} [order] Pagination order
      * @param {string} [continuation] Continuation token from earlier response
      * @param {number} [limit] Max number of items to return in a response. Defaults to 25 and is capped at 100. 
+     * @param {string} [assets] Comma-separated list of asset paths to filter. If the list is empty, or all elements are empty, this filter has no effect.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AccountsApi
      */
-    public getTxsByAddress(platform: string, network: string, address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, options?: any) {
-        return AccountsApiFp(this.configuration).getTxsByAddress(platform, network, address, order, continuation, limit, options).then((request) => request(this.axios, this.basePath));
+    public getTxsByAddress(platform: string, network: string, address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any) {
+        return AccountsApiFp(this.configuration).getTxsByAddress(platform, network, address, order, continuation, limit, assets, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
