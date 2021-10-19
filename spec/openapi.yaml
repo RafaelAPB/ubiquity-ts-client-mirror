@@ -148,6 +148,7 @@ paths:
         - $ref: '#/components/parameters/platform'
         - $ref: '#/components/parameters/network'
         - $ref: '#/components/parameters/address'
+        - $ref: '#/components/parameters/assets'
       responses:
         200:
           description: Balances
@@ -184,6 +185,7 @@ paths:
         - $ref: '#/components/parameters/order'
         - $ref: '#/components/parameters/continuation'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/assets'
       responses:
         200:
           description: Transactions
@@ -288,6 +290,42 @@ paths:
                 "detail": "current query size is too large for this account. try reducing query range (from, to)"
               }
 
+  /{platform}/{network}/accounts:
+    post:
+      summary: Balances Of Addresses
+      operationId: GetBalancesByAddresses
+      description: |
+        Returns the balances of accounts for all supported currencies.
+      tags:
+        - Accounts
+      parameters:
+        - $ref: '#/components/parameters/platform'
+        - $ref: '#/components/parameters/network'
+        - $ref: '#/components/parameters/assets'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/accounts_obj'
+      responses:
+        200:
+          description: Balances
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/accounts_balances_map"
+        400:
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/error"
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        429:
+          $ref: '#/components/responses/TooManyRequests'
+
   /{platform}/{network}/txs:
     get:
       summary: All Transactions
@@ -302,14 +340,7 @@ paths:
         - $ref: '#/components/parameters/order'
         - $ref: '#/components/parameters/continuation'
         - $ref: '#/components/parameters/limit'
-        - name: assets
-          in: query
-          required: false
-          description: Comma-separated list of asset paths to filter.
-            If the list is empty, or all elements are empty, this filter has no effect.
-          schema:
-            type: string
-          example: "ethereum/native/eth:ethereum/currency2"
+        - $ref: '#/components/parameters/assets'
 
       responses:
         200:
@@ -734,6 +765,11 @@ components:
           description: Token to get the next page
           example: "8185.123"
           nullable: true
+    accounts_balances_map:
+      type: object
+      description: Accounts balances with account addressses as keys
+      additionalProperties:
+        $ref: "#/components/schemas/balances_map"
     balances_map:
       type: object
       description: Currency balances with asset paths as keys
@@ -904,6 +940,14 @@ components:
           example: "200"
         currency:
           $ref: "#/components/schemas/currency"
+    accounts_obj:
+      type: object
+      properties:
+        addresses:
+          type: array
+          items:
+            type: string
+
     transfer:
       type: object
       description: Transfer of currency from one account to another
@@ -1440,7 +1484,22 @@ components:
           summary: Block hash or Block ID
         Special identifier:
           value: current
-          summary: Special identifier for the current bloc
+          summary: Special identifier for the current block
+    assets:
+      name: assets
+      in: query
+      required: false
+      description: Comma-separated list of asset paths to filter.
+        If the list is empty, or all elements are empty, this filter has no effect.
+      schema:
+        type: string
+      examples:
+        ETH native currency:
+          value: "ethereum/native/eth"
+        ETH smart token:
+          value: "ethereum/contract/0x0f5d2fb29fb7d3cfee444a200298f468908cc942/erc-20"
+        More than one asset:
+          value: "ethereum/native/eth,ethereum/contract/0x0f5d2fb29fb7d3cfee444a200298f468908cc942/erc-20"
     confirmed_within_blocks:
       name: confirmed_within_blocks
       in: query
