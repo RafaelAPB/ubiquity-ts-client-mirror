@@ -769,7 +769,13 @@ components:
       type: object
       description: Accounts balances with account addressses as keys
       additionalProperties:
-        $ref: "#/components/schemas/balances_map"
+        additionalProperties:
+          type: object
+          properties:
+            currency:
+              $ref: "#/components/schemas/currency"
+            balance:
+              $ref: "#/components/schemas/amount"
     balances_map:
       type: object
       description: Currency balances with asset paths as keys
