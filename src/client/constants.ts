@@ -13,10 +13,13 @@ export const PROTOCOL = {
   BITCOIN: "bitcoin",
   CELO: "celo",
   DIEM: "diem",
+  DOGECOIN: "dogecoin",
   ETHEREUM: "ethereum",
+  NEAR: "near",
   OASIS: "oasis",
   POLKADOT: "polkadot",
   RIPPLE: "ripple",
+  STACKS: "stacks",
 };
 
 export const SPECIAL_IDENTIFIERS = {
@@ -28,3 +31,4 @@ export const WS_CHANNELS = {
   BLOCK: "ubiquity.blocks",
   BLOCK_IDENTIFIERS: "ubiquity.block_identifiers",
 };
+ 
