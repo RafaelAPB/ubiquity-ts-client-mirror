@@ -42,7 +42,7 @@ info:
     * stacks/mainnet - [Stacks API Documentation](https://blockstack.github.io/stacks-blockchain-api/)
     * near/mainnet - [NEAR RPC Documentation](https://docs.near.org/docs/api/rpc)
 
-    A full URL example: https://ubiquity.api.blockdaemon.com/**bitcoin/mainnet**
+    A full URL example: https://ubiquity.api.blockdaemon.com/bitcoin/mainnet
 
     ##### Pagination
     Certain resources contain a lot of data, more than what's practical
@@ -61,9 +61,9 @@ info:
     url: 'logo.png'
 
 servers:
-  - url: https://ubiquity.api.blockdaemon.com/v2
+  - url: https://ubiquity.api.blockdaemon.com
     description: Production server
-  - url: https://stg.ubiquity.api.blockdaemon.com/v2
+  - url: https://stg.ubiquity.api.blockdaemon.com
     description: Staging server
 
 tags:
@@ -76,7 +76,166 @@ security:
   - bearerAuth: []
 
 paths:
-  /:
+  /v1/:
+    get:
+      summary: Platforms overview
+      operationId: GetPlatformsList
+      tags:
+        - Platforms
+      description: >
+        Provides a list of supported platforms and networks.
+      responses:
+        200:
+          description: Platforms overview
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/platforms_overview"
+              example: {
+                "platforms": [
+                  {
+                    "handle": "algorand",
+                    "network": "mainnet"
+                  },
+                  {
+                    "handle": "bitcoin",
+                    "network": "mainnet"
+                  },
+                  {
+                    "handle": "bitcoin",
+                    "network": "testnet"
+                  }
+                ]
+              }
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        429:
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v1/{platform}/{network}/:
+    get:
+      summary: Platform Info
+      operationId: GetPlatformEndpoints
+      tags:
+        - Platforms
+      description: >
+        Provides information about supported endpoints
+        and generic platform information.
+      parameters:
+        - $ref: '#/components/parameters/platform-v1'
+        - $ref: '#/components/parameters/network'
+      responses:
+        200:
+          description: Platform overview
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/platform_detail"
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        429:
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v1/{platform}/{network}/tx/estimate_fee:
+    get:
+      summary: Get fee estimate
+      description: |
+        Get a fee estimation in decimals from the ubiquity fee estimation service.
+        Currently supported for Bitcoin and Ethereum. Endpoint will return 3 fee estimations
+        fast, medium and slow
+      operationId: FeeEstimate
+      tags:
+        - Transactions
+      parameters:
+        - $ref: '#/components/parameters/platform-v1'
+        - $ref: '#/components/parameters/network'
+      responses:
+        200:
+          description: Platforms overview
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/fee_estimate"
+              example: {
+                "most_recent_block": 714408,
+                "estimated_fees": {
+                  fast": 5,
+                  "medium": 3,
+                  "slow": 2
+                }
+              }
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        429:
+          $ref: '#/components/responses/TooManyRequests'
+
+
+  /v1/{platform}/{network}/account/{address}:
+    get:
+      summary: Balances Of Address
+      operationId: GetListOfBalancesByAddress
+      description: |
+        Returns the account balances for all supported currencies.
+      tags:
+        - Accounts
+      parameters:
+        - $ref: '#/components/parameters/platform-v1'
+        - $ref: '#/components/parameters/network'
+        - $ref: '#/components/parameters/address'
+      responses:
+        200:
+          description: Balances
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/balances_map-v1"
+        400:
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/error"
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        429:
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v1/{platform}/{network}/accounts:
+    post:
+      summary: Balances Of Addresses
+      operationId: GetListOfBalancesByAddresses
+      description: |
+        Returns the balances of accounts for all supported currencies.
+      tags:
+        - Accounts
+      parameters:
+        - $ref: '#/components/parameters/platform-v1'
+        - $ref: '#/components/parameters/network'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/accounts_obj'
+      responses:
+        200:
+          description: Balances
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/accounts_balances_map-v1"
+        400:
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/error"
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        429:
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v2/:
     get:
       summary: Platforms overview
       operationId: GetPlatforms
@@ -112,7 +271,7 @@ paths:
         429:
           $ref: '#/components/responses/TooManyRequests'
 
-  /{platform}/{network}:
+  /v2/{platform}/{network}:
     get:
       summary: Platform Info
       operationId: GetPlatform
@@ -136,7 +295,7 @@ paths:
         429:
           $ref: '#/components/responses/TooManyRequests'
 
-  /{platform}/{network}/account/{address}:
+  /v2/{platform}/{network}/account/{address}:
     get:
       summary: Balances Of Address
       operationId: GetBalancesByAddress
@@ -167,7 +326,7 @@ paths:
         429:
           $ref: '#/components/responses/TooManyRequests'
 
-  /{platform}/{network}/account/{address}/txs:
+  /v2/{platform}/{network}/account/{address}/txs:
     get:
       summary: Transactions Of Address
       description: >
@@ -229,7 +388,7 @@ paths:
         429:
           $ref: '#/components/responses/TooManyRequests'
 
-  /{platform}/{network}/account/{address}/report:
+  /v2/{platform}/{network}/account/{address}/report:
     get:
       summary: A financial report for an address between a time period. Default timescale is within the last 30 days
       operationId: GetReportByAddress
@@ -290,7 +449,7 @@ paths:
                 "detail": "current query size is too large for this account. try reducing query range (from, to)"
               }
 
-  /{platform}/{network}/accounts:
+  /v2/{platform}/{network}/accounts:
     post:
       summary: Balances Of Addresses
       operationId: GetBalancesByAddresses
@@ -326,7 +485,7 @@ paths:
         429:
           $ref: '#/components/responses/TooManyRequests'
 
-  /{platform}/{network}/txs:
+  /v2/{platform}/{network}/txs:
     get:
       summary: All Transactions
       description: Get all transactions on the platform, starting with the lastest one.
@@ -372,7 +531,7 @@ paths:
         429:
           $ref: '#/components/responses/TooManyRequests'
 
-  /{platform}/{network}/block/{key}:
+  /v2/{platform}/{network}/block/{key}:
     get:
       summary: Block By Number/Hash
       description: Get a block and all its transactions by the block number or hash
@@ -421,7 +580,7 @@ paths:
         429:
           $ref: '#/components/responses/TooManyRequests'
 
-  /{platform}/{network}/block_identifier/{key}:
+  /v2/{platform}/{network}/block_identifier/{key}:
     get:
       summary: Block Identifier By Number/Hash
       description: Get minimal block identifier by block number or hash
@@ -470,7 +629,7 @@ paths:
         429:
           $ref: '#/components/responses/TooManyRequests'
 
-  /{platform}/{network}/tx/{id}:
+  /v2/{platform}/{network}/tx/{id}:
     get:
       summary: Transaction By Hash
       operationId: GetTx
@@ -524,7 +683,7 @@ paths:
         429:
           $ref: '#/components/responses/TooManyRequests'
 
-  /{platform}/{network}/sync/block_number:
+  /v2/{platform}/{network}/sync/block_number:
     get:
       summary: Get current block number
       operationId: CurrentBlockNumber
@@ -547,7 +706,7 @@ paths:
         429:
           $ref: '#/components/responses/TooManyRequests'
 
-  /{platform}/{network}/sync/block_id:
+  /v2/{platform}/{network}/sync/block_id:
     get:
       summary: Get current block ID
       operationId: CurrentBlockID
@@ -569,7 +728,7 @@ paths:
         429:
           $ref: '#/components/responses/TooManyRequests'
 
-  /{platform}/{network}/tx/send:
+  /v2/{platform}/{network}/tx/send:
     post:
       summary: Submit a signed transaction
       description: |
@@ -614,7 +773,7 @@ paths:
                 "detail": "failed to send transaction: json-rpc error #-27: Transaction already in block chain"
               }
 
-  /{platform}/{network}/tx/estimate_fee:
+  /v2/{platform}/{network}/tx/estimate_fee:
     get:
       summary: Get fee estimate
       description: |
@@ -652,7 +811,6 @@ paths:
                 "status": 400,
                 "detail": "failed to get estimated fee: json-rpc error #-8:  : Invalid conf_target, must be between 1 and 1008"
               }
-
 components:
   securitySchemes:
     bearerAuth:
@@ -776,6 +934,11 @@ components:
               $ref: "#/components/schemas/currency"
             balance:
               $ref: "#/components/schemas/amount"
+    accounts_balances_map-v1:
+      type: object
+      description: Accounts balances with account addressses as keys
+      additionalProperties:
+        $ref: "#/components/schemas/balances_map-v1"
     balances_map:
       type: object
       description: Currency balances with asset paths as keys
@@ -798,6 +961,53 @@ components:
           "balance": "99999"
         }
       }
+    balances_map-v1:
+      description: Currency balances with asset paths as keys
+      type: array
+      items:
+        $ref: "#/components/schemas/balance-v1"
+      example: [
+        {
+          "currency": {
+            "asset_path": "ethereum/native/eth",
+            "symbol": "ETH",
+            "name": "Ether",
+            "decimals": 18,
+            "type": "native"
+          },
+          "confirmed_balance": "99999",
+          "pending_balance": "999999",
+          "confirmed_nonce": 9999,
+          "confirmed_block": 99999999
+        }
+      ]
+    balance-v1:
+      description: Currency balances with asset paths as keys
+      type: object
+      properties:
+        currency:
+          $ref: "#/components/schemas/currency"
+        confirmed_balance:
+          type: string
+        pending_balance:
+          type: string
+        confirmed_nonce:
+          type: integer
+        confirmed_block:
+          type: integer
+      example: {
+          "currency": {
+            "asset_path": "ethereum/native/eth",
+            "symbol": "ETH",
+            "name": "Ether",
+            "decimals": 18,
+            "type": "native"
+          },
+          "confirmed_balance": "99999",
+          "pending_balance": "999999",
+          "confirmed_nonce": 9999,
+          "confirmed_block": 99999999
+        }
     tx:
       type: object
       properties:
@@ -1218,6 +1428,19 @@ components:
               network:
                 type: string
                 example: "mainnet"
+    fee_estimate:
+      type: object
+      properties:
+        most_recent_block:
+          type: integer
+          description: Most recent block
+        estimated_fees:
+          type: object
+          description: Object containing fast, medium, slow fees
+          properties:
+            fast: {}
+            medium: {}
+            slow: {}
     supply:
       type: object
       properties:
@@ -1428,6 +1651,18 @@ components:
           value: stellar
         Ripple:
           value: xrp
+    platform-v1:
+      in: path
+      name: platform
+      required: true
+      description: Coin platform handle
+      schema:
+        type: string
+      examples:
+        Bitcoin:
+          value: bitcoin
+        Ethereum:
+          value: ethereum
     network:
       name: network
       in: path
