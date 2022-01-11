@@ -18,24 +18,24 @@ cache:
     - dist
 
 generate:
-  image: docker:20.10.12-alpine3.15
+  image: openapitools/openapi-generator-cli:v5.2.0
   stage: generate
   script:
-    - docker run --rm -v "$$(pwd):/local" \
-      openapitools/openapi-generator-cli:v5.2.0 generate \
-      -i /local/spec/openapi.yaml \
-      -g typescript-axios \
-      -o /local/src/generated
-    - git config --global user.name "Mr.Roboto 🤖"
-    - git config --global user.email "mrRoboto@blockdaemon.com"
-    - git add ./src/generated
-    - git commit -m "UB-00 Updating generated code with changes from ${CI_JOB_ID}" || true
-    - git push http://gitlab-ci-token:${AUTH_TOKEN_UBIQUITY_TS_CLIENT}@gitlab.com/Blockdaemon/ubiquity/ubiquity-ts-client.git HEAD:master || true
-  only:
-    refs:
-      - master
-    changes:
-      - spec/openapi.yaml
+    - >
+      java -jar /opt/openapi-generator/modules/openapi-generator-cli/target/openapi-generator-cli.jar generate
+      -i ./spec/openapi.yaml
+      -g typescript-axios
+      -o ./src/generated
+    # - git config --global user.name "Mr.Roboto 🤖"
+    # - git config --global user.email "mrRoboto@blockdaemon.com"
+    # - git add ./src/generated
+    # - git commit -m "UB-00 Updating generated code with changes from ${CI_JOB_ID}" || true
+    # - git push http://gitlab-ci-token:${AUTH_TOKEN_UBIQUITY_TS_CLIENT}@gitlab.com/Blockdaemon/ubiquity/ubiquity-ts-client.git HEAD:master || true
+  # only:
+  #   refs:
+  #     - master
+  #   changes:
+  #     - spec/openapi.yaml
 
 build:
   image: node:15-alpine
