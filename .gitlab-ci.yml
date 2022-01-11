@@ -18,13 +18,14 @@ cache:
     - dist
 
 generate:
-  image: openjdk:8-jre-alpine3.9
+  image: docker:20.10.12-alpine3.15
   stage: generate
-  before_script:
-  - apk add --no-cache git
-  - git submodule update --init
   script:
-    - java -jar openapi-generator-cli-5.2.0.jar generate -i spec/openapi.yaml -c open-api-conf.yaml -g typescript-axios -o ./src/generated
+    - docker run --rm -v "$$(pwd):/local" \
+      openapitools/openapi-generator-cli:v5.2.0 generate \
+      -i /local/spec/openapi.yaml \
+      -g typescript-axios \
+      -o /local/src/generated
     - git config --global user.name "Mr.Roboto 🤖"
     - git config --global user.email "mrRoboto@blockdaemon.com"
     - git add ./src/generated
@@ -46,11 +47,11 @@ build:
 test:
   image: node:15-alpine
   stage: test
-  script: 
+  script:
     - npm install
     - npm run build
     - npm run test
- 
+
 deploy:
   image: node:15-alpine
   stage: deploy
@@ -59,7 +60,7 @@ deploy:
     - echo "//gitlab.com/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}">>.npmrc
     - echo "always-auth=true">>.npmrc
     - npm install
-    - npm run build    
+    - npm run build
     - npm publish
   only:
   - tags
