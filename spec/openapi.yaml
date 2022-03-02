@@ -241,6 +241,83 @@ paths:
         429:
           $ref: '#/components/responses/TooManyRequests'
 
+  /v1/{platform}/{network}/account/{address}/report:
+    get:
+      summary: A financial report for an address between a time period. Default timescale is within the last 30 days
+      operationId: GetReportByAddress
+      description: |
+        Returns account activity
+      tags:
+        - Accounts
+      parameters:
+        - $ref: '#/components/parameters/platform'
+        - $ref: '#/components/parameters/network'
+        - $ref: '#/components/parameters/address'
+        - name: from
+          in: query
+          description: Unix Timestamp from where to start
+          schema:
+            type: integer
+          example: 961846434
+        - name: to
+          in: query
+          description: Unix Timestamp from where to end
+          schema:
+            type: integer
+          example: 1119612834
+        - name: limit
+          in: query
+          required: false
+          description: |
+            Max number of items to return in a response.
+            Defaults to 50k and is capped at 100k.
+          schema:
+            type: integer
+          example: 1000
+        - name: continuation
+          in: query
+          required: false
+          description: Continuation token from earlier response
+          schema:
+            type: string
+          example: "xyz"
+      responses:
+        200:
+          description: Account Activity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/report"
+            text/csv:
+              schema:
+                type: string
+                example: |
+                  Protocol,PublicAddress,Currency,EventID,Block,BlockTimestamp,BlockTime,Hash,Action,Value,SenderAddress,TransactionFee,SenderReward,RecipientReward,Close,CloseAmount,CloseReward
+                  Algorand,GXL2EQ6JV54MTMP2IXOTF5CJLS7GAWMRDZMOY7JZAPO72AQRDDYGD6OX3E,ALGO,RNEYUT3MRYGT5ENSLIC7LGJCJMW6BXNS6SAW7A25DTYRW4TFJ5JA,8986217,1599745403,2020-09-10 13:43:23 +0000 UTC,RNEYUT3MRYGT5ENSLIC7LGJCJMW6BXNS6SAW7A25DTYRW4TFJ5JA,pay,1,T3BYUTYZCWV7UVK7IFYPC2UKH5VNBGVP4PUKSUBF5F6GQ244Y4I2XUWCQM,0.001,0.000003,0,,0,0
+        400:
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/error"
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        429:
+          $ref: '#/components/responses/TooManyRequests'
+        413:
+          description: Too Many Transactions
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+              example: {
+                "type": "unsupported",
+                "code": 16390,
+                "title": "Unsupported functionality",
+                "status": 413,
+                "detail": "current query size is too large for this account. try reducing query range (from, to)"
+              }
+
   /v1/{platform}/{network}/tx/{id}/confirmations:
     get:
       summary: Transaction confirmations By Hash
@@ -451,7 +528,7 @@ paths:
   /v2/{platform}/{network}/account/{address}/report:
     get:
       summary: A financial report for an address between a time period. Default timescale is within the last 30 days
-      operationId: GetReportByAddress
+      operationId: v2GetReportByAddress
       description: |
         Returns account activity
       tags:
