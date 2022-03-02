@@ -26,6 +26,8 @@ generate:
       -i ./spec/openapi.yaml
       -g typescript-axios
       -o ./src/generated
+    - apt update
+    - apt install git -y
     - git config --global user.name "Mr.Roboto 🤖"
     - git config --global user.email "mrRoboto@blockdaemon.com"
     - git add ./src/generated
