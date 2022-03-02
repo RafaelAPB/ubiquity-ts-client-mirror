@@ -21,11 +21,16 @@ info:
     * dogecoin
     * oasis
     * near
+    * terra
+    * litecoin
+    * bitcoincash
 
     #### Testnet
     * bitcoin/testnet
     * ethereum/ropsten
     * dogecoin/testnet
+    * litecoin/testnet
+    * bitcoincash/testnet
 
     #### Native
     Ubiquity provides native access to all Blockchain nodes it supports.
@@ -39,6 +44,9 @@ info:
     * dogecoin/(mainnet | testnet) - [Dogecoin API Documentaion](https://developer.bitcoin.org/reference/rpc/)
     * oasis/mainnet - [Oasis Rosetta Gateway Documentation](https://www.rosetta-api.org/docs/api_identifiers.html#network-identifier)
     * near/mainnet - [NEAR RPC Documentation](https://docs.near.org/docs/api/rpc)
+    * terra/mainnet - [Terra RPC Documentation](https://docs.terra.money/docs/develop/how-to/endpoints.html)
+    * litecoin/mainnet - [Litecoin RPC Documentation](https://litecoin.info/index.php/Litecoin_API)
+    * bitcoincash/mainnet - [Bitcoin Cash RPC Documentation](https://docs.bitcoincashnode.org/doc/json-rpc/)
 
     A full URL example: https://ubiquity.api.blockdaemon.com/bitcoin/mainnet
 
@@ -233,6 +241,60 @@ paths:
         429:
           $ref: '#/components/responses/TooManyRequests'
 
+  /v1/{platform}/{network}/tx/{id}/confirmations:
+    get:
+      summary: Transaction confirmations By Hash
+      operationId: GetTxConfirmations
+      tags:
+        - Transactions
+      parameters:
+        - $ref: '#/components/parameters/platform'
+        - $ref: '#/components/parameters/network'
+        - name: id
+          in: path
+          required: true
+          description: Transaction ID/Hash
+          schema:
+            type: string
+          example: "0xF00Fa860473130C1df10707223E66Cb4B839B165"
+      responses:
+        200:
+          description: Transaction confirmations
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/tx_confirmation"
+        400:
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/error"
+              example: {
+                "type": "bad-request",
+                "code": 16385,
+                "title": "Invalid Identifier",
+                "status": 400,
+                "detail": "The requested identifier is invalid."
+              }
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        404:
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/error"
+              example: {
+                "type": "not-found",
+                "code": 16388,
+                "title": "Not Found",
+                "status": 404,
+                "detail": "The requested resource has not been found"
+              }
+        429:
+          $ref: '#/components/responses/TooManyRequests'
+
   /v2/:
     get:
       summary: Platforms overview
@@ -410,6 +472,22 @@ paths:
           schema:
             type: integer
           example: 1119612834
+        - name: limit
+          in: query
+          required: false
+          description: |
+            Max number of items to return in a response.
+            Defaults to 50k and is capped at 100k.
+          schema:
+            type: integer
+          example: 1000
+        - name: continuation
+          in: query
+          required: false
+          description: Continuation token from earlier response
+          schema:
+            type: string
+          example: "xyz"
       responses:
         200:
           description: Account Activity
@@ -905,6 +983,23 @@ components:
           type: string
           description: Parent block hash
           example: "0xfcf029ffd36a6714aae09dcc7acbdd8f2b96327f"
+    tx_confirmation:
+      type: object
+      properties:
+        current_height:
+          type: integer
+          format: int64
+          description: Current Block Number
+          example: 150123
+        tx_id:
+          type: string
+          description: Transaction hash
+          example: "0x123456070D674D44a7F9cb4Ab272bd88fAd004b5"
+        confirmations:
+          type: integer
+          format: int64
+          description: Total transaction confirmations 
+          example: 10
     tx_page:
       type: object
       properties:
@@ -1529,6 +1624,14 @@ components:
           type: integer
           description: The number of transactions in the report
           example: 1
+        limit:
+          type: integer
+          description: The limit number provided in the request or the default
+          example: 100
+        continuation:
+          type: string
+          description: Continuation token to send in the next request if there are more items
+          example: xyz
       required:
         - fields
         - items
