@@ -471,7 +471,7 @@ paths:
         from newest to oldest.
 
         This call uses pagination.
-      operationId: GetTxsByAddress
+      operationId: v2GetTxsByAddress
       tags:
         - Accounts
       parameters:
@@ -489,6 +489,68 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/tx_page"
+          links:
+            Continuation:
+              operationId: GetTxsByAddress
+              parameters:
+                continuation: '$response.body#/continuation'
+        400:
+          description: Invalid address
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/error"
+              example: {
+                "type": "bad-request",
+                "code": 16384,
+                "title": "Invalid Address",
+                "status": 400,
+                "detail": "The requested address is invalid on this platform"
+              }
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        403:
+          description: Invalid continuation
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/error"
+              example: {
+                "type": "forbidden",
+                "code": 16389,
+                "title": "Invalid Continuation",
+                "status": 403,
+                "detail": "The used continuation token is invalid."
+              }
+        429:
+          $ref: '#/components/responses/TooManyRequests'
+
+  /v1/{platform}/{network}/account/{address}/txs:
+    get:
+      summary: Transactions Of Address
+      description: >
+        Gets transactions that an address was involved with,
+        from newest to oldest.
+
+        This call uses pagination.
+      operationId: GetTxsByAddress
+      tags:
+        - Accounts
+      parameters:
+        - $ref: '#/components/parameters/platform'
+        - $ref: '#/components/parameters/network'
+        - $ref: '#/components/parameters/address'
+        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/continuation'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/assets'
+      responses:
+        200:
+          description: Transactions
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/tx_page-v1"
           links:
             Continuation:
               operationId: GetTxsByAddress
@@ -1093,6 +1155,22 @@ components:
           description: Token to get the next page
           example: "8185.123"
           nullable: true
+    tx_page-v1:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Number of items in txs
+          example: 1
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/tx-v1"
+        continuation:
+          type: string
+          description: Token to get the next page
+          example: "8185.123"
+          nullable: true
     accounts_balances_map:
       type: object
       description: Accounts balances with account addressses as keys
@@ -1254,6 +1332,68 @@ components:
               }
             }
           }
+    Event:
+      type: object
+      properties:
+        amount:
+          type: integer
+          nullable: true
+        block_id:
+          type: string
+        block_number:
+          type: integer
+        date:
+          type: integer
+        decimals:
+          type: integer
+          nullable: true
+        denomination:
+          type: string
+          nullable: true
+        destination:
+          type: string
+          nullable: true
+        id:
+          type: string
+        meta: {}
+        source:
+          type: string
+          nullable: true
+        transaction_id:
+          type: string
+        type:
+          type: string
+    tx-v1:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique transaction identifier
+          example: "0xF00Fa860473130C1df10707223E66Cb4B839B165"
+        date:
+          type: integer
+          format: int64
+          description: Unix timestamp
+          example: 1571222657
+        block_id:
+          type: string
+          description: ID of block if mined, otherwise omitted.
+          example: "0xaf2948aba2ed8cc7d5b7d4e4f4164a7c8819efc94d30aab3fce6904df68dbc07"
+          nullable: true
+        status:
+          type: string
+          description: Result status of the transaction.
+          enum: [ completed, failed ]
+        nonce:
+          type: integer
+        num_events:
+          type: integer
+        meta: {}
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/Event'
+          nullable: true
     operation:
       type: object
       oneOf:
