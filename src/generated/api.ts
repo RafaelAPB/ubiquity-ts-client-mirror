@@ -284,6 +284,85 @@ export interface Effect {
 /**
  * 
  * @export
+ * @interface Event
+ */
+export interface Event {
+    /**
+     * 
+     * @type {number}
+     * @memberof Event
+     */
+    amount?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Event
+     */
+    block_id?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Event
+     */
+    block_number?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Event
+     */
+    date?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Event
+     */
+    decimals?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Event
+     */
+    denomination?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Event
+     */
+    destination?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Event
+     */
+    id?: string;
+    /**
+     * 
+     * @type {any}
+     * @memberof Event
+     */
+    meta?: any | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Event
+     */
+    source?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Event
+     */
+    transaction_id?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Event
+     */
+    type?: string;
+}
+/**
+ * 
+ * @export
  * @interface Fee
  */
 export interface Fee {
@@ -1094,6 +1173,31 @@ export interface TxPage {
 /**
  * 
  * @export
+ * @interface TxPageV1
+ */
+export interface TxPageV1 {
+    /**
+     * Number of items in txs
+     * @type {number}
+     * @memberof TxPageV1
+     */
+    total?: number;
+    /**
+     * 
+     * @type {Array<TxV1>}
+     * @memberof TxPageV1
+     */
+    items?: Array<TxV1>;
+    /**
+     * Token to get the next page
+     * @type {string}
+     * @memberof TxPageV1
+     */
+    continuation?: string | null;
+}
+/**
+ * 
+ * @export
  * @interface TxReceipt
  */
 export interface TxReceipt {
@@ -1104,6 +1208,71 @@ export interface TxReceipt {
      */
     id: string;
 }
+/**
+ * 
+ * @export
+ * @interface TxV1
+ */
+export interface TxV1 {
+    /**
+     * Unique transaction identifier
+     * @type {string}
+     * @memberof TxV1
+     */
+    id?: string;
+    /**
+     * Unix timestamp
+     * @type {number}
+     * @memberof TxV1
+     */
+    date?: number;
+    /**
+     * ID of block if mined, otherwise omitted.
+     * @type {string}
+     * @memberof TxV1
+     */
+    block_id?: string | null;
+    /**
+     * Result status of the transaction.
+     * @type {string}
+     * @memberof TxV1
+     */
+    status?: TxV1StatusEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof TxV1
+     */
+    nonce?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TxV1
+     */
+    num_events?: number;
+    /**
+     * 
+     * @type {any}
+     * @memberof TxV1
+     */
+    meta?: any | null;
+    /**
+     * 
+     * @type {Array<Event>}
+     * @memberof TxV1
+     */
+    events?: Array<Event> | null;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum TxV1StatusEnum {
+    Completed = 'completed',
+    Failed = 'failed'
+}
+
 /**
  * An unspent transaction output
  * @export
@@ -1420,7 +1589,7 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
             assertParamExists('getTxsByAddress', 'network', network)
             // verify required parameter 'address' is not null or undefined
             assertParamExists('getTxsByAddress', 'address', address)
-            const localVarPath = `/v2/{platform}/{network}/account/{address}/txs`
+            const localVarPath = `/v1/{platform}/{network}/account/{address}/txs`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)))
                 .replace(`{${"address"}}`, encodeURIComponent(String(address)));
@@ -1532,6 +1701,72 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * Gets transactions that an address was involved with, from newest to oldest. This call uses pagination. 
+         * @summary Transactions Of Address
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} address Account address
+         * @param {'desc' | 'asc'} [order] Pagination order
+         * @param {string} [continuation] Continuation token from earlier response
+         * @param {number} [limit] Max number of items to return in a response. Defaults to 25 and is capped at 100. 
+         * @param {string} [assets] Comma-separated list of asset paths to filter. If the list is empty, or all elements are empty, this filter has no effect.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v2GetTxsByAddress: async (platform: string, network: string, address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'platform' is not null or undefined
+            assertParamExists('v2GetTxsByAddress', 'platform', platform)
+            // verify required parameter 'network' is not null or undefined
+            assertParamExists('v2GetTxsByAddress', 'network', network)
+            // verify required parameter 'address' is not null or undefined
+            assertParamExists('v2GetTxsByAddress', 'address', address)
+            const localVarPath = `/v2/{platform}/{network}/account/{address}/txs`
+                .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
+                .replace(`{${"network"}}`, encodeURIComponent(String(network)))
+                .replace(`{${"address"}}`, encodeURIComponent(String(address)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (order !== undefined) {
+                localVarQueryParameter['order'] = order;
+            }
+
+            if (continuation !== undefined) {
+                localVarQueryParameter['continuation'] = continuation;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (assets !== undefined) {
+                localVarQueryParameter['assets'] = assets;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -1626,7 +1861,7 @@ export const AccountsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getTxsByAddress(platform: string, network: string, address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TxPage>> {
+        async getTxsByAddress(platform: string, network: string, address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TxPageV1>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getTxsByAddress(platform, network, address, order, continuation, limit, assets, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -1645,6 +1880,23 @@ export const AccountsApiFp = function(configuration?: Configuration) {
          */
         async v2GetReportByAddress(platform: string, network: string, address: string, from?: number, to?: number, limit?: number, continuation?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Report>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.v2GetReportByAddress(platform, network, address, from, to, limit, continuation, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Gets transactions that an address was involved with, from newest to oldest. This call uses pagination. 
+         * @summary Transactions Of Address
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} address Account address
+         * @param {'desc' | 'asc'} [order] Pagination order
+         * @param {string} [continuation] Continuation token from earlier response
+         * @param {number} [limit] Max number of items to return in a response. Defaults to 25 and is capped at 100. 
+         * @param {string} [assets] Comma-separated list of asset paths to filter. If the list is empty, or all elements are empty, this filter has no effect.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v2GetTxsByAddress(platform: string, network: string, address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TxPage>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v2GetTxsByAddress(platform, network, address, order, continuation, limit, assets, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -1736,7 +1988,7 @@ export const AccountsApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTxsByAddress(platform: string, network: string, address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any): AxiosPromise<TxPage> {
+        getTxsByAddress(platform: string, network: string, address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any): AxiosPromise<TxPageV1> {
             return localVarFp.getTxsByAddress(platform, network, address, order, continuation, limit, assets, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1754,6 +2006,22 @@ export const AccountsApiFactory = function (configuration?: Configuration, baseP
          */
         v2GetReportByAddress(platform: string, network: string, address: string, from?: number, to?: number, limit?: number, continuation?: string, options?: any): AxiosPromise<Report> {
             return localVarFp.v2GetReportByAddress(platform, network, address, from, to, limit, continuation, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Gets transactions that an address was involved with, from newest to oldest. This call uses pagination. 
+         * @summary Transactions Of Address
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} address Account address
+         * @param {'desc' | 'asc'} [order] Pagination order
+         * @param {string} [continuation] Continuation token from earlier response
+         * @param {number} [limit] Max number of items to return in a response. Defaults to 25 and is capped at 100. 
+         * @param {string} [assets] Comma-separated list of asset paths to filter. If the list is empty, or all elements are empty, this filter has no effect.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v2GetTxsByAddress(platform: string, network: string, address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any): AxiosPromise<TxPage> {
+            return localVarFp.v2GetTxsByAddress(platform, network, address, order, continuation, limit, assets, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1875,6 +2143,24 @@ export class AccountsApi extends BaseAPI {
      */
     public v2GetReportByAddress(platform: string, network: string, address: string, from?: number, to?: number, limit?: number, continuation?: string, options?: any) {
         return AccountsApiFp(this.configuration).v2GetReportByAddress(platform, network, address, from, to, limit, continuation, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Gets transactions that an address was involved with, from newest to oldest. This call uses pagination. 
+     * @summary Transactions Of Address
+     * @param {string} platform Coin platform handle
+     * @param {string} network Which network to target. Available networks can be found with /{platform}
+     * @param {string} address Account address
+     * @param {'desc' | 'asc'} [order] Pagination order
+     * @param {string} [continuation] Continuation token from earlier response
+     * @param {number} [limit] Max number of items to return in a response. Defaults to 25 and is capped at 100. 
+     * @param {string} [assets] Comma-separated list of asset paths to filter. If the list is empty, or all elements are empty, this filter has no effect.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountsApi
+     */
+    public v2GetTxsByAddress(platform: string, network: string, address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any) {
+        return AccountsApiFp(this.configuration).v2GetTxsByAddress(platform, network, address, order, continuation, limit, assets, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
