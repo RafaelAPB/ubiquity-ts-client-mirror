@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Ubiquity REST API
- * Ubiquity provides a RESTful and uniform way to access blockchain resources, with a rich and reusable model across multiple cryptocurrencies.  [Documentation](https://app.blockdaemon.com/docs/ubiquity)  ### Protocols #### Mainnet The following protocols are currently supported: * bitcoin * ethereum * polkadot * xrp * algorand * stellar * dogecoin * oasis * near  #### Testnet * bitcoin/testnet * ethereum/ropsten * dogecoin/testnet  #### Native Ubiquity provides native access to all Blockchain nodes it supports. To access native functionality, use the protocol without the v2 prefix * bitcoin/(mainnet | testnet) - [RPC Documentation](https://developer.bitcoin.org/reference/rpc/) * ethereum/(mainnet | ropsten) - [RPC Documentation](https://ethereum.org/en/developers/docs/apis/json-rpc/) * polkadot/mainnet - [Sidecar API Documentation](https://paritytech.github.io/substrate-api-sidecar/dist/) * polkadot/mainnet/http-rpc - [Polkadot RPC Documentation](https://polkadot.js.org/docs/substrate/rpc/) * algorand/mainnet - [Algod API Documentation](https://developer.algorand.org/docs/reference/rest-apis/algod/v1/) * stellar/mainnet - [Stellar Horizon API Documentation](https://developers.stellar.org/api) * dogecoin/(mainnet | testnet) - [Dogecoin API Documentaion](https://developer.bitcoin.org/reference/rpc/) * oasis/mainnet - [Oasis Rosetta Gateway Documentation](https://www.rosetta-api.org/docs/api_identifiers.html#network-identifier) * near/mainnet - [NEAR RPC Documentation](https://docs.near.org/docs/api/rpc)  A full URL example: https://ubiquity.api.blockdaemon.com/bitcoin/mainnet  ##### Pagination Certain resources contain a lot of data, more than what\'s practical to return for a single request. With the help of pagination, the data is split across multiple responses. Each response returns a subset of the items requested, and a continuation token.  To get the next batch of items, copy the returned continuation token to the continuation query parameter and repeat the request with the new URL. In case no continuation token is returned, there is no more data available. 
+ * Ubiquity provides a RESTful and uniform way to access blockchain resources, with a rich and reusable model across multiple cryptocurrencies.  [Documentation](https://app.blockdaemon.com/docs/ubiquity)  ### Protocols #### Mainnet The following protocols are currently supported: * bitcoin * ethereum * polkadot * xrp * algorand * stellar * dogecoin * oasis * near * terra * litecoin * bitcoincash  #### Testnet * bitcoin/testnet * ethereum/ropsten * dogecoin/testnet * litecoin/testnet * bitcoincash/testnet  #### Native Ubiquity provides native access to all Blockchain nodes it supports. To access native functionality, use the protocol without the v2 prefix * bitcoin/(mainnet | testnet) - [RPC Documentation](https://developer.bitcoin.org/reference/rpc/) * ethereum/(mainnet | ropsten) - [RPC Documentation](https://ethereum.org/en/developers/docs/apis/json-rpc/) * polkadot/mainnet - [Sidecar API Documentation](https://paritytech.github.io/substrate-api-sidecar/dist/) * polkadot/mainnet/http-rpc - [Polkadot RPC Documentation](https://polkadot.js.org/docs/substrate/rpc/) * algorand/mainnet - [Algod API Documentation](https://developer.algorand.org/docs/reference/rest-apis/algod/v1/) * stellar/mainnet - [Stellar Horizon API Documentation](https://developers.stellar.org/api) * dogecoin/(mainnet | testnet) - [Dogecoin API Documentaion](https://developer.bitcoin.org/reference/rpc/) * oasis/mainnet - [Oasis Rosetta Gateway Documentation](https://www.rosetta-api.org/docs/api_identifiers.html#network-identifier) * near/mainnet - [NEAR RPC Documentation](https://docs.near.org/docs/api/rpc) * terra/mainnet - [Terra RPC Documentation](https://docs.terra.money/docs/develop/how-to/endpoints.html) * litecoin/mainnet - [Litecoin RPC Documentation](https://litecoin.info/index.php/Litecoin_API) * bitcoincash/mainnet - [Bitcoin Cash RPC Documentation](https://docs.bitcoincashnode.org/doc/json-rpc/)  A full URL example: https://ubiquity.api.blockdaemon.com/bitcoin/mainnet  ##### Pagination Certain resources contain a lot of data, more than what\'s practical to return for a single request. With the help of pagination, the data is split across multiple responses. Each response returns a subset of the items requested, and a continuation token.  To get the next batch of items, copy the returned continuation token to the continuation query parameter and repeat the request with the new URL. In case no continuation token is returned, there is no more data available. 
  *
  * The version of the OpenAPI document: 2.0.0
  * Contact: support@blockdaemon.com
@@ -592,6 +592,18 @@ export interface Report {
      * @memberof Report
      */
     items: number;
+    /**
+     * The limit number provided in the request or the default
+     * @type {number}
+     * @memberof Report
+     */
+    limit?: number;
+    /**
+     * Continuation token to send in the next request if there are more items
+     * @type {string}
+     * @memberof Report
+     */
+    continuation?: string;
 }
 /**
  * 
@@ -1011,6 +1023,31 @@ export enum TxStatusEnum {
 }
 
 /**
+ * 
+ * @export
+ * @interface TxConfirmation
+ */
+export interface TxConfirmation {
+    /**
+     * Current Block Number
+     * @type {number}
+     * @memberof TxConfirmation
+     */
+    current_height?: number;
+    /**
+     * Transaction hash
+     * @type {string}
+     * @memberof TxConfirmation
+     */
+    tx_id?: string;
+    /**
+     * Total transaction confirmations
+     * @type {number}
+     * @memberof TxConfirmation
+     */
+    confirmations?: number;
+}
+/**
  * A list of recipients
  * @export
  * @interface TxDestination
@@ -1305,17 +1342,19 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
          * @param {string} address Account address
          * @param {number} [from] Unix Timestamp from where to start
          * @param {number} [to] Unix Timestamp from where to end
+         * @param {number} [limit] Max number of items to return in a response. Defaults to 50k and is capped at 100k. 
+         * @param {string} [continuation] Continuation token from earlier response
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getReportByAddress: async (platform: string, network: string, address: string, from?: number, to?: number, options: any = {}): Promise<RequestArgs> => {
+        getReportByAddress: async (platform: string, network: string, address: string, from?: number, to?: number, limit?: number, continuation?: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'platform' is not null or undefined
             assertParamExists('getReportByAddress', 'platform', platform)
             // verify required parameter 'network' is not null or undefined
             assertParamExists('getReportByAddress', 'network', network)
             // verify required parameter 'address' is not null or undefined
             assertParamExists('getReportByAddress', 'address', address)
-            const localVarPath = `/v2/{platform}/{network}/account/{address}/report`
+            const localVarPath = `/v1/{platform}/{network}/account/{address}/report`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)))
                 .replace(`{${"address"}}`, encodeURIComponent(String(address)));
@@ -1340,6 +1379,14 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
 
             if (to !== undefined) {
                 localVarQueryParameter['to'] = to;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (continuation !== undefined) {
+                localVarQueryParameter['continuation'] = continuation;
             }
 
 
@@ -1406,6 +1453,72 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
 
             if (assets !== undefined) {
                 localVarQueryParameter['assets'] = assets;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns account activity 
+         * @summary A financial report for an address between a time period. Default timescale is within the last 30 days
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} address Account address
+         * @param {number} [from] Unix Timestamp from where to start
+         * @param {number} [to] Unix Timestamp from where to end
+         * @param {number} [limit] Max number of items to return in a response. Defaults to 50k and is capped at 100k. 
+         * @param {string} [continuation] Continuation token from earlier response
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v2GetReportByAddress: async (platform: string, network: string, address: string, from?: number, to?: number, limit?: number, continuation?: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'platform' is not null or undefined
+            assertParamExists('v2GetReportByAddress', 'platform', platform)
+            // verify required parameter 'network' is not null or undefined
+            assertParamExists('v2GetReportByAddress', 'network', network)
+            // verify required parameter 'address' is not null or undefined
+            assertParamExists('v2GetReportByAddress', 'address', address)
+            const localVarPath = `/v2/{platform}/{network}/account/{address}/report`
+                .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
+                .replace(`{${"network"}}`, encodeURIComponent(String(network)))
+                .replace(`{${"address"}}`, encodeURIComponent(String(address)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (from !== undefined) {
+                localVarQueryParameter['from'] = from;
+            }
+
+            if (to !== undefined) {
+                localVarQueryParameter['to'] = to;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (continuation !== undefined) {
+                localVarQueryParameter['continuation'] = continuation;
             }
 
 
@@ -1491,11 +1604,13 @@ export const AccountsApiFp = function(configuration?: Configuration) {
          * @param {string} address Account address
          * @param {number} [from] Unix Timestamp from where to start
          * @param {number} [to] Unix Timestamp from where to end
+         * @param {number} [limit] Max number of items to return in a response. Defaults to 50k and is capped at 100k. 
+         * @param {string} [continuation] Continuation token from earlier response
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getReportByAddress(platform: string, network: string, address: string, from?: number, to?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Report>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getReportByAddress(platform, network, address, from, to, options);
+        async getReportByAddress(platform: string, network: string, address: string, from?: number, to?: number, limit?: number, continuation?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Report>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getReportByAddress(platform, network, address, from, to, limit, continuation, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1513,6 +1628,23 @@ export const AccountsApiFp = function(configuration?: Configuration) {
          */
         async getTxsByAddress(platform: string, network: string, address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TxPage>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getTxsByAddress(platform, network, address, order, continuation, limit, assets, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Returns account activity 
+         * @summary A financial report for an address between a time period. Default timescale is within the last 30 days
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} address Account address
+         * @param {number} [from] Unix Timestamp from where to start
+         * @param {number} [to] Unix Timestamp from where to end
+         * @param {number} [limit] Max number of items to return in a response. Defaults to 50k and is capped at 100k. 
+         * @param {string} [continuation] Continuation token from earlier response
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v2GetReportByAddress(platform: string, network: string, address: string, from?: number, to?: number, limit?: number, continuation?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Report>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v2GetReportByAddress(platform, network, address, from, to, limit, continuation, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -1583,11 +1715,13 @@ export const AccountsApiFactory = function (configuration?: Configuration, baseP
          * @param {string} address Account address
          * @param {number} [from] Unix Timestamp from where to start
          * @param {number} [to] Unix Timestamp from where to end
+         * @param {number} [limit] Max number of items to return in a response. Defaults to 50k and is capped at 100k. 
+         * @param {string} [continuation] Continuation token from earlier response
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getReportByAddress(platform: string, network: string, address: string, from?: number, to?: number, options?: any): AxiosPromise<Report> {
-            return localVarFp.getReportByAddress(platform, network, address, from, to, options).then((request) => request(axios, basePath));
+        getReportByAddress(platform: string, network: string, address: string, from?: number, to?: number, limit?: number, continuation?: string, options?: any): AxiosPromise<Report> {
+            return localVarFp.getReportByAddress(platform, network, address, from, to, limit, continuation, options).then((request) => request(axios, basePath));
         },
         /**
          * Gets transactions that an address was involved with, from newest to oldest. This call uses pagination. 
@@ -1604,6 +1738,22 @@ export const AccountsApiFactory = function (configuration?: Configuration, baseP
          */
         getTxsByAddress(platform: string, network: string, address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any): AxiosPromise<TxPage> {
             return localVarFp.getTxsByAddress(platform, network, address, order, continuation, limit, assets, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Returns account activity 
+         * @summary A financial report for an address between a time period. Default timescale is within the last 30 days
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} address Account address
+         * @param {number} [from] Unix Timestamp from where to start
+         * @param {number} [to] Unix Timestamp from where to end
+         * @param {number} [limit] Max number of items to return in a response. Defaults to 50k and is capped at 100k. 
+         * @param {string} [continuation] Continuation token from earlier response
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v2GetReportByAddress(platform: string, network: string, address: string, from?: number, to?: number, limit?: number, continuation?: string, options?: any): AxiosPromise<Report> {
+            return localVarFp.v2GetReportByAddress(platform, network, address, from, to, limit, continuation, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1681,12 +1831,14 @@ export class AccountsApi extends BaseAPI {
      * @param {string} address Account address
      * @param {number} [from] Unix Timestamp from where to start
      * @param {number} [to] Unix Timestamp from where to end
+     * @param {number} [limit] Max number of items to return in a response. Defaults to 50k and is capped at 100k. 
+     * @param {string} [continuation] Continuation token from earlier response
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AccountsApi
      */
-    public getReportByAddress(platform: string, network: string, address: string, from?: number, to?: number, options?: any) {
-        return AccountsApiFp(this.configuration).getReportByAddress(platform, network, address, from, to, options).then((request) => request(this.axios, this.basePath));
+    public getReportByAddress(platform: string, network: string, address: string, from?: number, to?: number, limit?: number, continuation?: string, options?: any) {
+        return AccountsApiFp(this.configuration).getReportByAddress(platform, network, address, from, to, limit, continuation, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1705,6 +1857,24 @@ export class AccountsApi extends BaseAPI {
      */
     public getTxsByAddress(platform: string, network: string, address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any) {
         return AccountsApiFp(this.configuration).getTxsByAddress(platform, network, address, order, continuation, limit, assets, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Returns account activity 
+     * @summary A financial report for an address between a time period. Default timescale is within the last 30 days
+     * @param {string} platform Coin platform handle
+     * @param {string} network Which network to target. Available networks can be found with /{platform}
+     * @param {string} address Account address
+     * @param {number} [from] Unix Timestamp from where to start
+     * @param {number} [to] Unix Timestamp from where to end
+     * @param {number} [limit] Max number of items to return in a response. Defaults to 50k and is capped at 100k. 
+     * @param {string} [continuation] Continuation token from earlier response
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountsApi
+     */
+    public v2GetReportByAddress(platform: string, network: string, address: string, from?: number, to?: number, limit?: number, continuation?: string, options?: any) {
+        return AccountsApiFp(this.configuration).v2GetReportByAddress(platform, network, address, from, to, limit, continuation, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -2575,6 +2745,52 @@ export const TransactionsApiAxiosParamCreator = function (configuration?: Config
             };
         },
         /**
+         * 
+         * @summary Transaction confirmations By Hash
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} id Transaction ID/Hash
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTxConfirmations: async (platform: string, network: string, id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'platform' is not null or undefined
+            assertParamExists('getTxConfirmations', 'platform', platform)
+            // verify required parameter 'network' is not null or undefined
+            assertParamExists('getTxConfirmations', 'network', network)
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getTxConfirmations', 'id', id)
+            const localVarPath = `/v1/{platform}/{network}/tx/{id}/confirmations`
+                .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
+                .replace(`{${"network"}}`, encodeURIComponent(String(network)))
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Get all transactions on the platform, starting with the lastest one. Each call returns a slice of the entire list. Use the returned continuation token to get the next part.
          * @summary All Transactions
          * @param {string} platform Coin platform handle
@@ -2733,6 +2949,19 @@ export const TransactionsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
+         * 
+         * @summary Transaction confirmations By Hash
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} id Transaction ID/Hash
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getTxConfirmations(platform: string, network: string, id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TxConfirmation>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getTxConfirmations(platform, network, id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * Get all transactions on the platform, starting with the lastest one. Each call returns a slice of the entire list. Use the returned continuation token to get the next part.
          * @summary All Transactions
          * @param {string} platform Coin platform handle
@@ -2805,6 +3034,18 @@ export const TransactionsApiFactory = function (configuration?: Configuration, b
          */
         getTx(platform: string, network: string, id: string, options?: any): AxiosPromise<Tx> {
             return localVarFp.getTx(platform, network, id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Transaction confirmations By Hash
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} id Transaction ID/Hash
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTxConfirmations(platform: string, network: string, id: string, options?: any): AxiosPromise<TxConfirmation> {
+            return localVarFp.getTxConfirmations(platform, network, id, options).then((request) => request(axios, basePath));
         },
         /**
          * Get all transactions on the platform, starting with the lastest one. Each call returns a slice of the entire list. Use the returned continuation token to get the next part.
@@ -2882,6 +3123,20 @@ export class TransactionsApi extends BaseAPI {
      */
     public getTx(platform: string, network: string, id: string, options?: any) {
         return TransactionsApiFp(this.configuration).getTx(platform, network, id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Transaction confirmations By Hash
+     * @param {string} platform Coin platform handle
+     * @param {string} network Which network to target. Available networks can be found with /{platform}
+     * @param {string} id Transaction ID/Hash
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TransactionsApi
+     */
+    public getTxConfirmations(platform: string, network: string, id: string, options?: any) {
+        return TransactionsApiFp(this.configuration).getTxConfirmations(platform, network, id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
