@@ -24,6 +24,7 @@ info:
     * terra
     * litecoin
     * bitcoincash
+    * solana
 
     #### Testnet
     * bitcoin/testnet
@@ -47,6 +48,7 @@ info:
     * terra/mainnet - [Terra RPC Documentation](https://docs.terra.money/docs/develop/how-to/endpoints.html)
     * litecoin/mainnet - [Litecoin RPC Documentation](https://litecoin.info/index.php/Litecoin_API)
     * bitcoincash/mainnet - [Bitcoin Cash RPC Documentation](https://docs.bitcoincashnode.org/doc/json-rpc/)
+    * solana/mainnet - [Solana RPC Documentation](https://docs.solana.com/developing/clients/jsonrpc-api)
 
     A full URL example: https://ubiquity.api.blockdaemon.com/bitcoin/mainnet
 
@@ -1979,6 +1981,10 @@ components:
       examples:
         Bitcoin:
           value: bitcoin
+        Bitcoin Cash:
+          value: bitcoincash
+        Litecoin:
+          value: litecoin
         Ethereum:
           value: ethereum
     network:
