@@ -1,17 +1,19 @@
-## Ubiquity Typscript client
+# Ubiquity TypeScript client
 
-### Building
+A TypeScript client to the Ubiquity service of blockdaemon.com.
 
-To build and compile the typescript sources to javascript use:
+# Building
+
+To build and compile the TypeScript sources to JavaScript use:
 
 ```
 npm install
 npm run build
 ```
 
-### Dependency
+# Dependency
 
-To pull the client from the gitlab repo you will need to add some configuration to the ".npmrc".
+To pull the client from the gitlab repo, you will need to add some configuration to ".npmrc":
 
 ```bash
 echo "@ubiquity:registry=https://gitlab.com/api/v4/projects/27274533/packages/npm/">>.npmrc
@@ -19,17 +21,17 @@ echo "//gitlab.com/api/v4/projects/27274533/packages/npm/:_authToken=${AUTH_TOKE
 echo "always-auth=true">>.npmrc
 ```
 
-### Usage
+# Usage
 
-Create the client by providing a by providing an auth token
+Create the client by providing an auth token:
 
 ```typescript
 const client = new UbiquityClient("Auth Token Here");
 ```
 
-### Blocks API
+## Blocks API
 
-All of the API's return a promise of type AxiosResponse<T>
+All of the APIs return a promise of type AxiosResponse<T>:
 
 ```typescript
 client.blocksApi
@@ -40,7 +42,7 @@ client.blocksApi
   );
 ```
 
-The current block or block identifier can be retrieved using the "current" special identifier
+The current block or block identifier can be retrieved using the "current" special identifier:
 
 ```typescript
 client.blocksApi
@@ -51,10 +53,9 @@ client.blocksApi
   );
 ```
 
-### Accounts API
+## Accounts API
 
-Initial request to paged API's should not include a continuation. If no limit is supplied the default of 25 will be applied
-A filter can also be applied to select the returned assets.
+Initial request to paged APIs should not include a continuation. If no limit is supplied, the default of 25 will be applied. A filter can also be applied to select the returned assets.
 
 ```typescript
 client.accountsApi.getTxsByAddress(
@@ -64,7 +65,7 @@ client.accountsApi.getTxsByAddress(
 );
 ```
 
-To continue through the pages of transactions the continuation from the previous page must be supplied to the next request.
+To continue through the pages of transactions, the continuation from the previous page must be supplied to the next request:
 
 ```typescript
     .then((txsPage1: AxiosResponse<TxPage>) => {
@@ -83,7 +84,9 @@ To continue through the pages of transactions the continuation from the previous
     .catch((e: any) => console.log(`error code::${e.response.status} url::${e.config.url}`));
 ```
 
-To get the
+## Platforms API
+
+To get the platform info:
 
 ```typescript
 client.platformsApi
@@ -92,9 +95,9 @@ client.platformsApi
   .catch((r: any) => console.log(r));
 ```
 
-### Sync API
+## Sync API
 
-To get the current block height.
+To get the current block height:
 
 ```typescript
 client.syncApi
@@ -105,7 +108,7 @@ client.syncApi
   );
 ```
 
-To get the current block ID.
+To get the current block ID:
 
 ```typescript
 client.syncApi
@@ -116,7 +119,9 @@ client.syncApi
   );
 ```
 
-### Transactions API
+## Transactions API
+
+To get all transactions on the platform, starting with the latest one:
 
 ```typescript
 client.transactionsApi
@@ -126,6 +131,8 @@ client.transactionsApi
     console.log(`error code::${e.response.status} url::${e.config.url}`)
   );
 ```
+
+To get a transaction by hash:
 
 ```typescript
 client.transactionsApi
@@ -142,7 +149,7 @@ client.transactionsApi
 
 ## Generated client
 
-The generated clients can be used directly for lower level control or in the case of early stage features.
+The generated clients can be used directly for lower-level control or in the case of early stage features.
 
 ```typescript
 const configuration = new Configuration({
@@ -164,9 +171,10 @@ blockApi
 ```
 
 ## Working with transactions
-### Transaction creation and signing
-Transactions can be created and signed directly from the SDK.
-Currently supported platforms are Bitcoin and Ethereum.
+### Creating and signing transactions
+
+Transactions can be created and signed directly from the SDK. Currently supported platforms are Bitcoin and Ethereum.
+
 To create and sign a transaction that sends 0.0001 BTC (10000 satoshis) with a 0.00001 BTC (1000 satoshis) fee from an account to another in Bitcoin's testnet:
 
 ```typescript
@@ -239,9 +247,9 @@ main().catch(console.error);
 ```
 For Ethereum only transactions with a single output are currently supported.
 
-### Broadcasting signed transactions
+#### Broadcasting signed transactions
 
-After a transaction is created and signed, it can be broadcasted through Ubiquity's `/tx/send` endpoint, that is interfaced through the `txSend` method:
+After a transaction is created and signed, it can be broadcasted through Ubiquity's `/tx/send` endpoint, which is interfaced through the `txSend` method:
 
 ```typescript
 ...
@@ -258,12 +266,11 @@ async function main() {
 main().catch(console.error)
 ```
 
-### Estimating fees
+#### Estimating fees
 
-Ubiquity's `/tx/estimate_fee` endpoint returns an estimation of the fee value required for transactions to be pushed to the network.
-It can be used through the `estimateFee` method:
+Ubiquity's `/tx/estimate_fee` endpoint returns an estimation of the fee value required for transactions to be pushed to the network. It can be used through the `estimateFee()` method.
 
-For Ethereum, this endpoint returns the average gas price obtained from the network.
+For Ethereum, this endpoint returns the average gas price obtained from the network:
 
 ```typescript
 ...
@@ -284,7 +291,7 @@ async function main() {
 main().catch(console.error)
 ```
 
-## Websocket 
+## Websockets support 
 ### Blocks
 ```typescript
   const client = new UbiquityClient("---> Auth Token Here");
@@ -327,10 +334,10 @@ main().catch(console.error)
   };
 
   ws.subscribe(txSub);
-}
 ```
 
-The messages received may also be filtered based on address.
+The messages received may also be filtered based on an address:
+
 ```typescript
   const txSub: Subscription = {
     type:     WS_CHANNELS.TX,
@@ -341,6 +348,5 @@ The messages received may also be filtered based on address.
   };
 
   ws.subscribe(txSub);
-}
 ```
 
