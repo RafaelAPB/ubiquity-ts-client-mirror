@@ -79,9 +79,11 @@ tags:
   - name: Blocks
   - name: Transactions
   - name: Platforms
+  - name: Sync
+  - name: NFT
 
 security:
-  - bearerAuth: []
+  - bearerAuth: [ ]
 
 paths:
   /v1/:
@@ -1028,6 +1030,261 @@ paths:
                 "status": 400,
                 "detail": "failed to get estimated fee: json-rpc error #-8:  : Invalid conf_target, must be between 1 and 1008"
               }
+
+  /v1/nft/{protocol}/{network}/assets:
+    get:
+      tags:
+        - NFT
+      operationId: Explorer_ListAssets
+      parameters:
+        - name: protocol
+          in: path
+          description: Mapped to URL path
+          required: true
+          schema:
+            type: integer
+            format: enum
+        - name: network
+          in: path
+          description: Mapped to URL path
+          required: true
+          schema:
+            type: integer
+            format: enum
+        - name: wallet_address
+          in: query
+          description: Mapped to URL query parameter `wallet_address`
+          schema:
+            type: string
+        - name: contract_address
+          in: query
+          description: Mapped to URL query parameter `contract_address`
+          schema:
+            type: string
+        - name: token_id.value
+          in: query
+          description: The int64 value.
+          schema:
+            type: integer
+            format: int64
+        - name: collection_name
+          in: query
+          description: Mapped to URL query parameter `collection_name`
+          schema:
+            type: string
+        - name: sort_by
+          in: query
+          description: 'One of: name, token_id, mint_date'
+          schema:
+            type: string
+        - name: order
+          in: query
+          description: 'Mapped to URL query parameter `order` One of: asc, desc'
+          schema:
+            type: integer
+            format: enum
+        - name: page_size
+          in: query
+          description: Mapped to URL query parameter `page_size`
+          schema:
+            type: integer
+            format: uint32
+        - name: page_token
+          in: query
+          description: Mapped to URL query parameter `page_token` base64 encoded cursor
+          schema:
+            type: string
+        - name: attributes
+          in: query
+          description: Mapped to URL query parameter `attributes`
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListAssetsResponse'
+  /v1/nft/{protocol}/{network}/collection/{id}:
+    get:
+      tags:
+        - NFT
+      operationId: Explorer_GetCollection
+      parameters:
+        - name: protocol
+          in: path
+          description: Mapped to URL path
+          required: true
+          schema:
+            type: integer
+            format: enum
+        - name: network
+          in: path
+          description: Mapped to URL path
+          required: true
+          schema:
+            type: integer
+            format: enum
+        - name: id
+          in: path
+          description: Mapped to URL query parameter 'uuid'
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCollectionResponse'
+  /v1/nft/{protocol}/{network}/collections:
+    get:
+      tags:
+        - NFT
+      operationId: Explorer_ListCollections
+      parameters:
+        - name: protocol
+          in: path
+          description: Mapped to URL path
+          required: true
+          schema:
+            type: integer
+            format: enum
+        - name: network
+          in: path
+          description: Mapped to URL path
+          required: true
+          schema:
+            type: integer
+            format: enum
+        - name: contractAddress
+          in: query
+          description: Mapped to URL query parameter 'contract_address'
+          schema:
+            type: array
+            items:
+              type: string
+        - name: collectionName
+          in: query
+          description: Mapped to URL query parameter 'collection_name'
+          schema:
+            type: array
+            items:
+              type: string
+        - name: sort_by
+          in: query
+          description: 'Sort by one of: name'
+          schema:
+            type: string
+        - name: order
+          in: query
+          description: 'Mapped to URL query parameter `order` One of: asc, desc'
+          schema:
+            type: integer
+            format: enum
+        - name: page_size
+          in: query
+          description: Mapped to URL query parameter `page_size`
+          schema:
+            type: integer
+            format: uint32
+        - name: page_token
+          in: query
+          description: Mapped to URL query parameter `page_token` base64 encoded cursor
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCollectionResponse'
+  /v1/nft/{protocol}/{network}/events:
+    get:
+      tags:
+        - NFT
+      operationId: Explorer_ListEvents
+      parameters:
+        - name: protocol
+          in: path
+          description: mapped to URL path
+          required: true
+          schema:
+            type: integer
+            format: enum
+        - name: network
+          in: path
+          description: mapped to URL path
+          required: true
+          schema:
+            type: integer
+            format: enum
+        - name: contract_address
+          in: query
+          description: mapped to URL query parameter 'contract_address'
+          schema:
+            type: string
+        - name: wallet_address
+          in: query
+          description: mapped to URL query parameter 'wallet_address'
+          schema:
+            type: string
+        - name: token_id
+          in: query
+          description: mapped to URL query parameter 'token_id'
+          schema:
+            type: integer
+            format: int64
+        - name: event_type
+          in: query
+          description: mapped to URL query parameter 'event_type'
+          schema:
+            type: string
+        - name: sort_by
+          in: query
+          description: 'Sort by one of: timestamp'
+          schema:
+            type: string
+        - name: order
+          in: query
+          description: 'Mapped to URL query parameter `order` One of: asc, desc'
+          schema:
+            type: integer
+            format: enum
+        - name: page_size
+          in: query
+          description: Mapped to URL query parameter `page_size`
+          schema:
+            type: integer
+            format: uint32
+        - name: page_token
+          in: query
+          description: Mapped to URL query parameter `page_token` base64 encoded cursor
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListEventResponse'
+  /v1/status:
+    get:
+      tags:
+        - NFT
+      operationId: Explorer_GetStatus
+      responses:
+        "200":
+          description: OK
+          content: { }
+
+
 components:
   securitySchemes:
     bearerAuth:
@@ -1139,7 +1396,7 @@ components:
         confirmations:
           type: integer
           format: int64
-          description: Total transaction confirmations 
+          description: Total transaction confirmations
           example: 10
     tx_page:
       type: object
@@ -1246,18 +1503,18 @@ components:
         confirmed_block:
           type: integer
       example: {
-          "currency": {
-            "asset_path": "ethereum/native/eth",
-            "symbol": "ETH",
-            "name": "Ether",
-            "decimals": 18,
-            "type": "native"
-          },
-          "confirmed_balance": "99999",
-          "pending_balance": "999999",
-          "confirmed_nonce": 9999,
-          "confirmed_block": 99999999
-        }
+        "currency": {
+          "asset_path": "ethereum/native/eth",
+          "symbol": "ETH",
+          "name": "Ether",
+          "decimals": 18,
+          "type": "native"
+        },
+        "confirmed_balance": "99999",
+        "pending_balance": "999999",
+        "confirmed_nonce": 9999,
+        "confirmed_block": 99999999
+      }
     tx:
       type: object
       properties:
@@ -1357,7 +1614,7 @@ components:
           nullable: true
         id:
           type: string
-        meta: {}
+        meta: { }
         source:
           type: string
           nullable: true
@@ -1390,7 +1647,7 @@ components:
           type: integer
         num_events:
           type: integer
-        meta: {}
+        meta: { }
         events:
           type: array
           items:
@@ -1750,9 +2007,9 @@ components:
           type: object
           description: Object containing fast, medium, slow fees
           properties:
-            fast: {}
-            medium: {}
-            slow: {}
+            fast: { }
+            medium: { }
+            slow: { }
     supply:
       type: object
       properties:
@@ -1953,6 +2210,134 @@ components:
         close_reward:
           type: string
           example: "0"
+    Asset:
+      type: object
+      properties:
+        token_id:
+          type: integer
+          format: int64
+        image_url:
+          type: string
+        name:
+          type: string
+        contract:
+          $ref: '#/components/schemas/Contract'
+        wallets:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetWallet'
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetTrait'
+        mint_date:
+          type: integer
+          format: int64
+    AssetTrait:
+      type: object
+      properties:
+        trait_type:
+          type: string
+        value:
+          type: string
+    AssetWallet:
+      type: object
+      properties:
+        address:
+          type: string
+    Collection:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        image_url:
+          type: string
+        contracts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Contract'
+        meta:
+          type: object
+    Contract:
+      type: object
+      properties:
+        address:
+          type: string
+        name:
+          type: string
+        symbol:
+          type: string
+        description:
+          type: string
+        image_url:
+          type: string
+        type:
+          type: string
+    NFTEvent:
+      type: object
+      properties:
+        contract_address:
+          type: string
+        token_id:
+          type: integer
+          format: int64
+        event_type:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        from_account:
+          type: string
+        to_account:
+          type: string
+        transaction:
+          type: object
+    GetCollectionResponse:
+      type: object
+      properties:
+        collection:
+          $ref: '#/components/schemas/Collection'
+    ListAssetsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Asset'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    ListCollectionResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Collection'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    ListEventResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/NFTEvent'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    Meta:
+      type: object
+      properties:
+        paging:
+          $ref: '#/components/schemas/Paging'
+    Paging:
+      type: object
+      properties:
+        next_page_token:
+          type: string
 
   parameters:
     platform:
