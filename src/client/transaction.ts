@@ -1,7 +1,6 @@
 import { Address, Networks, PrivateKey, PublicKey, Script, Transaction } from 'bitcore-lib';
 import Web3 from "web3";
-import { NETWORKS, PROTOCOL } from "./constants";
-import { TransactionsApi } from "../generated/";
+import { NETWORKS } from "./constants";
 import { SignedTx } from "../generated/api";
 
 // Custom exceptions
@@ -81,9 +80,8 @@ export const btcTransaction = {
       transaction.to(txOut.address, txOut.amount);
     }
 
-    // Needs ts-ignore below because type definition do not
+    // @ts-ignore: needs ts-ignore because type definition do not
     //    have parameters in the "serialize" method for some reason
-    // @ts-ignore
     return transaction.serialize({
       disableAll: true,
     });
@@ -108,9 +106,8 @@ export const btcTransaction = {
     signedTx.outputs = unsignedTx.outputs;
 
     return Promise.resolve(
-      // Needs ts-ignore below because type definition do not
-      //    have parameters in the "serialize" method for some reason
-      // @ts-ignore
+    // @ts-ignore: needs ts-ignore because type definition do not
+    //    have parameters in the "serialize" method for some reason
       signedTx.sign(privateKeyObj).serialize({
         disableAll: true,
       })

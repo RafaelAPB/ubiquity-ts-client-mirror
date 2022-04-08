@@ -37,9 +37,19 @@ export type Subscription = {
   id?: number;
   subID?: number;
   type: string;
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   detail?: any;
+  /* eslint-enable  @typescript-eslint/no-explicit-any */
   handler: Handler;
 };
+
+export type SubscriptionRequest = {
+  id: number,
+  method: string,
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
+  params: { [key: string]: any } | Array<any>,
+  /* eslint-enable  @typescript-eslint/no-explicit-any */
+}
 
 export class UbiWebsocket {
   public reconnectTime = 10000;
@@ -135,7 +145,7 @@ export class UbiWebsocket {
 
   public subscribe(subscription: Subscription): Promise<Subscription> {
     return new Promise<Subscription>((resolve, reject) => {
-      if (WebSocket.OPEN !== this.rawWs.readyState) {
+      if (typeof(this.rawWs) === "undefined" || (WebSocket.OPEN !== this.rawWs.readyState)) {
         reject(new Error("Websocket is not open"));
       }
  
@@ -175,17 +185,18 @@ export class UbiWebsocket {
           }
         };
 
-        const subscribe: any = {
+        const subscribe: SubscriptionRequest = {
           id: subscription.id,
           method: "ubiquity.subscribe",
           params: {
             channel: subscription.type,
-
           },
         };
 
         if(subscription.detail){
-          subscribe.params.detail = subscription.detail;
+          if (!(subscribe.params instanceof Array)) {
+            subscribe.params.detail = subscription.detail;
+          }
         }
         this.rawWs?.addEventListener("message", waitForResult);
         this.rawWs?.send(JSON.stringify(subscribe));
