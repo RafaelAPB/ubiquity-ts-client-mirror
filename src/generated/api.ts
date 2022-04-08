@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Ubiquity REST API
- * Ubiquity provides a RESTful and uniform way to access blockchain resources, with a rich and reusable model across multiple cryptocurrencies.  [Documentation](https://app.blockdaemon.com/docs/ubiquity)  ### Protocols #### Mainnet The following protocols are currently supported: * bitcoin * ethereum * polkadot * xrp * algorand * stellar * dogecoin * oasis * near * terra * litecoin * bitcoincash * tezos  #### Testnet * bitcoin/testnet * ethereum/ropsten * dogecoin/testnet * litecoin/testnet * bitcoincash/testnet  #### Native Ubiquity provides native access to all Blockchain nodes it supports. * bitcoin/(mainnet | testnet) - [RPC Documentation](https://developer.bitcoin.org/reference/rpc/) * ethereum/(mainnet | ropsten) - [RPC Documentation](https://ethereum.org/en/developers/docs/apis/json-rpc/) * polkadot/mainnet - [Sidecar API Documentation](https://paritytech.github.io/substrate-api-sidecar/dist/) * polkadot/mainnet/http-rpc - [Polkadot RPC Documentation](https://polkadot.js.org/docs/substrate/rpc/) * algorand/mainnet - [Algod API Documentation](https://developer.algorand.org/docs/reference/rest-apis/algod/) * stellar/mainnet - [Stellar Horizon API Documentation](https://developers.stellar.org/api) * dogecoin/(mainnet | testnet) - [Dogecoin API Documentaion](https://developer.bitcoin.org/reference/rpc/) * oasis/mainnet - [Oasis Rosetta Gateway Documentation](https://www.rosetta-api.org/docs/api_identifiers.html#network-identifier) * near/mainnet - [NEAR RPC Documentation](https://docs.near.org/docs/api/rpc) * terra/mainnet - [Terra RPC Documentation](https://docs.terra.money/docs/develop/how-to/endpoints.html) * litecoin/mainnet - [Litecoin RPC Documentation](https://litecoin.info/index.php/Litecoin_API) * bitcoincash/mainnet - [Bitcoin Cash RPC Documentation](https://docs.bitcoincashnode.org/doc/json-rpc/) * tezos/mainnet - [Tezos RPC Documentation](https://tezos.gitlab.io/developer/rpc.html)   A full URL example: https://ubiquity.api.blockdaemon.com/bitcoin/mainnet  ##### Pagination Certain resources contain a lot of data, more than what\'s practical to return for a single request. With the help of pagination, the data is split across multiple responses. Each response returns a subset of the items requested, and a continuation token.  To get the next batch of items, copy the returned continuation token to the continuation query parameter and repeat the request with the new URL. In case no continuation token is returned, there is no more data available. 
+ * Ubiquity provides a RESTful and uniform way to access blockchain resources, with a rich and reusable model across multiple cryptocurrencies.  [Documentation](https://app.blockdaemon.com/docs/ubiquity)  ### Protocols #### Mainnet The following protocols are currently supported: * bitcoin * ethereum * polkadot * xrp * algorand * stellar * dogecoin * oasis * near * terra * litecoin * bitcoincash * tezos  #### Testnet * bitcoin/testnet * ethereum/ropsten * dogecoin/testnet * litecoin/testnet * bitcoincash/testnet  #### Native Ubiquity provides native access to all Blockchain nodes it supports. * bitcoin/(mainnet | testnet) - [RPC Documentation](https://developer.bitcoin.org/reference/rpc/) * ethereum/(mainnet | ropsten) - [RPC Documentation](https://ethereum.org/en/developers/docs/apis/json-rpc/) * polkadot/mainnet - [Sidecar API Documentation](https://paritytech.github.io/substrate-api-sidecar/dist/) * polkadot/mainnet/http-rpc - [Polkadot RPC Documentation](https://polkadot.js.org/docs/substrate/rpc/) * algorand/mainnet - [Algod API Documentation](https://developer.algorand.org/docs/reference/rest-apis/algod/) * stellar/mainnet - [Stellar Horizon API Documentation](https://developers.stellar.org/api) * dogecoin/(mainnet | testnet) - [Dogecoin API Documentaion](https://developer.bitcoin.org/reference/rpc/) * oasis/mainnet - [Oasis Rosetta Gateway Documentation](https://www.rosetta-api.org/docs/api_identifiers.html#network-identifier) * near/mainnet - [NEAR RPC Documentation](https://docs.near.org/docs/api/rpc) * terra/mainnet - [Terra RPC Documentation](https://docs.terra.money/docs/develop/how-to/endpoints.html) * litecoin/mainnet - [Litecoin RPC Documentation](https://litecoin.info/index.php/Litecoin_API) * bitcoincash/mainnet - [Bitcoin Cash RPC Documentation](https://docs.bitcoincashnode.org/doc/json-rpc/) * tezos/mainnet - [Tezos RPC Documentation](https://tezos.gitlab.io/developer/rpc.html)   A full URL example: https://ubiquity.api.blockdaemon.com/v1/bitcoin/mainnet  ##### Pagination Certain resources contain a lot of data, more than what\'s practical to return for a single request. With the help of pagination, the data is split across multiple responses. Each response returns a subset of the items requested, and a continuation token.  To get the next batch of items, copy the returned continuation token to the continuation query parameter and repeat the request with the new URL. In case no continuation token is returned, there is no more data available. 
  *
  * The version of the OpenAPI document: 3.0.0
  * Contact: support@blockdaemon.com
@@ -76,6 +76,87 @@ export interface AlgorandMeta {
      * @memberof AlgorandMeta
      */
     close_reward?: string;
+}
+/**
+ * 
+ * @export
+ * @interface Asset
+ */
+export interface Asset {
+    /**
+     * 
+     * @type {number}
+     * @memberof Asset
+     */
+    token_id?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Asset
+     */
+    image_url?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Asset
+     */
+    name?: string;
+    /**
+     * 
+     * @type {Contract}
+     * @memberof Asset
+     */
+    contract?: Contract;
+    /**
+     * 
+     * @type {Array<AssetWallet>}
+     * @memberof Asset
+     */
+    wallets?: Array<AssetWallet>;
+    /**
+     * 
+     * @type {Array<AssetTrait>}
+     * @memberof Asset
+     */
+    attributes?: Array<AssetTrait>;
+    /**
+     * 
+     * @type {number}
+     * @memberof Asset
+     */
+    mint_date?: number;
+}
+/**
+ * 
+ * @export
+ * @interface AssetTrait
+ */
+export interface AssetTrait {
+    /**
+     * 
+     * @type {string}
+     * @memberof AssetTrait
+     */
+    trait_type?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AssetTrait
+     */
+    value?: string;
+}
+/**
+ * 
+ * @export
+ * @interface AssetWallet
+ */
+export interface AssetWallet {
+    /**
+     * 
+     * @type {string}
+     * @memberof AssetWallet
+     */
+    address?: string;
 }
 /**
  * Currency balances with asset paths as keys
@@ -214,6 +295,92 @@ export interface BlockIdentifierPage {
     continuation?: number | null;
 }
 /**
+ * 
+ * @export
+ * @interface Collection
+ */
+export interface Collection {
+    /**
+     * 
+     * @type {string}
+     * @memberof Collection
+     */
+    id?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Collection
+     */
+    name?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Collection
+     */
+    description?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Collection
+     */
+    image_url?: string;
+    /**
+     * 
+     * @type {Array<Contract>}
+     * @memberof Collection
+     */
+    contracts?: Array<Contract>;
+    /**
+     * 
+     * @type {object}
+     * @memberof Collection
+     */
+    meta?: object;
+}
+/**
+ * 
+ * @export
+ * @interface Contract
+ */
+export interface Contract {
+    /**
+     * 
+     * @type {string}
+     * @memberof Contract
+     */
+    address?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Contract
+     */
+    name?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Contract
+     */
+    symbol?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Contract
+     */
+    description?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Contract
+     */
+    image_url?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Contract
+     */
+    type?: string;
+}
+/**
  * @type Currency
  * @export
  */
@@ -345,6 +512,89 @@ export interface FeeEstimateEstimatedFees {
 /**
  * 
  * @export
+ * @interface GetCollectionResponse
+ */
+export interface GetCollectionResponse {
+    /**
+     * 
+     * @type {Collection}
+     * @memberof GetCollectionResponse
+     */
+    collection?: Collection;
+}
+/**
+ * 
+ * @export
+ * @interface ListAssetsResponse
+ */
+export interface ListAssetsResponse {
+    /**
+     * 
+     * @type {Array<Asset>}
+     * @memberof ListAssetsResponse
+     */
+    data?: Array<Asset>;
+    /**
+     * 
+     * @type {Meta}
+     * @memberof ListAssetsResponse
+     */
+    meta?: Meta;
+}
+/**
+ * 
+ * @export
+ * @interface ListCollectionResponse
+ */
+export interface ListCollectionResponse {
+    /**
+     * 
+     * @type {Array<Collection>}
+     * @memberof ListCollectionResponse
+     */
+    data?: Array<Collection>;
+    /**
+     * 
+     * @type {Meta}
+     * @memberof ListCollectionResponse
+     */
+    meta?: Meta;
+}
+/**
+ * 
+ * @export
+ * @interface ListEventResponse
+ */
+export interface ListEventResponse {
+    /**
+     * 
+     * @type {Array<NFTEvent>}
+     * @memberof ListEventResponse
+     */
+    data?: Array<NFTEvent>;
+    /**
+     * 
+     * @type {Meta}
+     * @memberof ListEventResponse
+     */
+    meta?: Meta;
+}
+/**
+ * 
+ * @export
+ * @interface Meta
+ */
+export interface Meta {
+    /**
+     * 
+     * @type {Paging}
+     * @memberof Meta
+     */
+    paging?: Paging;
+}
+/**
+ * 
+ * @export
  * @interface ModelError
  */
 export interface ModelError {
@@ -382,6 +632,55 @@ export interface ModelError {
 /**
  * 
  * @export
+ * @interface NFTEvent
+ */
+export interface NFTEvent {
+    /**
+     * 
+     * @type {string}
+     * @memberof NFTEvent
+     */
+    contract_address?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof NFTEvent
+     */
+    token_id?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof NFTEvent
+     */
+    event_type?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof NFTEvent
+     */
+    timestamp?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof NFTEvent
+     */
+    from_account?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof NFTEvent
+     */
+    to_account?: string;
+    /**
+     * 
+     * @type {object}
+     * @memberof NFTEvent
+     */
+    transaction?: object;
+}
+/**
+ * 
+ * @export
  * @interface NativeCurrency
  */
 export interface NativeCurrency {
@@ -415,6 +714,19 @@ export interface NativeCurrency {
      * @memberof NativeCurrency
      */
     type: string;
+}
+/**
+ * 
+ * @export
+ * @interface Paging
+ */
+export interface Paging {
+    /**
+     * 
+     * @type {string}
+     * @memberof Paging
+     */
+    next_page_token?: string;
 }
 /**
  * 
@@ -1600,6 +1912,591 @@ export class BlocksApi extends BaseAPI {
      */
     public getBlockIdentifiers(platform: string, network: string, options?: any) {
         return BlocksApiFp(this.configuration).getBlockIdentifiers(platform, network, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * NFTApi - axios parameter creator
+ * @export
+ */
+export const NFTApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {number} protocol Mapped to URL path
+         * @param {number} network Mapped to URL path
+         * @param {string} id Mapped to URL query parameter \&#39;uuid\&#39;
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        explorerGetCollection: async (protocol: number, network: number, id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'protocol' is not null or undefined
+            assertParamExists('explorerGetCollection', 'protocol', protocol)
+            // verify required parameter 'network' is not null or undefined
+            assertParamExists('explorerGetCollection', 'network', network)
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('explorerGetCollection', 'id', id)
+            const localVarPath = `/nft/{protocol}/{network}/collection/{id}`
+                .replace(`{${"protocol"}}`, encodeURIComponent(String(protocol)))
+                .replace(`{${"network"}}`, encodeURIComponent(String(network)))
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        explorerGetStatus: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/status`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} protocol Mapped to URL path
+         * @param {number} network Mapped to URL path
+         * @param {string} [walletAddress] Mapped to URL query parameter &#x60;wallet_address&#x60;
+         * @param {string} [contractAddress] Mapped to URL query parameter &#x60;contract_address&#x60;
+         * @param {number} [tokenIdValue] The int64 value.
+         * @param {string} [collectionName] Mapped to URL query parameter &#x60;collection_name&#x60;
+         * @param {string} [sortBy] One of: name, token_id, mint_date
+         * @param {number} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
+         * @param {number} [pageSize] Mapped to URL query parameter &#x60;page_size&#x60;
+         * @param {string} [pageToken] Mapped to URL query parameter &#x60;page_token&#x60; base64 encoded cursor
+         * @param {Array<string>} [attributes] Mapped to URL query parameter &#x60;attributes&#x60;
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        explorerListAssets: async (protocol: number, network: number, walletAddress?: string, contractAddress?: string, tokenIdValue?: number, collectionName?: string, sortBy?: string, order?: number, pageSize?: number, pageToken?: string, attributes?: Array<string>, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'protocol' is not null or undefined
+            assertParamExists('explorerListAssets', 'protocol', protocol)
+            // verify required parameter 'network' is not null or undefined
+            assertParamExists('explorerListAssets', 'network', network)
+            const localVarPath = `/nft/{protocol}/{network}/assets`
+                .replace(`{${"protocol"}}`, encodeURIComponent(String(protocol)))
+                .replace(`{${"network"}}`, encodeURIComponent(String(network)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (walletAddress !== undefined) {
+                localVarQueryParameter['wallet_address'] = walletAddress;
+            }
+
+            if (contractAddress !== undefined) {
+                localVarQueryParameter['contract_address'] = contractAddress;
+            }
+
+            if (tokenIdValue !== undefined) {
+                localVarQueryParameter['token_id.value'] = tokenIdValue;
+            }
+
+            if (collectionName !== undefined) {
+                localVarQueryParameter['collection_name'] = collectionName;
+            }
+
+            if (sortBy !== undefined) {
+                localVarQueryParameter['sort_by'] = sortBy;
+            }
+
+            if (order !== undefined) {
+                localVarQueryParameter['order'] = order;
+            }
+
+            if (pageSize !== undefined) {
+                localVarQueryParameter['page_size'] = pageSize;
+            }
+
+            if (pageToken !== undefined) {
+                localVarQueryParameter['page_token'] = pageToken;
+            }
+
+            if (attributes) {
+                localVarQueryParameter['attributes'] = attributes;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} protocol Mapped to URL path
+         * @param {number} network Mapped to URL path
+         * @param {Array<string>} [contractAddress] Mapped to URL query parameter \&#39;contract_address\&#39;
+         * @param {Array<string>} [collectionName] Mapped to URL query parameter \&#39;collection_name\&#39;
+         * @param {string} [sortBy] Sort by one of: name
+         * @param {number} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
+         * @param {number} [pageSize] Mapped to URL query parameter &#x60;page_size&#x60;
+         * @param {string} [pageToken] Mapped to URL query parameter &#x60;page_token&#x60; base64 encoded cursor
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        explorerListCollections: async (protocol: number, network: number, contractAddress?: Array<string>, collectionName?: Array<string>, sortBy?: string, order?: number, pageSize?: number, pageToken?: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'protocol' is not null or undefined
+            assertParamExists('explorerListCollections', 'protocol', protocol)
+            // verify required parameter 'network' is not null or undefined
+            assertParamExists('explorerListCollections', 'network', network)
+            const localVarPath = `/nft/{protocol}/{network}/collections`
+                .replace(`{${"protocol"}}`, encodeURIComponent(String(protocol)))
+                .replace(`{${"network"}}`, encodeURIComponent(String(network)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (contractAddress) {
+                localVarQueryParameter['contractAddress'] = contractAddress;
+            }
+
+            if (collectionName) {
+                localVarQueryParameter['collectionName'] = collectionName;
+            }
+
+            if (sortBy !== undefined) {
+                localVarQueryParameter['sort_by'] = sortBy;
+            }
+
+            if (order !== undefined) {
+                localVarQueryParameter['order'] = order;
+            }
+
+            if (pageSize !== undefined) {
+                localVarQueryParameter['page_size'] = pageSize;
+            }
+
+            if (pageToken !== undefined) {
+                localVarQueryParameter['page_token'] = pageToken;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} protocol mapped to URL path
+         * @param {number} network mapped to URL path
+         * @param {string} [contractAddress] mapped to URL query parameter \&#39;contract_address\&#39;
+         * @param {string} [walletAddress] mapped to URL query parameter \&#39;wallet_address\&#39;
+         * @param {number} [tokenId] mapped to URL query parameter \&#39;token_id\&#39;
+         * @param {string} [eventType] mapped to URL query parameter \&#39;event_type\&#39;
+         * @param {string} [sortBy] Sort by one of: timestamp
+         * @param {number} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
+         * @param {number} [pageSize] Mapped to URL query parameter &#x60;page_size&#x60;
+         * @param {string} [pageToken] Mapped to URL query parameter &#x60;page_token&#x60; base64 encoded cursor
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        explorerListEvents: async (protocol: number, network: number, contractAddress?: string, walletAddress?: string, tokenId?: number, eventType?: string, sortBy?: string, order?: number, pageSize?: number, pageToken?: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'protocol' is not null or undefined
+            assertParamExists('explorerListEvents', 'protocol', protocol)
+            // verify required parameter 'network' is not null or undefined
+            assertParamExists('explorerListEvents', 'network', network)
+            const localVarPath = `/nft/{protocol}/{network}/events`
+                .replace(`{${"protocol"}}`, encodeURIComponent(String(protocol)))
+                .replace(`{${"network"}}`, encodeURIComponent(String(network)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (contractAddress !== undefined) {
+                localVarQueryParameter['contract_address'] = contractAddress;
+            }
+
+            if (walletAddress !== undefined) {
+                localVarQueryParameter['wallet_address'] = walletAddress;
+            }
+
+            if (tokenId !== undefined) {
+                localVarQueryParameter['token_id'] = tokenId;
+            }
+
+            if (eventType !== undefined) {
+                localVarQueryParameter['event_type'] = eventType;
+            }
+
+            if (sortBy !== undefined) {
+                localVarQueryParameter['sort_by'] = sortBy;
+            }
+
+            if (order !== undefined) {
+                localVarQueryParameter['order'] = order;
+            }
+
+            if (pageSize !== undefined) {
+                localVarQueryParameter['page_size'] = pageSize;
+            }
+
+            if (pageToken !== undefined) {
+                localVarQueryParameter['page_token'] = pageToken;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * NFTApi - functional programming interface
+ * @export
+ */
+export const NFTApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = NFTApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {number} protocol Mapped to URL path
+         * @param {number} network Mapped to URL path
+         * @param {string} id Mapped to URL query parameter \&#39;uuid\&#39;
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async explorerGetCollection(protocol: number, network: number, id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetCollectionResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.explorerGetCollection(protocol, network, id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async explorerGetStatus(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.explorerGetStatus(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} protocol Mapped to URL path
+         * @param {number} network Mapped to URL path
+         * @param {string} [walletAddress] Mapped to URL query parameter &#x60;wallet_address&#x60;
+         * @param {string} [contractAddress] Mapped to URL query parameter &#x60;contract_address&#x60;
+         * @param {number} [tokenIdValue] The int64 value.
+         * @param {string} [collectionName] Mapped to URL query parameter &#x60;collection_name&#x60;
+         * @param {string} [sortBy] One of: name, token_id, mint_date
+         * @param {number} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
+         * @param {number} [pageSize] Mapped to URL query parameter &#x60;page_size&#x60;
+         * @param {string} [pageToken] Mapped to URL query parameter &#x60;page_token&#x60; base64 encoded cursor
+         * @param {Array<string>} [attributes] Mapped to URL query parameter &#x60;attributes&#x60;
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async explorerListAssets(protocol: number, network: number, walletAddress?: string, contractAddress?: string, tokenIdValue?: number, collectionName?: string, sortBy?: string, order?: number, pageSize?: number, pageToken?: string, attributes?: Array<string>, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListAssetsResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.explorerListAssets(protocol, network, walletAddress, contractAddress, tokenIdValue, collectionName, sortBy, order, pageSize, pageToken, attributes, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} protocol Mapped to URL path
+         * @param {number} network Mapped to URL path
+         * @param {Array<string>} [contractAddress] Mapped to URL query parameter \&#39;contract_address\&#39;
+         * @param {Array<string>} [collectionName] Mapped to URL query parameter \&#39;collection_name\&#39;
+         * @param {string} [sortBy] Sort by one of: name
+         * @param {number} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
+         * @param {number} [pageSize] Mapped to URL query parameter &#x60;page_size&#x60;
+         * @param {string} [pageToken] Mapped to URL query parameter &#x60;page_token&#x60; base64 encoded cursor
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async explorerListCollections(protocol: number, network: number, contractAddress?: Array<string>, collectionName?: Array<string>, sortBy?: string, order?: number, pageSize?: number, pageToken?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListCollectionResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.explorerListCollections(protocol, network, contractAddress, collectionName, sortBy, order, pageSize, pageToken, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} protocol mapped to URL path
+         * @param {number} network mapped to URL path
+         * @param {string} [contractAddress] mapped to URL query parameter \&#39;contract_address\&#39;
+         * @param {string} [walletAddress] mapped to URL query parameter \&#39;wallet_address\&#39;
+         * @param {number} [tokenId] mapped to URL query parameter \&#39;token_id\&#39;
+         * @param {string} [eventType] mapped to URL query parameter \&#39;event_type\&#39;
+         * @param {string} [sortBy] Sort by one of: timestamp
+         * @param {number} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
+         * @param {number} [pageSize] Mapped to URL query parameter &#x60;page_size&#x60;
+         * @param {string} [pageToken] Mapped to URL query parameter &#x60;page_token&#x60; base64 encoded cursor
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async explorerListEvents(protocol: number, network: number, contractAddress?: string, walletAddress?: string, tokenId?: number, eventType?: string, sortBy?: string, order?: number, pageSize?: number, pageToken?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListEventResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.explorerListEvents(protocol, network, contractAddress, walletAddress, tokenId, eventType, sortBy, order, pageSize, pageToken, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * NFTApi - factory interface
+ * @export
+ */
+export const NFTApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = NFTApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {number} protocol Mapped to URL path
+         * @param {number} network Mapped to URL path
+         * @param {string} id Mapped to URL query parameter \&#39;uuid\&#39;
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        explorerGetCollection(protocol: number, network: number, id: string, options?: any): AxiosPromise<GetCollectionResponse> {
+            return localVarFp.explorerGetCollection(protocol, network, id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        explorerGetStatus(options?: any): AxiosPromise<void> {
+            return localVarFp.explorerGetStatus(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} protocol Mapped to URL path
+         * @param {number} network Mapped to URL path
+         * @param {string} [walletAddress] Mapped to URL query parameter &#x60;wallet_address&#x60;
+         * @param {string} [contractAddress] Mapped to URL query parameter &#x60;contract_address&#x60;
+         * @param {number} [tokenIdValue] The int64 value.
+         * @param {string} [collectionName] Mapped to URL query parameter &#x60;collection_name&#x60;
+         * @param {string} [sortBy] One of: name, token_id, mint_date
+         * @param {number} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
+         * @param {number} [pageSize] Mapped to URL query parameter &#x60;page_size&#x60;
+         * @param {string} [pageToken] Mapped to URL query parameter &#x60;page_token&#x60; base64 encoded cursor
+         * @param {Array<string>} [attributes] Mapped to URL query parameter &#x60;attributes&#x60;
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        explorerListAssets(protocol: number, network: number, walletAddress?: string, contractAddress?: string, tokenIdValue?: number, collectionName?: string, sortBy?: string, order?: number, pageSize?: number, pageToken?: string, attributes?: Array<string>, options?: any): AxiosPromise<ListAssetsResponse> {
+            return localVarFp.explorerListAssets(protocol, network, walletAddress, contractAddress, tokenIdValue, collectionName, sortBy, order, pageSize, pageToken, attributes, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} protocol Mapped to URL path
+         * @param {number} network Mapped to URL path
+         * @param {Array<string>} [contractAddress] Mapped to URL query parameter \&#39;contract_address\&#39;
+         * @param {Array<string>} [collectionName] Mapped to URL query parameter \&#39;collection_name\&#39;
+         * @param {string} [sortBy] Sort by one of: name
+         * @param {number} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
+         * @param {number} [pageSize] Mapped to URL query parameter &#x60;page_size&#x60;
+         * @param {string} [pageToken] Mapped to URL query parameter &#x60;page_token&#x60; base64 encoded cursor
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        explorerListCollections(protocol: number, network: number, contractAddress?: Array<string>, collectionName?: Array<string>, sortBy?: string, order?: number, pageSize?: number, pageToken?: string, options?: any): AxiosPromise<ListCollectionResponse> {
+            return localVarFp.explorerListCollections(protocol, network, contractAddress, collectionName, sortBy, order, pageSize, pageToken, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} protocol mapped to URL path
+         * @param {number} network mapped to URL path
+         * @param {string} [contractAddress] mapped to URL query parameter \&#39;contract_address\&#39;
+         * @param {string} [walletAddress] mapped to URL query parameter \&#39;wallet_address\&#39;
+         * @param {number} [tokenId] mapped to URL query parameter \&#39;token_id\&#39;
+         * @param {string} [eventType] mapped to URL query parameter \&#39;event_type\&#39;
+         * @param {string} [sortBy] Sort by one of: timestamp
+         * @param {number} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
+         * @param {number} [pageSize] Mapped to URL query parameter &#x60;page_size&#x60;
+         * @param {string} [pageToken] Mapped to URL query parameter &#x60;page_token&#x60; base64 encoded cursor
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        explorerListEvents(protocol: number, network: number, contractAddress?: string, walletAddress?: string, tokenId?: number, eventType?: string, sortBy?: string, order?: number, pageSize?: number, pageToken?: string, options?: any): AxiosPromise<ListEventResponse> {
+            return localVarFp.explorerListEvents(protocol, network, contractAddress, walletAddress, tokenId, eventType, sortBy, order, pageSize, pageToken, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * NFTApi - object-oriented interface
+ * @export
+ * @class NFTApi
+ * @extends {BaseAPI}
+ */
+export class NFTApi extends BaseAPI {
+    /**
+     * 
+     * @param {number} protocol Mapped to URL path
+     * @param {number} network Mapped to URL path
+     * @param {string} id Mapped to URL query parameter \&#39;uuid\&#39;
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NFTApi
+     */
+    public explorerGetCollection(protocol: number, network: number, id: string, options?: any) {
+        return NFTApiFp(this.configuration).explorerGetCollection(protocol, network, id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NFTApi
+     */
+    public explorerGetStatus(options?: any) {
+        return NFTApiFp(this.configuration).explorerGetStatus(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} protocol Mapped to URL path
+     * @param {number} network Mapped to URL path
+     * @param {string} [walletAddress] Mapped to URL query parameter &#x60;wallet_address&#x60;
+     * @param {string} [contractAddress] Mapped to URL query parameter &#x60;contract_address&#x60;
+     * @param {number} [tokenIdValue] The int64 value.
+     * @param {string} [collectionName] Mapped to URL query parameter &#x60;collection_name&#x60;
+     * @param {string} [sortBy] One of: name, token_id, mint_date
+     * @param {number} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
+     * @param {number} [pageSize] Mapped to URL query parameter &#x60;page_size&#x60;
+     * @param {string} [pageToken] Mapped to URL query parameter &#x60;page_token&#x60; base64 encoded cursor
+     * @param {Array<string>} [attributes] Mapped to URL query parameter &#x60;attributes&#x60;
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NFTApi
+     */
+    public explorerListAssets(protocol: number, network: number, walletAddress?: string, contractAddress?: string, tokenIdValue?: number, collectionName?: string, sortBy?: string, order?: number, pageSize?: number, pageToken?: string, attributes?: Array<string>, options?: any) {
+        return NFTApiFp(this.configuration).explorerListAssets(protocol, network, walletAddress, contractAddress, tokenIdValue, collectionName, sortBy, order, pageSize, pageToken, attributes, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} protocol Mapped to URL path
+     * @param {number} network Mapped to URL path
+     * @param {Array<string>} [contractAddress] Mapped to URL query parameter \&#39;contract_address\&#39;
+     * @param {Array<string>} [collectionName] Mapped to URL query parameter \&#39;collection_name\&#39;
+     * @param {string} [sortBy] Sort by one of: name
+     * @param {number} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
+     * @param {number} [pageSize] Mapped to URL query parameter &#x60;page_size&#x60;
+     * @param {string} [pageToken] Mapped to URL query parameter &#x60;page_token&#x60; base64 encoded cursor
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NFTApi
+     */
+    public explorerListCollections(protocol: number, network: number, contractAddress?: Array<string>, collectionName?: Array<string>, sortBy?: string, order?: number, pageSize?: number, pageToken?: string, options?: any) {
+        return NFTApiFp(this.configuration).explorerListCollections(protocol, network, contractAddress, collectionName, sortBy, order, pageSize, pageToken, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} protocol mapped to URL path
+     * @param {number} network mapped to URL path
+     * @param {string} [contractAddress] mapped to URL query parameter \&#39;contract_address\&#39;
+     * @param {string} [walletAddress] mapped to URL query parameter \&#39;wallet_address\&#39;
+     * @param {number} [tokenId] mapped to URL query parameter \&#39;token_id\&#39;
+     * @param {string} [eventType] mapped to URL query parameter \&#39;event_type\&#39;
+     * @param {string} [sortBy] Sort by one of: timestamp
+     * @param {number} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
+     * @param {number} [pageSize] Mapped to URL query parameter &#x60;page_size&#x60;
+     * @param {string} [pageToken] Mapped to URL query parameter &#x60;page_token&#x60; base64 encoded cursor
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NFTApi
+     */
+    public explorerListEvents(protocol: number, network: number, contractAddress?: string, walletAddress?: string, tokenId?: number, eventType?: string, sortBy?: string, order?: number, pageSize?: number, pageToken?: string, options?: any) {
+        return NFTApiFp(this.configuration).explorerListEvents(protocol, network, contractAddress, walletAddress, tokenId, eventType, sortBy, order, pageSize, pageToken, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
