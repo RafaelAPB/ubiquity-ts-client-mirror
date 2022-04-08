@@ -17,7 +17,7 @@ test("fetches algo account balance successfully data from an API", async () => {
     Promise.resolve({ status: 200, data: algoAccountBalance })
   );
 
-  const balance = await client.accountsApi.getBalancesByAddress(
+  const balance = await client.accountsApi.getListOfBalancesByAddress(
     PROTOCOL.ALGORAND,
     NETWORKS.MAIN_NET,
     "HG2JL36OPPITBA7RNIPW4GUQS74AF3SEBO6DAJSLJC33C34I2DQ42F5MU4"

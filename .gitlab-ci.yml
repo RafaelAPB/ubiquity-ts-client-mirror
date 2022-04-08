@@ -23,7 +23,7 @@ generate:
   script:
     - >
       java -jar /opt/openapi-generator/modules/openapi-generator-cli/target/openapi-generator-cli.jar generate
-      -i ./spec/openapi.yaml
+      -i ./spec/openapi-v1.yaml
       -g typescript-axios
       -o ./src/generated
     - apt update
@@ -37,7 +37,7 @@ generate:
     refs:
       - master
     changes:
-      - spec/openapi.yaml
+      - spec/openapi-v1.yaml
 
 build:
   image: node:15-alpine

@@ -15,7 +15,7 @@ test("fetches platform info for btc successfully data from an API", async () => 
     Promise.resolve({ status: 200, data: btcPlatformInfo })
   );
 
-  const platform = await client.platformsApi.getPlatform(
+  const platform = await client.platformsApi.getPlatformEndpoints(
     PROTOCOL.BITCOIN,
     NETWORKS.MAIN_NET
   );

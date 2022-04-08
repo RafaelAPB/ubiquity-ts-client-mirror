@@ -58,30 +58,31 @@ client.blocksApi
 Initial request to paged APIs should not include a continuation. If no limit is supplied, the default of 25 will be applied. A filter can also be applied to select the returned assets.
 
 ```typescript
-client.accountsApi.getTxsByAddress(
-  PROTOCOL.ETHEREUM,
-  NETWORKS.MAIN_NET,
-  "0x49bC2A9EE1A08dbCa7dd66629700E68AA8DB09aC"
-);
+client.accountsApi
+  .getTxsByAddress(
+    PROTOCOL.LITECOIN,
+    NETWORKS.MAIN_NET,
+    "ltc1q6sfr0xfrz7ajzxwvdegs3frrqrfa7mcdhyr202"
+  );
 ```
 
 To continue through the pages of transactions, the continuation from the previous page must be supplied to the next request:
 
 ```typescript
     .then((txsPage1: AxiosResponse<TxPage>) => {
-      console.log(txsPage1);
+      console.log(txsPage1.data);
       client.accountsApi
         .getTxsByAddress(
-          PROTOCOL.ETHEREUM,
+          PROTOCOL.LITECOIN,
           NETWORKS.MAIN_NET,
-          "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+          "ltc1q6sfr0xfrz7ajzxwvdegs3frrqrfa7mcdhyr202",
           "desc",
           txsPage1.data.continuation
         )
-        .then((txPage2: AxiosResponse<TxPage>) => console.log(txPage2))
-        .catch((e: any) => console.log(`error code::${e.response.status} url::${e.config.url}`));
+        .then((txPage2: AxiosResponse<TxPage>) => console.log("txs: ", txPage2.data))
+        .catch(e => console.log(`error code::${e.response.status} url::${e.config.url}`));
     })
-    .catch((e: any) => console.log(`error code::${e.response.status} url::${e.config.url}`));
+    .catch(e => console.log(`error code::${e.response.status} url::${e.config.url}`));
 ```
 
 ## Platforms API
@@ -90,7 +91,7 @@ To get the platform info:
 
 ```typescript
 client.platformsApi
-  .getPlatform(PROTOCOL.POLKADOT, NETWORKS.MAIN_NET)
+  .getPlatformEndpoints(PROTOCOL.POLKADOT, NETWORKS.MAIN_NET)
   .then((balance: AxiosResponse) => console.log(balance.data))
   .catch((r: any) => console.log(r));
 ```
@@ -101,8 +102,8 @@ To get the current block height:
 
 ```typescript
 client.syncApi
-  .currentBlockID(PROTOCOL.ETHEREUM, NETWORKS.MAIN_NET)
-  .then((syncData: AxiosResponse<string>) => console.log(syncData.data))
+  .currentBlockNumber(PROTOCOL.ETHEREUM, NETWORKS.MAIN_NET)
+  .then((syncData: AxiosResponse<number>) => console.log(syncData.data))
   .catch((e: any) =>
     console.log(`error code::${e.response.status} url::${e.config.url}`)
   );
@@ -112,8 +113,8 @@ To get the current block ID:
 
 ```typescript
 client.syncApi
-  .currentBlockNumber(PROTOCOL.ETHEREUM, NETWORKS.MAIN_NET)
-  .then((syncData: AxiosResponse<number>) => console.log(syncData.data))
+  .currentBlockID(PROTOCOL.ETHEREUM, NETWORKS.MAIN_NET)
+  .then((syncData: AxiosResponse<string>) => console.log(syncData.data))
   .catch((e: any) =>
     console.log(`error code::${e.response.status} url::${e.config.url}`)
   );
@@ -125,7 +126,7 @@ To get all transactions on the platform, starting with the latest one:
 
 ```typescript
 client.transactionsApi
-  .getTxs(PROTOCOL.ETHEREUM, NETWORKS.MAIN_NET)
+  .getTxs(PROTOCOL.BITCOIN_CASH, NETWORKS.MAIN_NET)
   .then((syncData: AxiosResponse<TxPage>) => console.log(syncData.data))
   .catch((e: any) =>
     console.log(`error code::${e.response.status} url::${e.config.url}`)
@@ -137,9 +138,9 @@ To get a transaction by hash:
 ```typescript
 client.transactionsApi
   .getTx(
-    PROTOCOL.ETHEREUM,
+    PROTOCOL.TEZOS,
     NETWORKS.MAIN_NET,
-    "0x6821b32162ad40f979ad8e999ffbe358e5df0f54e1894d1b3fc3e01fce6a134b"
+    "onhbU4nd1A9BrvAsWx5QHfQMhjcmJtC5dzpmwxrycdt7FbYcQ7L"
   )
   .then((syncData: AxiosResponse<Tx>) => console.log(syncData.data))
   .catch((e: any) =>
@@ -154,7 +155,7 @@ The generated clients can be used directly for lower-level control or in the cas
 ```typescript
 const configuration = new Configuration({
   accessToken: "Auth Token Here",
-  basePath: "https://ubiquity.api.blockdaemon.com/v2",
+  basePath: "https://ubiquity.api.blockdaemon.com/v1",
 });
 
 const blockApi = new BlocksApi(configuration);
@@ -189,7 +190,6 @@ const input = [
   }
 ];
 
-const fee = 1000;
 const outputs = [
   {
     address: "<destination address>",
@@ -209,7 +209,7 @@ main().catch(console.error);
 
 For Bitcoin an unsigned transaction can also be created with the function `TransactionCreation.create`.
 
-To create and sign a transaction that sends 1 ETH and pays 21000 gas as fee from an account to another:
+To create and sign a transaction that sends 1 ETH from an account to another with a gas price of `1509999997` and a gas limit of `21000`:
 
 ```typescript
 import { createAndSign, ethTransaction, NETWORKS } from "@ubiquity/ubiquity-ts-client";
@@ -256,7 +256,13 @@ After a transaction is created and signed, it can be broadcasted through Ubiquit
 
 async function main() {
   const apiClient = new UbiquityClient("Auth Token Here");
+
+  const rawSignedTx = {
+    tx: "<raw transaction payload here>"
+  };
+
   console.log("Sending transaction to the network...");
+
   const txSendResponse = await apiClient.transactionsApi.txSend(PROTOCOL.BITCOIN, NETWORKS.TEST_NET, rawSignedTx);
 
   console.log("Transaction id: ", txSendResponse.data.id);
@@ -268,7 +274,7 @@ main().catch(console.error)
 
 #### Estimating fees
 
-Ubiquity's `/tx/estimate_fee` endpoint returns an estimation of the fee value required for transactions to be pushed to the network. It can be used through the `estimateFee()` method.
+Ubiquity's `/tx/estimate_fee` endpoint returns an estimation of the fee value required for transactions to be pushed to the network. It can be used through the `feeEstimate()` method.
 
 For Ethereum, this endpoint returns the average gas price obtained from the network:
 
@@ -278,13 +284,9 @@ For Ethereum, this endpoint returns the average gas price obtained from the netw
 async function main() {
   const apiClient = new UbiquityClient("Auth Token Here");
   
-  // For bitcoin, the 'confirmedWithinBlocks' parameter (defaults to 10) specifies
-  //   the number of blocks the transaction would be processed within, which
-  //   reflects in different fee values
-  const confirmedWithinBlocks = 15;
-  const feeResponse = await apiClient.transactionsApi.estimateFee(PROTOCOL.BITCOIN, NETWORKS.TEST_NET, confirmedWithinBlocks);
+  const feeResponse = await apiClient.transactionsApi.feeEstimate(PROTOCOL.BITCOIN, NETWORKS.MAIN_NET);
 
-  console.log("Transaction id: ", feeResponse.data.id);
+  console.log("Fee estimate: ", feeResponse.data);
 
 }
 
@@ -306,9 +308,9 @@ main().catch(console.error)
     }
   };
   
-  ws.subscribe(blocksub).then()=>{
-      ws.unsubscribe(blocksub);
-  };
+  ws.subscribe(blocksub).then(()=>{
+    ws.unsubscribe(blocksub);
+  });
 ```
 
 ### Block Identifiers
