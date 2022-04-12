@@ -1924,13 +1924,13 @@ export const NFTApiAxiosParamCreator = function (configuration?: Configuration) 
     return {
         /**
          * 
-         * @param {number} protocol Mapped to URL path
-         * @param {number} network Mapped to URL path
+         * @param {string} protocol Coin platform handle
+         * @param {string} network Which network to target
          * @param {string} id Mapped to URL query parameter \&#39;uuid\&#39;
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        explorerGetCollection: async (protocol: number, network: number, id: string, options: any = {}): Promise<RequestArgs> => {
+        explorerGetCollection: async (protocol: string, network: string, id: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'protocol' is not null or undefined
             assertParamExists('explorerGetCollection', 'protocol', protocol)
             // verify required parameter 'network' is not null or undefined
@@ -1969,54 +1969,21 @@ export const NFTApiAxiosParamCreator = function (configuration?: Configuration) 
         },
         /**
          * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        explorerGetStatus: async (options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/status`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearerAuth required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {number} protocol Mapped to URL path
-         * @param {number} network Mapped to URL path
+         * @param {string} protocol Coin platform handle
+         * @param {string} network Which network to target
          * @param {string} [walletAddress] Mapped to URL query parameter &#x60;wallet_address&#x60;
          * @param {string} [contractAddress] Mapped to URL query parameter &#x60;contract_address&#x60;
          * @param {number} [tokenIdValue] The int64 value.
          * @param {string} [collectionName] Mapped to URL query parameter &#x60;collection_name&#x60;
          * @param {string} [sortBy] One of: name, token_id, mint_date
-         * @param {number} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
+         * @param {string} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
          * @param {number} [pageSize] Mapped to URL query parameter &#x60;page_size&#x60;
          * @param {string} [pageToken] Mapped to URL query parameter &#x60;page_token&#x60; base64 encoded cursor
          * @param {Array<string>} [attributes] Mapped to URL query parameter &#x60;attributes&#x60;
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        explorerListAssets: async (protocol: number, network: number, walletAddress?: string, contractAddress?: string, tokenIdValue?: number, collectionName?: string, sortBy?: string, order?: number, pageSize?: number, pageToken?: string, attributes?: Array<string>, options: any = {}): Promise<RequestArgs> => {
+        explorerListAssets: async (protocol: string, network: string, walletAddress?: string, contractAddress?: string, tokenIdValue?: number, collectionName?: string, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, attributes?: Array<string>, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'protocol' is not null or undefined
             assertParamExists('explorerListAssets', 'protocol', protocol)
             // verify required parameter 'network' is not null or undefined
@@ -2088,18 +2055,18 @@ export const NFTApiAxiosParamCreator = function (configuration?: Configuration) 
         },
         /**
          * 
-         * @param {number} protocol Mapped to URL path
-         * @param {number} network Mapped to URL path
+         * @param {string} protocol Coin platform handle
+         * @param {string} network Which network to target
          * @param {Array<string>} [contractAddress] Mapped to URL query parameter \&#39;contract_address\&#39;
          * @param {Array<string>} [collectionName] Mapped to URL query parameter \&#39;collection_name\&#39;
          * @param {string} [sortBy] Sort by one of: name
-         * @param {number} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
+         * @param {string} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
          * @param {number} [pageSize] Mapped to URL query parameter &#x60;page_size&#x60;
          * @param {string} [pageToken] Mapped to URL query parameter &#x60;page_token&#x60; base64 encoded cursor
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        explorerListCollections: async (protocol: number, network: number, contractAddress?: Array<string>, collectionName?: Array<string>, sortBy?: string, order?: number, pageSize?: number, pageToken?: string, options: any = {}): Promise<RequestArgs> => {
+        explorerListCollections: async (protocol: string, network: string, contractAddress?: Array<string>, collectionName?: Array<string>, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'protocol' is not null or undefined
             assertParamExists('explorerListCollections', 'protocol', protocol)
             // verify required parameter 'network' is not null or undefined
@@ -2159,20 +2126,20 @@ export const NFTApiAxiosParamCreator = function (configuration?: Configuration) 
         },
         /**
          * 
-         * @param {number} protocol mapped to URL path
-         * @param {number} network mapped to URL path
+         * @param {string} protocol Coin platform handle
+         * @param {string} network Which network to target
          * @param {string} [contractAddress] mapped to URL query parameter \&#39;contract_address\&#39;
          * @param {string} [walletAddress] mapped to URL query parameter \&#39;wallet_address\&#39;
          * @param {number} [tokenId] mapped to URL query parameter \&#39;token_id\&#39;
          * @param {string} [eventType] mapped to URL query parameter \&#39;event_type\&#39;
          * @param {string} [sortBy] Sort by one of: timestamp
-         * @param {number} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
+         * @param {string} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
          * @param {number} [pageSize] Mapped to URL query parameter &#x60;page_size&#x60;
          * @param {string} [pageToken] Mapped to URL query parameter &#x60;page_token&#x60; base64 encoded cursor
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        explorerListEvents: async (protocol: number, network: number, contractAddress?: string, walletAddress?: string, tokenId?: number, eventType?: string, sortBy?: string, order?: number, pageSize?: number, pageToken?: string, options: any = {}): Promise<RequestArgs> => {
+        explorerListEvents: async (protocol: string, network: string, contractAddress?: string, walletAddress?: string, tokenId?: number, eventType?: string, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'protocol' is not null or undefined
             assertParamExists('explorerListEvents', 'protocol', protocol)
             // verify required parameter 'network' is not null or undefined
@@ -2250,78 +2217,69 @@ export const NFTApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {number} protocol Mapped to URL path
-         * @param {number} network Mapped to URL path
+         * @param {string} protocol Coin platform handle
+         * @param {string} network Which network to target
          * @param {string} id Mapped to URL query parameter \&#39;uuid\&#39;
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async explorerGetCollection(protocol: number, network: number, id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetCollectionResponse>> {
+        async explorerGetCollection(protocol: string, network: string, id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetCollectionResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.explorerGetCollection(protocol, network, id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async explorerGetStatus(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.explorerGetStatus(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @param {number} protocol Mapped to URL path
-         * @param {number} network Mapped to URL path
+         * @param {string} protocol Coin platform handle
+         * @param {string} network Which network to target
          * @param {string} [walletAddress] Mapped to URL query parameter &#x60;wallet_address&#x60;
          * @param {string} [contractAddress] Mapped to URL query parameter &#x60;contract_address&#x60;
          * @param {number} [tokenIdValue] The int64 value.
          * @param {string} [collectionName] Mapped to URL query parameter &#x60;collection_name&#x60;
          * @param {string} [sortBy] One of: name, token_id, mint_date
-         * @param {number} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
+         * @param {string} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
          * @param {number} [pageSize] Mapped to URL query parameter &#x60;page_size&#x60;
          * @param {string} [pageToken] Mapped to URL query parameter &#x60;page_token&#x60; base64 encoded cursor
          * @param {Array<string>} [attributes] Mapped to URL query parameter &#x60;attributes&#x60;
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async explorerListAssets(protocol: number, network: number, walletAddress?: string, contractAddress?: string, tokenIdValue?: number, collectionName?: string, sortBy?: string, order?: number, pageSize?: number, pageToken?: string, attributes?: Array<string>, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListAssetsResponse>> {
+        async explorerListAssets(protocol: string, network: string, walletAddress?: string, contractAddress?: string, tokenIdValue?: number, collectionName?: string, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, attributes?: Array<string>, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListAssetsResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.explorerListAssets(protocol, network, walletAddress, contractAddress, tokenIdValue, collectionName, sortBy, order, pageSize, pageToken, attributes, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
-         * @param {number} protocol Mapped to URL path
-         * @param {number} network Mapped to URL path
+         * @param {string} protocol Coin platform handle
+         * @param {string} network Which network to target
          * @param {Array<string>} [contractAddress] Mapped to URL query parameter \&#39;contract_address\&#39;
          * @param {Array<string>} [collectionName] Mapped to URL query parameter \&#39;collection_name\&#39;
          * @param {string} [sortBy] Sort by one of: name
-         * @param {number} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
+         * @param {string} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
          * @param {number} [pageSize] Mapped to URL query parameter &#x60;page_size&#x60;
          * @param {string} [pageToken] Mapped to URL query parameter &#x60;page_token&#x60; base64 encoded cursor
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async explorerListCollections(protocol: number, network: number, contractAddress?: Array<string>, collectionName?: Array<string>, sortBy?: string, order?: number, pageSize?: number, pageToken?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListCollectionResponse>> {
+        async explorerListCollections(protocol: string, network: string, contractAddress?: Array<string>, collectionName?: Array<string>, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListCollectionResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.explorerListCollections(protocol, network, contractAddress, collectionName, sortBy, order, pageSize, pageToken, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
-         * @param {number} protocol mapped to URL path
-         * @param {number} network mapped to URL path
+         * @param {string} protocol Coin platform handle
+         * @param {string} network Which network to target
          * @param {string} [contractAddress] mapped to URL query parameter \&#39;contract_address\&#39;
          * @param {string} [walletAddress] mapped to URL query parameter \&#39;wallet_address\&#39;
          * @param {number} [tokenId] mapped to URL query parameter \&#39;token_id\&#39;
          * @param {string} [eventType] mapped to URL query parameter \&#39;event_type\&#39;
          * @param {string} [sortBy] Sort by one of: timestamp
-         * @param {number} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
+         * @param {string} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
          * @param {number} [pageSize] Mapped to URL query parameter &#x60;page_size&#x60;
          * @param {string} [pageToken] Mapped to URL query parameter &#x60;page_token&#x60; base64 encoded cursor
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async explorerListEvents(protocol: number, network: number, contractAddress?: string, walletAddress?: string, tokenId?: number, eventType?: string, sortBy?: string, order?: number, pageSize?: number, pageToken?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListEventResponse>> {
+        async explorerListEvents(protocol: string, network: string, contractAddress?: string, walletAddress?: string, tokenId?: number, eventType?: string, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListEventResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.explorerListEvents(protocol, network, contractAddress, walletAddress, tokenId, eventType, sortBy, order, pageSize, pageToken, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -2337,74 +2295,66 @@ export const NFTApiFactory = function (configuration?: Configuration, basePath?:
     return {
         /**
          * 
-         * @param {number} protocol Mapped to URL path
-         * @param {number} network Mapped to URL path
+         * @param {string} protocol Coin platform handle
+         * @param {string} network Which network to target
          * @param {string} id Mapped to URL query parameter \&#39;uuid\&#39;
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        explorerGetCollection(protocol: number, network: number, id: string, options?: any): AxiosPromise<GetCollectionResponse> {
+        explorerGetCollection(protocol: string, network: string, id: string, options?: any): AxiosPromise<GetCollectionResponse> {
             return localVarFp.explorerGetCollection(protocol, network, id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        explorerGetStatus(options?: any): AxiosPromise<void> {
-            return localVarFp.explorerGetStatus(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {number} protocol Mapped to URL path
-         * @param {number} network Mapped to URL path
+         * @param {string} protocol Coin platform handle
+         * @param {string} network Which network to target
          * @param {string} [walletAddress] Mapped to URL query parameter &#x60;wallet_address&#x60;
          * @param {string} [contractAddress] Mapped to URL query parameter &#x60;contract_address&#x60;
          * @param {number} [tokenIdValue] The int64 value.
          * @param {string} [collectionName] Mapped to URL query parameter &#x60;collection_name&#x60;
          * @param {string} [sortBy] One of: name, token_id, mint_date
-         * @param {number} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
+         * @param {string} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
          * @param {number} [pageSize] Mapped to URL query parameter &#x60;page_size&#x60;
          * @param {string} [pageToken] Mapped to URL query parameter &#x60;page_token&#x60; base64 encoded cursor
          * @param {Array<string>} [attributes] Mapped to URL query parameter &#x60;attributes&#x60;
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        explorerListAssets(protocol: number, network: number, walletAddress?: string, contractAddress?: string, tokenIdValue?: number, collectionName?: string, sortBy?: string, order?: number, pageSize?: number, pageToken?: string, attributes?: Array<string>, options?: any): AxiosPromise<ListAssetsResponse> {
+        explorerListAssets(protocol: string, network: string, walletAddress?: string, contractAddress?: string, tokenIdValue?: number, collectionName?: string, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, attributes?: Array<string>, options?: any): AxiosPromise<ListAssetsResponse> {
             return localVarFp.explorerListAssets(protocol, network, walletAddress, contractAddress, tokenIdValue, collectionName, sortBy, order, pageSize, pageToken, attributes, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {number} protocol Mapped to URL path
-         * @param {number} network Mapped to URL path
+         * @param {string} protocol Coin platform handle
+         * @param {string} network Which network to target
          * @param {Array<string>} [contractAddress] Mapped to URL query parameter \&#39;contract_address\&#39;
          * @param {Array<string>} [collectionName] Mapped to URL query parameter \&#39;collection_name\&#39;
          * @param {string} [sortBy] Sort by one of: name
-         * @param {number} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
+         * @param {string} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
          * @param {number} [pageSize] Mapped to URL query parameter &#x60;page_size&#x60;
          * @param {string} [pageToken] Mapped to URL query parameter &#x60;page_token&#x60; base64 encoded cursor
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        explorerListCollections(protocol: number, network: number, contractAddress?: Array<string>, collectionName?: Array<string>, sortBy?: string, order?: number, pageSize?: number, pageToken?: string, options?: any): AxiosPromise<ListCollectionResponse> {
+        explorerListCollections(protocol: string, network: string, contractAddress?: Array<string>, collectionName?: Array<string>, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, options?: any): AxiosPromise<ListCollectionResponse> {
             return localVarFp.explorerListCollections(protocol, network, contractAddress, collectionName, sortBy, order, pageSize, pageToken, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {number} protocol mapped to URL path
-         * @param {number} network mapped to URL path
+         * @param {string} protocol Coin platform handle
+         * @param {string} network Which network to target
          * @param {string} [contractAddress] mapped to URL query parameter \&#39;contract_address\&#39;
          * @param {string} [walletAddress] mapped to URL query parameter \&#39;wallet_address\&#39;
          * @param {number} [tokenId] mapped to URL query parameter \&#39;token_id\&#39;
          * @param {string} [eventType] mapped to URL query parameter \&#39;event_type\&#39;
          * @param {string} [sortBy] Sort by one of: timestamp
-         * @param {number} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
+         * @param {string} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
          * @param {number} [pageSize] Mapped to URL query parameter &#x60;page_size&#x60;
          * @param {string} [pageToken] Mapped to URL query parameter &#x60;page_token&#x60; base64 encoded cursor
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        explorerListEvents(protocol: number, network: number, contractAddress?: string, walletAddress?: string, tokenId?: number, eventType?: string, sortBy?: string, order?: number, pageSize?: number, pageToken?: string, options?: any): AxiosPromise<ListEventResponse> {
+        explorerListEvents(protocol: string, network: string, contractAddress?: string, walletAddress?: string, tokenId?: number, eventType?: string, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, options?: any): AxiosPromise<ListEventResponse> {
             return localVarFp.explorerListEvents(protocol, network, contractAddress, walletAddress, tokenId, eventType, sortBy, order, pageSize, pageToken, options).then((request) => request(axios, basePath));
         },
     };
@@ -2419,37 +2369,27 @@ export const NFTApiFactory = function (configuration?: Configuration, basePath?:
 export class NFTApi extends BaseAPI {
     /**
      * 
-     * @param {number} protocol Mapped to URL path
-     * @param {number} network Mapped to URL path
+     * @param {string} protocol Coin platform handle
+     * @param {string} network Which network to target
      * @param {string} id Mapped to URL query parameter \&#39;uuid\&#39;
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NFTApi
      */
-    public explorerGetCollection(protocol: number, network: number, id: string, options?: any) {
+    public explorerGetCollection(protocol: string, network: string, id: string, options?: any) {
         return NFTApiFp(this.configuration).explorerGetCollection(protocol, network, id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof NFTApi
-     */
-    public explorerGetStatus(options?: any) {
-        return NFTApiFp(this.configuration).explorerGetStatus(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {number} protocol Mapped to URL path
-     * @param {number} network Mapped to URL path
+     * @param {string} protocol Coin platform handle
+     * @param {string} network Which network to target
      * @param {string} [walletAddress] Mapped to URL query parameter &#x60;wallet_address&#x60;
      * @param {string} [contractAddress] Mapped to URL query parameter &#x60;contract_address&#x60;
      * @param {number} [tokenIdValue] The int64 value.
      * @param {string} [collectionName] Mapped to URL query parameter &#x60;collection_name&#x60;
      * @param {string} [sortBy] One of: name, token_id, mint_date
-     * @param {number} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
+     * @param {string} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
      * @param {number} [pageSize] Mapped to URL query parameter &#x60;page_size&#x60;
      * @param {string} [pageToken] Mapped to URL query parameter &#x60;page_token&#x60; base64 encoded cursor
      * @param {Array<string>} [attributes] Mapped to URL query parameter &#x60;attributes&#x60;
@@ -2457,45 +2397,45 @@ export class NFTApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof NFTApi
      */
-    public explorerListAssets(protocol: number, network: number, walletAddress?: string, contractAddress?: string, tokenIdValue?: number, collectionName?: string, sortBy?: string, order?: number, pageSize?: number, pageToken?: string, attributes?: Array<string>, options?: any) {
+    public explorerListAssets(protocol: string, network: string, walletAddress?: string, contractAddress?: string, tokenIdValue?: number, collectionName?: string, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, attributes?: Array<string>, options?: any) {
         return NFTApiFp(this.configuration).explorerListAssets(protocol, network, walletAddress, contractAddress, tokenIdValue, collectionName, sortBy, order, pageSize, pageToken, attributes, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {number} protocol Mapped to URL path
-     * @param {number} network Mapped to URL path
+     * @param {string} protocol Coin platform handle
+     * @param {string} network Which network to target
      * @param {Array<string>} [contractAddress] Mapped to URL query parameter \&#39;contract_address\&#39;
      * @param {Array<string>} [collectionName] Mapped to URL query parameter \&#39;collection_name\&#39;
      * @param {string} [sortBy] Sort by one of: name
-     * @param {number} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
+     * @param {string} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
      * @param {number} [pageSize] Mapped to URL query parameter &#x60;page_size&#x60;
      * @param {string} [pageToken] Mapped to URL query parameter &#x60;page_token&#x60; base64 encoded cursor
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NFTApi
      */
-    public explorerListCollections(protocol: number, network: number, contractAddress?: Array<string>, collectionName?: Array<string>, sortBy?: string, order?: number, pageSize?: number, pageToken?: string, options?: any) {
+    public explorerListCollections(protocol: string, network: string, contractAddress?: Array<string>, collectionName?: Array<string>, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, options?: any) {
         return NFTApiFp(this.configuration).explorerListCollections(protocol, network, contractAddress, collectionName, sortBy, order, pageSize, pageToken, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {number} protocol mapped to URL path
-     * @param {number} network mapped to URL path
+     * @param {string} protocol Coin platform handle
+     * @param {string} network Which network to target
      * @param {string} [contractAddress] mapped to URL query parameter \&#39;contract_address\&#39;
      * @param {string} [walletAddress] mapped to URL query parameter \&#39;wallet_address\&#39;
      * @param {number} [tokenId] mapped to URL query parameter \&#39;token_id\&#39;
      * @param {string} [eventType] mapped to URL query parameter \&#39;event_type\&#39;
      * @param {string} [sortBy] Sort by one of: timestamp
-     * @param {number} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
+     * @param {string} [order] Mapped to URL query parameter &#x60;order&#x60; One of: asc, desc
      * @param {number} [pageSize] Mapped to URL query parameter &#x60;page_size&#x60;
      * @param {string} [pageToken] Mapped to URL query parameter &#x60;page_token&#x60; base64 encoded cursor
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NFTApi
      */
-    public explorerListEvents(protocol: number, network: number, contractAddress?: string, walletAddress?: string, tokenId?: number, eventType?: string, sortBy?: string, order?: number, pageSize?: number, pageToken?: string, options?: any) {
+    public explorerListEvents(protocol: string, network: string, contractAddress?: string, walletAddress?: string, tokenId?: number, eventType?: string, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, options?: any) {
         return NFTApiFp(this.configuration).explorerListEvents(protocol, network, contractAddress, walletAddress, tokenId, eventType, sortBy, order, pageSize, pageToken, options).then((request) => request(this.axios, this.basePath));
     }
 }
