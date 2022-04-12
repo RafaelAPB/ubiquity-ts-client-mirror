@@ -807,18 +807,16 @@ paths:
       parameters:
         - name: protocol
           in: path
-          description: Mapped to URL path
+          description: Coin platform handle
           required: true
           schema:
-            type: integer
-            format: enum
+            type: string
         - name: network
           in: path
-          description: Mapped to URL path
+          description: Which network to target
           required: true
           schema:
-            type: integer
-            format: enum
+            type: string
         - name: wallet_address
           in: query
           description: Mapped to URL query parameter `wallet_address`
@@ -849,8 +847,7 @@ paths:
           in: query
           description: 'Mapped to URL query parameter `order` One of: asc, desc'
           schema:
-            type: integer
-            format: enum
+            type: string
         - name: page_size
           in: query
           description: Mapped to URL query parameter `page_size`
@@ -884,18 +881,16 @@ paths:
       parameters:
         - name: protocol
           in: path
-          description: Mapped to URL path
+          description: Coin platform handle
           required: true
           schema:
-            type: integer
-            format: enum
+            type: string
         - name: network
           in: path
-          description: Mapped to URL path
+          description: Which network to target
           required: true
           schema:
-            type: integer
-            format: enum
+            type: string
         - name: id
           in: path
           description: Mapped to URL query parameter 'uuid'
@@ -917,18 +912,16 @@ paths:
       parameters:
         - name: protocol
           in: path
-          description: Mapped to URL path
+          description: Coin platform handle
           required: true
           schema:
-            type: integer
-            format: enum
+            type: string
         - name: network
           in: path
-          description: Mapped to URL path
+          description: Which network to target
           required: true
           schema:
-            type: integer
-            format: enum
+            type: string
         - name: contractAddress
           in: query
           description: Mapped to URL query parameter 'contract_address'
@@ -952,8 +945,7 @@ paths:
           in: query
           description: 'Mapped to URL query parameter `order` One of: asc, desc'
           schema:
-            type: integer
-            format: enum
+            type: string
         - name: page_size
           in: query
           description: Mapped to URL query parameter `page_size`
@@ -980,18 +972,16 @@ paths:
       parameters:
         - name: protocol
           in: path
-          description: mapped to URL path
+          description: Coin platform handle
           required: true
           schema:
-            type: integer
-            format: enum
+            type: string
         - name: network
           in: path
-          description: mapped to URL path
+          description: Which network to target
           required: true
           schema:
-            type: integer
-            format: enum
+            type: string
         - name: contract_address
           in: query
           description: mapped to URL query parameter 'contract_address'
@@ -1022,8 +1012,7 @@ paths:
           in: query
           description: 'Mapped to URL query parameter `order` One of: asc, desc'
           schema:
-            type: integer
-            format: enum
+            type: string
         - name: page_size
           in: query
           description: Mapped to URL query parameter `page_size`
@@ -1042,17 +1031,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ListEventResponse'
-  /status:
-    get:
-      tags:
-        - NFT
-      operationId: Explorer_GetStatus
-      responses:
-        "200":
-          description: OK
-          content: { }
-
-
 
 components:
   securitySchemes:
