@@ -1148,6 +1148,90 @@ export interface TxConfirmation {
     confirmations?: number;
 }
 /**
+ * Transaction
+ * @export
+ * @interface TxMinify
+ */
+export interface TxMinify {
+    /**
+     * Unique transaction identifier
+     * @type {string}
+     * @memberof TxMinify
+     */
+    id?: string;
+    /**
+     * Unix timestamp
+     * @type {number}
+     * @memberof TxMinify
+     */
+    date?: number;
+    /**
+     * ID of block.
+     * @type {string}
+     * @memberof TxMinify
+     */
+    block_id?: string | null;
+    /**
+     * Height of block,
+     * @type {number}
+     * @memberof TxMinify
+     */
+    block_number?: number | null;
+    /**
+     * Total transaction confirmations
+     * @type {number}
+     * @memberof TxMinify
+     */
+    confirmations?: number;
+}
+/**
+ * 
+ * @export
+ * @interface TxOutput
+ */
+export interface TxOutput {
+    /**
+     * Result status of the transaction output.
+     * @type {string}
+     * @memberof TxOutput
+     */
+    status?: TxOutputStatusEnum;
+    /**
+     * If the transaction output was spent or not, if the value is true the `spent` transaction object will be presented
+     * @type {boolean}
+     * @memberof TxOutput
+     */
+    is_spent?: boolean;
+    /**
+     * Amount of transaction output
+     * @type {number}
+     * @memberof TxOutput
+     */
+    value?: number | null;
+    /**
+     * 
+     * @type {TxMinify}
+     * @memberof TxOutput
+     */
+    mined?: TxMinify | null;
+    /**
+     * 
+     * @type {TxMinify}
+     * @memberof TxOutput
+     */
+    spent?: TxMinify | null;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum TxOutputStatusEnum {
+    Mined = 'mined',
+    Unknown = 'unknown'
+}
+
+/**
  * 
  * @export
  * @interface TxPage
@@ -2911,6 +2995,56 @@ export const TransactionsApiAxiosParamCreator = function (configuration?: Config
         },
         /**
          * 
+         * @summary Transaction output by hash and index
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} id Transaction ID/Hash
+         * @param {number} index Transaction output index
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTxByHashAndIndex: async (platform: string, network: string, id: string, index: number, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'platform' is not null or undefined
+            assertParamExists('getTxByHashAndIndex', 'platform', platform)
+            // verify required parameter 'network' is not null or undefined
+            assertParamExists('getTxByHashAndIndex', 'network', network)
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getTxByHashAndIndex', 'id', id)
+            // verify required parameter 'index' is not null or undefined
+            assertParamExists('getTxByHashAndIndex', 'index', index)
+            const localVarPath = `/{platform}/{network}/tx/{id}/{index}`
+                .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
+                .replace(`{${"network"}}`, encodeURIComponent(String(network)))
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)))
+                .replace(`{${"index"}}`, encodeURIComponent(String(index)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Transaction confirmations By Hash
          * @param {string} platform Coin platform handle
          * @param {string} network Which network to target. Available networks can be found with /{platform}
@@ -3097,6 +3231,20 @@ export const TransactionsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Transaction output by hash and index
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} id Transaction ID/Hash
+         * @param {number} index Transaction output index
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getTxByHashAndIndex(platform: string, network: string, id: string, index: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TxOutput>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getTxByHashAndIndex(platform, network, id, index, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Transaction confirmations By Hash
          * @param {string} platform Coin platform handle
          * @param {string} network Which network to target. Available networks can be found with /{platform}
@@ -3171,6 +3319,19 @@ export const TransactionsApiFactory = function (configuration?: Configuration, b
         },
         /**
          * 
+         * @summary Transaction output by hash and index
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} id Transaction ID/Hash
+         * @param {number} index Transaction output index
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTxByHashAndIndex(platform: string, network: string, id: string, index: number, options?: any): AxiosPromise<TxOutput> {
+            return localVarFp.getTxByHashAndIndex(platform, network, id, index, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Transaction confirmations By Hash
          * @param {string} platform Coin platform handle
          * @param {string} network Which network to target. Available networks can be found with /{platform}
@@ -3242,6 +3403,21 @@ export class TransactionsApi extends BaseAPI {
      */
     public getTx(platform: string, network: string, id: string, options?: any) {
         return TransactionsApiFp(this.configuration).getTx(platform, network, id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Transaction output by hash and index
+     * @param {string} platform Coin platform handle
+     * @param {string} network Which network to target. Available networks can be found with /{platform}
+     * @param {string} id Transaction ID/Hash
+     * @param {number} index Transaction output index
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TransactionsApi
+     */
+    public getTxByHashAndIndex(platform: string, network: string, id: string, index: number, options?: any) {
+        return TransactionsApiFp(this.configuration).getTxByHashAndIndex(platform, network, id, index, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
