@@ -901,6 +901,67 @@ paths:
               }
         429:
           $ref: '#/components/responses/TooManyRequests'
+          
+  /v1/{platform}/{network}/tx/{id}/{index}:
+    get:
+      summary: Transaction output by hash and index
+      operationId: GetTxByHashAndIndex
+      tags:
+        - Transactions
+      parameters:
+        - $ref: '#/components/parameters/platform'
+        - $ref: '#/components/parameters/network'
+        - name: id
+          in: path
+          required: true
+          description: Transaction ID/Hash
+          schema:
+            type: string
+          example: "0xF00Fa860473130C1df10707223E66Cb4B839B165"
+        - name: index
+          in: path
+          required: true
+          description: Transaction output index
+          schema:
+            type: integer
+          example: 0
+      responses:
+        200:
+          description: Transaction output
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/tx_output"
+        400:
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/error"
+              example: {
+                "type": "bad-request",
+                "code": 16385,
+                "title": "Invalid Identifier",
+                "status": 400,
+                "detail": "The requested identifier is invalid."
+              }
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        404:
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/error"
+              example: {
+                "type": "not-found",
+                "code": 16388,
+                "title": "Not Found",
+                "status": 404,
+                "detail": "The requested resource has not been found"
+              }
+        429:
+          $ref: '#/components/responses/TooManyRequests'
 
   /v2/{platform}/{network}/sync/block_number:
     get:
@@ -1570,6 +1631,59 @@ components:
               }
             }
           }
+          
+    tx_minify:
+      type: object
+      nullable: true
+      description: Transaction
+      properties:
+        id:
+          type: string
+          description: Unique transaction identifier
+          example: "0xF00Fa860473130C1df10707223E66Cb4B839B165"
+        date:
+          type: integer
+          format: int64
+          description: Unix timestamp
+          example: 1571222657
+        block_id:
+          type: string
+          description: ID of block.
+          example: "0xaf2948aba2ed8cc7d5b7d4e4f4164a7c8819efc94d30aab3fce6904df68dbc07"
+          nullable: true
+        block_number:
+          type: integer
+          format: int64
+          description: Height of block,
+          example: 77477
+          nullable: true
+        confirmations:
+          type: integer
+          format: int64
+          description: Total transaction confirmations
+          example: 10
+      
+    tx_output:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Result status of the transaction output.
+          enum: [ mined, unknown ]
+        is_spent:
+          type: boolean
+          description: If the transaction output was spent or not, if the value is true the `spent` transaction object will be presented
+          example: true
+        value:
+          type: integer
+          format: int64
+          description: Amount of transaction output
+          nullable: true
+        mined:
+          $ref: '#/components/schemas/tx_minify'
+        spent:
+          $ref: '#/components/schemas/tx_minify'
+          
     Event:
       type: object
       properties:
