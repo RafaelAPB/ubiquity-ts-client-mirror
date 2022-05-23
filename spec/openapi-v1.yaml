@@ -201,6 +201,7 @@ paths:
         - $ref: '#/components/parameters/platform'
         - $ref: '#/components/parameters/network'
         - $ref: '#/components/parameters/address'
+        - $ref: '#/components/parameters/assets'
       responses:
         200:
           description: Balances
@@ -379,6 +380,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/platform'
         - $ref: '#/components/parameters/network'
+        - $ref: '#/components/parameters/assets'
       requestBody:
         required: true
         content:
@@ -611,6 +613,7 @@ paths:
         - $ref: '#/components/parameters/order'
         - $ref: '#/components/parameters/continuation'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/assets'
       responses:
         200:
           description: Transactions
@@ -1343,6 +1346,14 @@ components:
           type: string
           description: Result status of the transaction.
           enum: [ completed, failed ]
+        assets:
+          type: array
+          description: List of moved assets by asset path
+          uniqueItems: true
+          items:
+            type: string
+            example: "ethereum/native/eth"
+          nullable: true
         nonce:
           type: integer
         num_events:
