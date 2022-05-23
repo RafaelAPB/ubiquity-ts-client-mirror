@@ -294,25 +294,6 @@ main().catch(console.error)
 ```
 
 ## Websockets support 
-### Blocks
-```typescript
-  const client = new UbiquityClient("---> Auth Token Here");
-
-  // Call the connect function to create a new websocket
-  const ws = client.ws.connect(PROTOCOL.ETHEREUM, NETWORKS.MAIN_NET);
-
-  const blocksub: Subscription= {
-    type:    WS_CHANNELS.BLOCK,
-    handler: (_ws: UbiWebsocket, block: BlockItem) => {
-      console.log(block);
-    }
-  };
-  
-  ws.subscribe(blocksub).then(()=>{
-    ws.unsubscribe(blocksub);
-  });
-```
-
 ### Block Identifiers
 ```typescript
   const blockIdentSub: Subscription = {

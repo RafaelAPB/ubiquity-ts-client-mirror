@@ -4,10 +4,10 @@ import {
   PROTOCOL,
   WS_CHANNELS,
   UbiWebsocket,
-  BlockItem,
+  TxItem,
 } from "../src/client";
 import WebSocket from "isomorphic-ws";
-import * as ethBlock from "./data/eth_block.json";
+import * as ethtx from "./data/eth_tx.json";
 
 let ubiWs: UbiWebsocket;
 let server: WebSocket.Server;
@@ -42,9 +42,9 @@ test("Websocket subscribe/unsubscribe/subscription happy path", async () => {
                 items: [
                   {
                     subID: 123,
-                    channel: "ubiquity.block",
+                    channel: "ubiquity.txs",
                     revert: false,
-                    content: ethBlock,
+                    content: ethtx,
                   },
                 ],
               },
@@ -76,10 +76,10 @@ test("Websocket subscribe/unsubscribe/subscription happy path", async () => {
   await ubiWs.connect();
 
   let subscriptionPromise;
-  const blockFromSubscription = new Promise((resolve) => {
+  const txFromSubscription = new Promise((resolve) => {
     subscriptionPromise = ubiWs.subscribe({
-      type: WS_CHANNELS.BLOCK,
-      handler: (instance: UbiWebsocket, event: BlockItem) => {
+      type: WS_CHANNELS.TX,
+      handler: (instance: UbiWebsocket, event: TxItem) => {
         resolve(event.content);
       }}
     );
@@ -87,15 +87,15 @@ test("Websocket subscribe/unsubscribe/subscription happy path", async () => {
 
   const subscription = await subscriptionPromise;
 
-  const block = await blockFromSubscription;
-  expect(block).toEqual(ethBlock);
+  const tx = await txFromSubscription;
+  expect(tx).toEqual(ethtx);
 
   await ubiWs.unsubscribe(subscription).then(() => {
     expect(events[events.length - 1]).toEqual({
       method: "ubiquity.unsubscribe",
       id: 2,
       params: {
-        channel: "ubiquity.blocks",
+        channel: "ubiquity.txs",
         subID: 123,
       },
     });
