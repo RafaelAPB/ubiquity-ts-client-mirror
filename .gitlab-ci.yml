@@ -6,7 +6,6 @@ include:
   - template: Security/Dependency-Scanning.gitlab-ci.yml
 
 stages:
-- generate
 - build
 - test
 - deploy
@@ -16,28 +15,6 @@ cache:
   paths:
     - node_modules
     - dist
-
-generate:
-  image: openapitools/openapi-generator-cli:v5.2.0
-  stage: generate
-  script:
-    - >
-      java -jar /opt/openapi-generator/modules/openapi-generator-cli/target/openapi-generator-cli.jar generate
-      -i ./spec/openapi-v1.yaml
-      -g typescript-axios
-      -o ./src/generated
-    - apt update
-    - apt install git -y
-    - git config --global user.name "Mr.Roboto 🤖"
-    - git config --global user.email "mrRoboto@blockdaemon.com"
-    - git add ./src/generated
-    - git commit -m "UB-00 Updating generated code with changes from ${CI_JOB_ID}" || true
-    - git push http://gitlab-ci-token:${AUTH_TOKEN_UBIQUITY_TS_CLIENT}@gitlab.com/Blockdaemon/ubiquity/ubiquity-ts-client.git HEAD:master || true
-  only:
-    refs:
-      - master
-    changes:
-      - spec/openapi-v1.yaml
 
 build:
   image: node:15-alpine
