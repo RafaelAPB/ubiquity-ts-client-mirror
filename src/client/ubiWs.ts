@@ -1,4 +1,4 @@
-import { Block, BlockIdentifier, Tx } from "../generated";
+import { BlockIdentifier, Tx } from "../generated";
 import { WS_BASE_URL } from "./constants";
 import WebSocket from "isomorphic-ws";
 
@@ -9,13 +9,6 @@ export type TxItem = {
   content: Tx;
 };
 
-export type BlockItem = {
-  subID: number;
-  channel: string;
-  revert: boolean;
-  content: Block;
-};
-
 export type BlockIdentifierItem = {
   subID: number;
   channel: string;
@@ -23,15 +16,14 @@ export type BlockIdentifierItem = {
   content: BlockIdentifier;
 };
 
-export type Item = TxItem | BlockItem | BlockIdentifierItem;
+export type Item = TxItem | BlockIdentifierItem;
 
 export type TxHandler = (instance: UbiWebsocket, event: TxItem) => void;
-export type BlockHandler = (instance: UbiWebsocket, event: BlockItem) => void;
 export type BlockIdentifierHandler = (
   instance: UbiWebsocket,
   event: BlockIdentifierItem
 ) => void;
-export type Handler = TxHandler | BlockHandler | BlockIdentifierHandler;
+export type Handler = TxHandler | BlockIdentifierHandler;
 
 export type Subscription = {
   id?: number;
