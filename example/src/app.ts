@@ -20,29 +20,7 @@ async function app(): Promise<void> {
   // Initial request to paged API's should not include a continuation.
   // If no limit is supplied the default of 25 will be applied
   // A filter can also be applied to select the returned assets
-  client.accountsApi
-    .getTxsByAddress(
-      PROTOCOL.LITECOIN,
-      NETWORKS.MAIN_NET,
-      "ltc1q6sfr0xfrz7ajzxwvdegs3frrqrfa7mcdhyr202"
-    )
-
-    // To continue through the pages of transactions the continuation
-    // from the previous page must be supplied to the next request
-    .then((txsPage1: AxiosResponse<TxPage>) => {
-      console.log("txs: ", txsPage1.data);
-      client.accountsApi
-        .getTxsByAddress(
-          PROTOCOL.LITECOIN,
-          NETWORKS.MAIN_NET,
-          "ltc1q6sfr0xfrz7ajzxwvdegs3frrqrfa7mcdhyr202",
-          "desc",
-          txsPage1.data.continuation
-        )
-        .then((txPage2: AxiosResponse<TxPage>) => console.log("txs: ", txPage2.data))
-        .catch(e => console.log(`error code::${e.response.status} url::${e.config.url}`));
-    })
-    .catch(e => console.log(`error code::${e.response.status} url::${e.config.url}`));
+ 
 
   // All of the API's return a promise of type AxiosResponse<T>
   client.platformsApi

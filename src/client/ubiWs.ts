@@ -26,8 +26,8 @@ export type BlockIdentifierHandler = (
 export type Handler = TxHandler | BlockIdentifierHandler;
 
 export type Subscription = {
-  id?: number;
-  subID?: number;
+  id: number;
+  subID: number;
   type: string;
   /* eslint-disable  @typescript-eslint/no-explicit-any */
   detail?: any;
@@ -53,7 +53,7 @@ export class UbiWebsocket {
       ev.message,
       this.reconnectTime
     );
-    public rawWs: WebSocket;
+    public rawWs: WebSocket =  new WebSocket("uninitialized");
  
   private id = 0;
   private subscriptions: Array<Subscription> = [];
@@ -64,13 +64,14 @@ export class UbiWebsocket {
   public constructor(
     platform: string,
     network: string,
-    accessToken: string,
+    accessToken?: string,
     basePath = WS_BASE_URL
   ) {
     const encodedPlatform = encodeURIComponent(String(platform));
     const encodedNetwork = encodeURIComponent(String(network));
     const encodedToken = encodeURIComponent(String(accessToken));
     this.url = `${basePath}/${encodedPlatform}/${encodedNetwork}/websocket?apiKey=${encodedToken}`;
+    this.rawWs = new WebSocket(this.url);
   }
 
  
@@ -85,8 +86,6 @@ export class UbiWebsocket {
     return Promise.race([
       timeout,
       new Promise<void>((resolve, reject) => {
-        this.rawWs = new WebSocket(this.url);
-
         this.rawWs.addEventListener("open", () => {
           this.handlers.clear();
           this.subscriptions.forEach((sub) => this.processSubscribe(sub));
@@ -97,8 +96,11 @@ export class UbiWebsocket {
           const e = JSON.parse(ev.data.toString());
           if ("ubiquity.subscription" === e.method) {
             e.params.items.forEach((element: Item) => {
-              if (this.handlers.has(element.subID)) {
-                this.handlers.get(element.subID)(this, element);
+              const thereIsHandler = this.handlers.has(element.subID);
+              if (thereIsHandler) {
+                // eslint-disable-next-line @typescript-eslint/ban-types
+                const handler =  this.handlers.get(element.subID) as Handler;
+                handler(this, element);
               }
             });
           }

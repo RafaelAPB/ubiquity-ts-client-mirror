@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import { Address, Networks, PrivateKey, PublicKey, Script, Transaction } from 'bitcore-lib';
 import Web3 from "web3";
 import { NETWORKS } from "./constants";
@@ -94,7 +96,9 @@ export const btcTransaction = {
     const network = options.network || NETWORKS.TEST_NET;
     const address = new Address(publicKey, getBitcoinNetwork(network));
     const script = Script.fromAddress(address);
-    const signedTxUtxos = unsignedTx.inputs.map((input) => Transaction.UnspentOutput.fromObject({
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const signedTxUtxos = unsignedTx.inputs.map((input: any) => Transaction.UnspentOutput.fromObject({
       txId: input.prevTxId.toString("hex"),
       outputIndex: 0,
       script,
