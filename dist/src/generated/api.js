@@ -40,7 +40,7 @@ var TxStatusEnum;
 (function (TxStatusEnum) {
     TxStatusEnum["Completed"] = "completed";
     TxStatusEnum["Failed"] = "failed";
-})(TxStatusEnum = exports.TxStatusEnum || (exports.TxStatusEnum = {}));
+})(TxStatusEnum || (exports.TxStatusEnum = TxStatusEnum = {}));
 /**
     * @export
     * @enum {string}
@@ -49,7 +49,7 @@ var TxOutputStatusEnum;
 (function (TxOutputStatusEnum) {
     TxOutputStatusEnum["Mined"] = "mined";
     TxOutputStatusEnum["Unknown"] = "unknown";
-})(TxOutputStatusEnum = exports.TxOutputStatusEnum || (exports.TxOutputStatusEnum = {}));
+})(TxOutputStatusEnum || (exports.TxOutputStatusEnum = TxOutputStatusEnum = {}));
 /**
  * AccountsApi - axios parameter creator
  * @export
@@ -68,11 +68,11 @@ const AccountsApiAxiosParamCreator = function (configuration) {
          */
         getListOfBalancesByAddress: (platform, network, address, assets, options = {}) => __awaiter(this, void 0, void 0, function* () {
             // verify required parameter 'platform' is not null or undefined
-            common_1.assertParamExists('getListOfBalancesByAddress', 'platform', platform);
+            (0, common_1.assertParamExists)('getListOfBalancesByAddress', 'platform', platform);
             // verify required parameter 'network' is not null or undefined
-            common_1.assertParamExists('getListOfBalancesByAddress', 'network', network);
+            (0, common_1.assertParamExists)('getListOfBalancesByAddress', 'network', network);
             // verify required parameter 'address' is not null or undefined
-            common_1.assertParamExists('getListOfBalancesByAddress', 'address', address);
+            (0, common_1.assertParamExists)('getListOfBalancesByAddress', 'address', address);
             const localVarPath = `/{platform}/{network}/account/{address}`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)))
@@ -88,15 +88,15 @@ const AccountsApiAxiosParamCreator = function (configuration) {
             const localVarQueryParameter = {};
             // authentication bearerAuth required
             // http bearer authentication required
-            yield common_1.setBearerAuthToObject(localVarHeaderParameter, configuration);
+            yield (0, common_1.setBearerAuthToObject)(localVarHeaderParameter, configuration);
             if (assets !== undefined) {
                 localVarQueryParameter['assets'] = assets;
             }
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            (0, common_1.setSearchParams)(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
             return {
-                url: common_1.toPathString(localVarUrlObj),
+                url: (0, common_1.toPathString)(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         }),
@@ -112,11 +112,11 @@ const AccountsApiAxiosParamCreator = function (configuration) {
          */
         getListOfBalancesByAddresses: (platform, network, accountsObj, assets, options = {}) => __awaiter(this, void 0, void 0, function* () {
             // verify required parameter 'platform' is not null or undefined
-            common_1.assertParamExists('getListOfBalancesByAddresses', 'platform', platform);
+            (0, common_1.assertParamExists)('getListOfBalancesByAddresses', 'platform', platform);
             // verify required parameter 'network' is not null or undefined
-            common_1.assertParamExists('getListOfBalancesByAddresses', 'network', network);
+            (0, common_1.assertParamExists)('getListOfBalancesByAddresses', 'network', network);
             // verify required parameter 'accountsObj' is not null or undefined
-            common_1.assertParamExists('getListOfBalancesByAddresses', 'accountsObj', accountsObj);
+            (0, common_1.assertParamExists)('getListOfBalancesByAddresses', 'accountsObj', accountsObj);
             const localVarPath = `/{platform}/{network}/accounts`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)));
@@ -131,17 +131,17 @@ const AccountsApiAxiosParamCreator = function (configuration) {
             const localVarQueryParameter = {};
             // authentication bearerAuth required
             // http bearer authentication required
-            yield common_1.setBearerAuthToObject(localVarHeaderParameter, configuration);
+            yield (0, common_1.setBearerAuthToObject)(localVarHeaderParameter, configuration);
             if (assets !== undefined) {
                 localVarQueryParameter['assets'] = assets;
             }
             localVarHeaderParameter['Content-Type'] = 'application/json';
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            (0, common_1.setSearchParams)(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
-            localVarRequestOptions.data = common_1.serializeDataIfNeeded(accountsObj, localVarRequestOptions, configuration);
+            localVarRequestOptions.data = (0, common_1.serializeDataIfNeeded)(accountsObj, localVarRequestOptions, configuration);
             return {
-                url: common_1.toPathString(localVarUrlObj),
+                url: (0, common_1.toPathString)(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         }),
@@ -160,11 +160,11 @@ const AccountsApiAxiosParamCreator = function (configuration) {
          */
         getReportByAddress: (platform, network, address, from, to, limit, continuation, options = {}) => __awaiter(this, void 0, void 0, function* () {
             // verify required parameter 'platform' is not null or undefined
-            common_1.assertParamExists('getReportByAddress', 'platform', platform);
+            (0, common_1.assertParamExists)('getReportByAddress', 'platform', platform);
             // verify required parameter 'network' is not null or undefined
-            common_1.assertParamExists('getReportByAddress', 'network', network);
+            (0, common_1.assertParamExists)('getReportByAddress', 'network', network);
             // verify required parameter 'address' is not null or undefined
-            common_1.assertParamExists('getReportByAddress', 'address', address);
+            (0, common_1.assertParamExists)('getReportByAddress', 'address', address);
             const localVarPath = `/{platform}/{network}/account/{address}/report`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)))
@@ -180,7 +180,7 @@ const AccountsApiAxiosParamCreator = function (configuration) {
             const localVarQueryParameter = {};
             // authentication bearerAuth required
             // http bearer authentication required
-            yield common_1.setBearerAuthToObject(localVarHeaderParameter, configuration);
+            yield (0, common_1.setBearerAuthToObject)(localVarHeaderParameter, configuration);
             if (from !== undefined) {
                 localVarQueryParameter['from'] = from;
             }
@@ -193,11 +193,11 @@ const AccountsApiAxiosParamCreator = function (configuration) {
             if (continuation !== undefined) {
                 localVarQueryParameter['continuation'] = continuation;
             }
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            (0, common_1.setSearchParams)(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
             return {
-                url: common_1.toPathString(localVarUrlObj),
+                url: (0, common_1.toPathString)(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         }),
@@ -216,11 +216,11 @@ const AccountsApiAxiosParamCreator = function (configuration) {
          */
         getTxsByAddress: (platform, network, address, order, continuation, limit, assets, options = {}) => __awaiter(this, void 0, void 0, function* () {
             // verify required parameter 'platform' is not null or undefined
-            common_1.assertParamExists('getTxsByAddress', 'platform', platform);
+            (0, common_1.assertParamExists)('getTxsByAddress', 'platform', platform);
             // verify required parameter 'network' is not null or undefined
-            common_1.assertParamExists('getTxsByAddress', 'network', network);
+            (0, common_1.assertParamExists)('getTxsByAddress', 'network', network);
             // verify required parameter 'address' is not null or undefined
-            common_1.assertParamExists('getTxsByAddress', 'address', address);
+            (0, common_1.assertParamExists)('getTxsByAddress', 'address', address);
             const localVarPath = `/{platform}/{network}/account/{address}/txs`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)))
@@ -236,7 +236,7 @@ const AccountsApiAxiosParamCreator = function (configuration) {
             const localVarQueryParameter = {};
             // authentication bearerAuth required
             // http bearer authentication required
-            yield common_1.setBearerAuthToObject(localVarHeaderParameter, configuration);
+            yield (0, common_1.setBearerAuthToObject)(localVarHeaderParameter, configuration);
             if (order !== undefined) {
                 localVarQueryParameter['order'] = order;
             }
@@ -249,11 +249,11 @@ const AccountsApiAxiosParamCreator = function (configuration) {
             if (assets !== undefined) {
                 localVarQueryParameter['assets'] = assets;
             }
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            (0, common_1.setSearchParams)(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
             return {
-                url: common_1.toPathString(localVarUrlObj),
+                url: (0, common_1.toPathString)(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         }),
@@ -265,7 +265,7 @@ exports.AccountsApiAxiosParamCreator = AccountsApiAxiosParamCreator;
  * @export
  */
 const AccountsApiFp = function (configuration) {
-    const localVarAxiosParamCreator = exports.AccountsApiAxiosParamCreator(configuration);
+    const localVarAxiosParamCreator = (0, exports.AccountsApiAxiosParamCreator)(configuration);
     return {
         /**
          * Returns the account balances for all supported currencies.
@@ -280,7 +280,7 @@ const AccountsApiFp = function (configuration) {
         getListOfBalancesByAddress(platform, network, address, assets, options) {
             return __awaiter(this, void 0, void 0, function* () {
                 const localVarAxiosArgs = yield localVarAxiosParamCreator.getListOfBalancesByAddress(platform, network, address, assets, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+                return (0, common_1.createRequestFunction)(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
             });
         },
         /**
@@ -296,7 +296,7 @@ const AccountsApiFp = function (configuration) {
         getListOfBalancesByAddresses(platform, network, accountsObj, assets, options) {
             return __awaiter(this, void 0, void 0, function* () {
                 const localVarAxiosArgs = yield localVarAxiosParamCreator.getListOfBalancesByAddresses(platform, network, accountsObj, assets, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+                return (0, common_1.createRequestFunction)(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
             });
         },
         /**
@@ -315,7 +315,7 @@ const AccountsApiFp = function (configuration) {
         getReportByAddress(platform, network, address, from, to, limit, continuation, options) {
             return __awaiter(this, void 0, void 0, function* () {
                 const localVarAxiosArgs = yield localVarAxiosParamCreator.getReportByAddress(platform, network, address, from, to, limit, continuation, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+                return (0, common_1.createRequestFunction)(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
             });
         },
         /**
@@ -334,7 +334,7 @@ const AccountsApiFp = function (configuration) {
         getTxsByAddress(platform, network, address, order, continuation, limit, assets, options) {
             return __awaiter(this, void 0, void 0, function* () {
                 const localVarAxiosArgs = yield localVarAxiosParamCreator.getTxsByAddress(platform, network, address, order, continuation, limit, assets, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+                return (0, common_1.createRequestFunction)(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
             });
         },
     };
@@ -345,7 +345,7 @@ exports.AccountsApiFp = AccountsApiFp;
  * @export
  */
 const AccountsApiFactory = function (configuration, basePath, axios) {
-    const localVarFp = exports.AccountsApiFp(configuration);
+    const localVarFp = (0, exports.AccountsApiFp)(configuration);
     return {
         /**
          * Returns the account balances for all supported currencies.
@@ -427,7 +427,7 @@ class AccountsApi extends base_1.BaseAPI {
      * @memberof AccountsApi
      */
     getListOfBalancesByAddress(platform, network, address, assets, options) {
-        return exports.AccountsApiFp(this.configuration).getListOfBalancesByAddress(platform, network, address, assets, options).then((request) => request(this.axios, this.basePath));
+        return (0, exports.AccountsApiFp)(this.configuration).getListOfBalancesByAddress(platform, network, address, assets, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * Returns the balances of accounts for all supported currencies.
@@ -441,7 +441,7 @@ class AccountsApi extends base_1.BaseAPI {
      * @memberof AccountsApi
      */
     getListOfBalancesByAddresses(platform, network, accountsObj, assets, options) {
-        return exports.AccountsApiFp(this.configuration).getListOfBalancesByAddresses(platform, network, accountsObj, assets, options).then((request) => request(this.axios, this.basePath));
+        return (0, exports.AccountsApiFp)(this.configuration).getListOfBalancesByAddresses(platform, network, accountsObj, assets, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * Returns account activity
@@ -458,7 +458,7 @@ class AccountsApi extends base_1.BaseAPI {
      * @memberof AccountsApi
      */
     getReportByAddress(platform, network, address, from, to, limit, continuation, options) {
-        return exports.AccountsApiFp(this.configuration).getReportByAddress(platform, network, address, from, to, limit, continuation, options).then((request) => request(this.axios, this.basePath));
+        return (0, exports.AccountsApiFp)(this.configuration).getReportByAddress(platform, network, address, from, to, limit, continuation, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * Gets transactions that an address was involved with, from newest to oldest. This call uses pagination.
@@ -475,7 +475,7 @@ class AccountsApi extends base_1.BaseAPI {
      * @memberof AccountsApi
      */
     getTxsByAddress(platform, network, address, order, continuation, limit, assets, options) {
-        return exports.AccountsApiFp(this.configuration).getTxsByAddress(platform, network, address, order, continuation, limit, assets, options).then((request) => request(this.axios, this.basePath));
+        return (0, exports.AccountsApiFp)(this.configuration).getTxsByAddress(platform, network, address, order, continuation, limit, assets, options).then((request) => request(this.axios, this.basePath));
     }
 }
 exports.AccountsApi = AccountsApi;
@@ -496,11 +496,11 @@ const BlocksApiAxiosParamCreator = function (configuration) {
          */
         getBlock: (platform, network, key, options = {}) => __awaiter(this, void 0, void 0, function* () {
             // verify required parameter 'platform' is not null or undefined
-            common_1.assertParamExists('getBlock', 'platform', platform);
+            (0, common_1.assertParamExists)('getBlock', 'platform', platform);
             // verify required parameter 'network' is not null or undefined
-            common_1.assertParamExists('getBlock', 'network', network);
+            (0, common_1.assertParamExists)('getBlock', 'network', network);
             // verify required parameter 'key' is not null or undefined
-            common_1.assertParamExists('getBlock', 'key', key);
+            (0, common_1.assertParamExists)('getBlock', 'key', key);
             const localVarPath = `/{platform}/{network}/block/{key}`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)))
@@ -516,12 +516,12 @@ const BlocksApiAxiosParamCreator = function (configuration) {
             const localVarQueryParameter = {};
             // authentication bearerAuth required
             // http bearer authentication required
-            yield common_1.setBearerAuthToObject(localVarHeaderParameter, configuration);
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            yield (0, common_1.setBearerAuthToObject)(localVarHeaderParameter, configuration);
+            (0, common_1.setSearchParams)(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
             return {
-                url: common_1.toPathString(localVarUrlObj),
+                url: (0, common_1.toPathString)(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         }),
@@ -536,11 +536,11 @@ const BlocksApiAxiosParamCreator = function (configuration) {
          */
         getBlockIdentifier: (platform, network, key, options = {}) => __awaiter(this, void 0, void 0, function* () {
             // verify required parameter 'platform' is not null or undefined
-            common_1.assertParamExists('getBlockIdentifier', 'platform', platform);
+            (0, common_1.assertParamExists)('getBlockIdentifier', 'platform', platform);
             // verify required parameter 'network' is not null or undefined
-            common_1.assertParamExists('getBlockIdentifier', 'network', network);
+            (0, common_1.assertParamExists)('getBlockIdentifier', 'network', network);
             // verify required parameter 'key' is not null or undefined
-            common_1.assertParamExists('getBlockIdentifier', 'key', key);
+            (0, common_1.assertParamExists)('getBlockIdentifier', 'key', key);
             const localVarPath = `/{platform}/{network}/block_identifier/{key}`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)))
@@ -556,12 +556,12 @@ const BlocksApiAxiosParamCreator = function (configuration) {
             const localVarQueryParameter = {};
             // authentication bearerAuth required
             // http bearer authentication required
-            yield common_1.setBearerAuthToObject(localVarHeaderParameter, configuration);
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            yield (0, common_1.setBearerAuthToObject)(localVarHeaderParameter, configuration);
+            (0, common_1.setSearchParams)(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
             return {
-                url: common_1.toPathString(localVarUrlObj),
+                url: (0, common_1.toPathString)(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         }),
@@ -575,9 +575,9 @@ const BlocksApiAxiosParamCreator = function (configuration) {
          */
         getBlockIdentifiers: (platform, network, options = {}) => __awaiter(this, void 0, void 0, function* () {
             // verify required parameter 'platform' is not null or undefined
-            common_1.assertParamExists('getBlockIdentifiers', 'platform', platform);
+            (0, common_1.assertParamExists)('getBlockIdentifiers', 'platform', platform);
             // verify required parameter 'network' is not null or undefined
-            common_1.assertParamExists('getBlockIdentifiers', 'network', network);
+            (0, common_1.assertParamExists)('getBlockIdentifiers', 'network', network);
             const localVarPath = `/{platform}/{network}/block_identifiers`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)));
@@ -592,12 +592,12 @@ const BlocksApiAxiosParamCreator = function (configuration) {
             const localVarQueryParameter = {};
             // authentication bearerAuth required
             // http bearer authentication required
-            yield common_1.setBearerAuthToObject(localVarHeaderParameter, configuration);
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            yield (0, common_1.setBearerAuthToObject)(localVarHeaderParameter, configuration);
+            (0, common_1.setSearchParams)(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
             return {
-                url: common_1.toPathString(localVarUrlObj),
+                url: (0, common_1.toPathString)(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         }),
@@ -609,7 +609,7 @@ exports.BlocksApiAxiosParamCreator = BlocksApiAxiosParamCreator;
  * @export
  */
 const BlocksApiFp = function (configuration) {
-    const localVarAxiosParamCreator = exports.BlocksApiAxiosParamCreator(configuration);
+    const localVarAxiosParamCreator = (0, exports.BlocksApiAxiosParamCreator)(configuration);
     return {
         /**
          * Get a block and all its transactions by the block number or hash
@@ -623,7 +623,7 @@ const BlocksApiFp = function (configuration) {
         getBlock(platform, network, key, options) {
             return __awaiter(this, void 0, void 0, function* () {
                 const localVarAxiosArgs = yield localVarAxiosParamCreator.getBlock(platform, network, key, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+                return (0, common_1.createRequestFunction)(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
             });
         },
         /**
@@ -638,7 +638,7 @@ const BlocksApiFp = function (configuration) {
         getBlockIdentifier(platform, network, key, options) {
             return __awaiter(this, void 0, void 0, function* () {
                 const localVarAxiosArgs = yield localVarAxiosParamCreator.getBlockIdentifier(platform, network, key, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+                return (0, common_1.createRequestFunction)(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
             });
         },
         /**
@@ -652,7 +652,7 @@ const BlocksApiFp = function (configuration) {
         getBlockIdentifiers(platform, network, options) {
             return __awaiter(this, void 0, void 0, function* () {
                 const localVarAxiosArgs = yield localVarAxiosParamCreator.getBlockIdentifiers(platform, network, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+                return (0, common_1.createRequestFunction)(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
             });
         },
     };
@@ -663,7 +663,7 @@ exports.BlocksApiFp = BlocksApiFp;
  * @export
  */
 const BlocksApiFactory = function (configuration, basePath, axios) {
-    const localVarFp = exports.BlocksApiFp(configuration);
+    const localVarFp = (0, exports.BlocksApiFp)(configuration);
     return {
         /**
          * Get a block and all its transactions by the block number or hash
@@ -721,7 +721,7 @@ class BlocksApi extends base_1.BaseAPI {
      * @memberof BlocksApi
      */
     getBlock(platform, network, key, options) {
-        return exports.BlocksApiFp(this.configuration).getBlock(platform, network, key, options).then((request) => request(this.axios, this.basePath));
+        return (0, exports.BlocksApiFp)(this.configuration).getBlock(platform, network, key, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * Get minimal block identifier by block number or hash
@@ -734,7 +734,7 @@ class BlocksApi extends base_1.BaseAPI {
      * @memberof BlocksApi
      */
     getBlockIdentifier(platform, network, key, options) {
-        return exports.BlocksApiFp(this.configuration).getBlockIdentifier(platform, network, key, options).then((request) => request(this.axios, this.basePath));
+        return (0, exports.BlocksApiFp)(this.configuration).getBlockIdentifier(platform, network, key, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * Get minimal block identifiers from oldest to newest. This call uses pagination.
@@ -746,7 +746,7 @@ class BlocksApi extends base_1.BaseAPI {
      * @memberof BlocksApi
      */
     getBlockIdentifiers(platform, network, options) {
-        return exports.BlocksApiFp(this.configuration).getBlockIdentifiers(platform, network, options).then((request) => request(this.axios, this.basePath));
+        return (0, exports.BlocksApiFp)(this.configuration).getBlockIdentifiers(platform, network, options).then((request) => request(this.axios, this.basePath));
     }
 }
 exports.BlocksApi = BlocksApi;
@@ -766,11 +766,11 @@ const NFTApiAxiosParamCreator = function (configuration) {
          */
         explorerGetCollection: (protocol, network, id, options = {}) => __awaiter(this, void 0, void 0, function* () {
             // verify required parameter 'protocol' is not null or undefined
-            common_1.assertParamExists('explorerGetCollection', 'protocol', protocol);
+            (0, common_1.assertParamExists)('explorerGetCollection', 'protocol', protocol);
             // verify required parameter 'network' is not null or undefined
-            common_1.assertParamExists('explorerGetCollection', 'network', network);
+            (0, common_1.assertParamExists)('explorerGetCollection', 'network', network);
             // verify required parameter 'id' is not null or undefined
-            common_1.assertParamExists('explorerGetCollection', 'id', id);
+            (0, common_1.assertParamExists)('explorerGetCollection', 'id', id);
             const localVarPath = `/nft/{protocol}/{network}/collection/{id}`
                 .replace(`{${"protocol"}}`, encodeURIComponent(String(protocol)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)))
@@ -786,12 +786,12 @@ const NFTApiAxiosParamCreator = function (configuration) {
             const localVarQueryParameter = {};
             // authentication bearerAuth required
             // http bearer authentication required
-            yield common_1.setBearerAuthToObject(localVarHeaderParameter, configuration);
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            yield (0, common_1.setBearerAuthToObject)(localVarHeaderParameter, configuration);
+            (0, common_1.setSearchParams)(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
             return {
-                url: common_1.toPathString(localVarUrlObj),
+                url: (0, common_1.toPathString)(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         }),
@@ -813,9 +813,9 @@ const NFTApiAxiosParamCreator = function (configuration) {
          */
         explorerListAssets: (protocol, network, walletAddress, contractAddress, tokenIdValue, collectionName, sortBy, order, pageSize, pageToken, attributes, options = {}) => __awaiter(this, void 0, void 0, function* () {
             // verify required parameter 'protocol' is not null or undefined
-            common_1.assertParamExists('explorerListAssets', 'protocol', protocol);
+            (0, common_1.assertParamExists)('explorerListAssets', 'protocol', protocol);
             // verify required parameter 'network' is not null or undefined
-            common_1.assertParamExists('explorerListAssets', 'network', network);
+            (0, common_1.assertParamExists)('explorerListAssets', 'network', network);
             const localVarPath = `/nft/{protocol}/{network}/assets`
                 .replace(`{${"protocol"}}`, encodeURIComponent(String(protocol)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)));
@@ -830,7 +830,7 @@ const NFTApiAxiosParamCreator = function (configuration) {
             const localVarQueryParameter = {};
             // authentication bearerAuth required
             // http bearer authentication required
-            yield common_1.setBearerAuthToObject(localVarHeaderParameter, configuration);
+            yield (0, common_1.setBearerAuthToObject)(localVarHeaderParameter, configuration);
             if (walletAddress !== undefined) {
                 localVarQueryParameter['wallet_address'] = walletAddress;
             }
@@ -858,11 +858,11 @@ const NFTApiAxiosParamCreator = function (configuration) {
             if (attributes) {
                 localVarQueryParameter['attributes'] = attributes;
             }
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            (0, common_1.setSearchParams)(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
             return {
-                url: common_1.toPathString(localVarUrlObj),
+                url: (0, common_1.toPathString)(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         }),
@@ -881,9 +881,9 @@ const NFTApiAxiosParamCreator = function (configuration) {
          */
         explorerListCollections: (protocol, network, contractAddress, collectionName, sortBy, order, pageSize, pageToken, options = {}) => __awaiter(this, void 0, void 0, function* () {
             // verify required parameter 'protocol' is not null or undefined
-            common_1.assertParamExists('explorerListCollections', 'protocol', protocol);
+            (0, common_1.assertParamExists)('explorerListCollections', 'protocol', protocol);
             // verify required parameter 'network' is not null or undefined
-            common_1.assertParamExists('explorerListCollections', 'network', network);
+            (0, common_1.assertParamExists)('explorerListCollections', 'network', network);
             const localVarPath = `/nft/{protocol}/{network}/collections`
                 .replace(`{${"protocol"}}`, encodeURIComponent(String(protocol)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)));
@@ -898,7 +898,7 @@ const NFTApiAxiosParamCreator = function (configuration) {
             const localVarQueryParameter = {};
             // authentication bearerAuth required
             // http bearer authentication required
-            yield common_1.setBearerAuthToObject(localVarHeaderParameter, configuration);
+            yield (0, common_1.setBearerAuthToObject)(localVarHeaderParameter, configuration);
             if (contractAddress) {
                 localVarQueryParameter['contractAddress'] = contractAddress;
             }
@@ -917,11 +917,11 @@ const NFTApiAxiosParamCreator = function (configuration) {
             if (pageToken !== undefined) {
                 localVarQueryParameter['page_token'] = pageToken;
             }
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            (0, common_1.setSearchParams)(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
             return {
-                url: common_1.toPathString(localVarUrlObj),
+                url: (0, common_1.toPathString)(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         }),
@@ -942,9 +942,9 @@ const NFTApiAxiosParamCreator = function (configuration) {
          */
         explorerListEvents: (protocol, network, contractAddress, walletAddress, tokenId, eventType, sortBy, order, pageSize, pageToken, options = {}) => __awaiter(this, void 0, void 0, function* () {
             // verify required parameter 'protocol' is not null or undefined
-            common_1.assertParamExists('explorerListEvents', 'protocol', protocol);
+            (0, common_1.assertParamExists)('explorerListEvents', 'protocol', protocol);
             // verify required parameter 'network' is not null or undefined
-            common_1.assertParamExists('explorerListEvents', 'network', network);
+            (0, common_1.assertParamExists)('explorerListEvents', 'network', network);
             const localVarPath = `/nft/{protocol}/{network}/events`
                 .replace(`{${"protocol"}}`, encodeURIComponent(String(protocol)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)));
@@ -959,7 +959,7 @@ const NFTApiAxiosParamCreator = function (configuration) {
             const localVarQueryParameter = {};
             // authentication bearerAuth required
             // http bearer authentication required
-            yield common_1.setBearerAuthToObject(localVarHeaderParameter, configuration);
+            yield (0, common_1.setBearerAuthToObject)(localVarHeaderParameter, configuration);
             if (contractAddress !== undefined) {
                 localVarQueryParameter['contract_address'] = contractAddress;
             }
@@ -984,11 +984,11 @@ const NFTApiAxiosParamCreator = function (configuration) {
             if (pageToken !== undefined) {
                 localVarQueryParameter['page_token'] = pageToken;
             }
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            (0, common_1.setSearchParams)(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
             return {
-                url: common_1.toPathString(localVarUrlObj),
+                url: (0, common_1.toPathString)(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         }),
@@ -1000,7 +1000,7 @@ exports.NFTApiAxiosParamCreator = NFTApiAxiosParamCreator;
  * @export
  */
 const NFTApiFp = function (configuration) {
-    const localVarAxiosParamCreator = exports.NFTApiAxiosParamCreator(configuration);
+    const localVarAxiosParamCreator = (0, exports.NFTApiAxiosParamCreator)(configuration);
     return {
         /**
          *
@@ -1013,7 +1013,7 @@ const NFTApiFp = function (configuration) {
         explorerGetCollection(protocol, network, id, options) {
             return __awaiter(this, void 0, void 0, function* () {
                 const localVarAxiosArgs = yield localVarAxiosParamCreator.explorerGetCollection(protocol, network, id, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+                return (0, common_1.createRequestFunction)(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
             });
         },
         /**
@@ -1035,7 +1035,7 @@ const NFTApiFp = function (configuration) {
         explorerListAssets(protocol, network, walletAddress, contractAddress, tokenIdValue, collectionName, sortBy, order, pageSize, pageToken, attributes, options) {
             return __awaiter(this, void 0, void 0, function* () {
                 const localVarAxiosArgs = yield localVarAxiosParamCreator.explorerListAssets(protocol, network, walletAddress, contractAddress, tokenIdValue, collectionName, sortBy, order, pageSize, pageToken, attributes, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+                return (0, common_1.createRequestFunction)(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
             });
         },
         /**
@@ -1054,7 +1054,7 @@ const NFTApiFp = function (configuration) {
         explorerListCollections(protocol, network, contractAddress, collectionName, sortBy, order, pageSize, pageToken, options) {
             return __awaiter(this, void 0, void 0, function* () {
                 const localVarAxiosArgs = yield localVarAxiosParamCreator.explorerListCollections(protocol, network, contractAddress, collectionName, sortBy, order, pageSize, pageToken, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+                return (0, common_1.createRequestFunction)(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
             });
         },
         /**
@@ -1075,7 +1075,7 @@ const NFTApiFp = function (configuration) {
         explorerListEvents(protocol, network, contractAddress, walletAddress, tokenId, eventType, sortBy, order, pageSize, pageToken, options) {
             return __awaiter(this, void 0, void 0, function* () {
                 const localVarAxiosArgs = yield localVarAxiosParamCreator.explorerListEvents(protocol, network, contractAddress, walletAddress, tokenId, eventType, sortBy, order, pageSize, pageToken, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+                return (0, common_1.createRequestFunction)(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
             });
         },
     };
@@ -1086,7 +1086,7 @@ exports.NFTApiFp = NFTApiFp;
  * @export
  */
 const NFTApiFactory = function (configuration, basePath, axios) {
-    const localVarFp = exports.NFTApiFp(configuration);
+    const localVarFp = (0, exports.NFTApiFp)(configuration);
     return {
         /**
          *
@@ -1172,7 +1172,7 @@ class NFTApi extends base_1.BaseAPI {
      * @memberof NFTApi
      */
     explorerGetCollection(protocol, network, id, options) {
-        return exports.NFTApiFp(this.configuration).explorerGetCollection(protocol, network, id, options).then((request) => request(this.axios, this.basePath));
+        return (0, exports.NFTApiFp)(this.configuration).explorerGetCollection(protocol, network, id, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      *
@@ -1192,7 +1192,7 @@ class NFTApi extends base_1.BaseAPI {
      * @memberof NFTApi
      */
     explorerListAssets(protocol, network, walletAddress, contractAddress, tokenIdValue, collectionName, sortBy, order, pageSize, pageToken, attributes, options) {
-        return exports.NFTApiFp(this.configuration).explorerListAssets(protocol, network, walletAddress, contractAddress, tokenIdValue, collectionName, sortBy, order, pageSize, pageToken, attributes, options).then((request) => request(this.axios, this.basePath));
+        return (0, exports.NFTApiFp)(this.configuration).explorerListAssets(protocol, network, walletAddress, contractAddress, tokenIdValue, collectionName, sortBy, order, pageSize, pageToken, attributes, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      *
@@ -1209,7 +1209,7 @@ class NFTApi extends base_1.BaseAPI {
      * @memberof NFTApi
      */
     explorerListCollections(protocol, network, contractAddress, collectionName, sortBy, order, pageSize, pageToken, options) {
-        return exports.NFTApiFp(this.configuration).explorerListCollections(protocol, network, contractAddress, collectionName, sortBy, order, pageSize, pageToken, options).then((request) => request(this.axios, this.basePath));
+        return (0, exports.NFTApiFp)(this.configuration).explorerListCollections(protocol, network, contractAddress, collectionName, sortBy, order, pageSize, pageToken, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      *
@@ -1228,7 +1228,7 @@ class NFTApi extends base_1.BaseAPI {
      * @memberof NFTApi
      */
     explorerListEvents(protocol, network, contractAddress, walletAddress, tokenId, eventType, sortBy, order, pageSize, pageToken, options) {
-        return exports.NFTApiFp(this.configuration).explorerListEvents(protocol, network, contractAddress, walletAddress, tokenId, eventType, sortBy, order, pageSize, pageToken, options).then((request) => request(this.axios, this.basePath));
+        return (0, exports.NFTApiFp)(this.configuration).explorerListEvents(protocol, network, contractAddress, walletAddress, tokenId, eventType, sortBy, order, pageSize, pageToken, options).then((request) => request(this.axios, this.basePath));
     }
 }
 exports.NFTApi = NFTApi;
@@ -1248,9 +1248,9 @@ const PlatformsApiAxiosParamCreator = function (configuration) {
          */
         getPlatformEndpoints: (platform, network, options = {}) => __awaiter(this, void 0, void 0, function* () {
             // verify required parameter 'platform' is not null or undefined
-            common_1.assertParamExists('getPlatformEndpoints', 'platform', platform);
+            (0, common_1.assertParamExists)('getPlatformEndpoints', 'platform', platform);
             // verify required parameter 'network' is not null or undefined
-            common_1.assertParamExists('getPlatformEndpoints', 'network', network);
+            (0, common_1.assertParamExists)('getPlatformEndpoints', 'network', network);
             const localVarPath = `/{platform}/{network}/`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)));
@@ -1265,12 +1265,12 @@ const PlatformsApiAxiosParamCreator = function (configuration) {
             const localVarQueryParameter = {};
             // authentication bearerAuth required
             // http bearer authentication required
-            yield common_1.setBearerAuthToObject(localVarHeaderParameter, configuration);
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            yield (0, common_1.setBearerAuthToObject)(localVarHeaderParameter, configuration);
+            (0, common_1.setSearchParams)(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
             return {
-                url: common_1.toPathString(localVarUrlObj),
+                url: (0, common_1.toPathString)(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         }),
@@ -1293,12 +1293,12 @@ const PlatformsApiAxiosParamCreator = function (configuration) {
             const localVarQueryParameter = {};
             // authentication bearerAuth required
             // http bearer authentication required
-            yield common_1.setBearerAuthToObject(localVarHeaderParameter, configuration);
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            yield (0, common_1.setBearerAuthToObject)(localVarHeaderParameter, configuration);
+            (0, common_1.setSearchParams)(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
             return {
-                url: common_1.toPathString(localVarUrlObj),
+                url: (0, common_1.toPathString)(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         }),
@@ -1310,7 +1310,7 @@ exports.PlatformsApiAxiosParamCreator = PlatformsApiAxiosParamCreator;
  * @export
  */
 const PlatformsApiFp = function (configuration) {
-    const localVarAxiosParamCreator = exports.PlatformsApiAxiosParamCreator(configuration);
+    const localVarAxiosParamCreator = (0, exports.PlatformsApiAxiosParamCreator)(configuration);
     return {
         /**
          * Provides information about supported endpoints and generic platform information.
@@ -1323,7 +1323,7 @@ const PlatformsApiFp = function (configuration) {
         getPlatformEndpoints(platform, network, options) {
             return __awaiter(this, void 0, void 0, function* () {
                 const localVarAxiosArgs = yield localVarAxiosParamCreator.getPlatformEndpoints(platform, network, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+                return (0, common_1.createRequestFunction)(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
             });
         },
         /**
@@ -1335,7 +1335,7 @@ const PlatformsApiFp = function (configuration) {
         getPlatformsList(options) {
             return __awaiter(this, void 0, void 0, function* () {
                 const localVarAxiosArgs = yield localVarAxiosParamCreator.getPlatformsList(options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+                return (0, common_1.createRequestFunction)(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
             });
         },
     };
@@ -1346,7 +1346,7 @@ exports.PlatformsApiFp = PlatformsApiFp;
  * @export
  */
 const PlatformsApiFactory = function (configuration, basePath, axios) {
-    const localVarFp = exports.PlatformsApiFp(configuration);
+    const localVarFp = (0, exports.PlatformsApiFp)(configuration);
     return {
         /**
          * Provides information about supported endpoints and generic platform information.
@@ -1388,7 +1388,7 @@ class PlatformsApi extends base_1.BaseAPI {
      * @memberof PlatformsApi
      */
     getPlatformEndpoints(platform, network, options) {
-        return exports.PlatformsApiFp(this.configuration).getPlatformEndpoints(platform, network, options).then((request) => request(this.axios, this.basePath));
+        return (0, exports.PlatformsApiFp)(this.configuration).getPlatformEndpoints(platform, network, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * Provides a list of supported platforms and networks.
@@ -1398,7 +1398,7 @@ class PlatformsApi extends base_1.BaseAPI {
      * @memberof PlatformsApi
      */
     getPlatformsList(options) {
-        return exports.PlatformsApiFp(this.configuration).getPlatformsList(options).then((request) => request(this.axios, this.basePath));
+        return (0, exports.PlatformsApiFp)(this.configuration).getPlatformsList(options).then((request) => request(this.axios, this.basePath));
     }
 }
 exports.PlatformsApi = PlatformsApi;
@@ -1418,9 +1418,9 @@ const SyncApiAxiosParamCreator = function (configuration) {
          */
         currentBlockID: (platform, network, options = {}) => __awaiter(this, void 0, void 0, function* () {
             // verify required parameter 'platform' is not null or undefined
-            common_1.assertParamExists('currentBlockID', 'platform', platform);
+            (0, common_1.assertParamExists)('currentBlockID', 'platform', platform);
             // verify required parameter 'network' is not null or undefined
-            common_1.assertParamExists('currentBlockID', 'network', network);
+            (0, common_1.assertParamExists)('currentBlockID', 'network', network);
             const localVarPath = `/{platform}/{network}/sync/block_id`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)));
@@ -1435,12 +1435,12 @@ const SyncApiAxiosParamCreator = function (configuration) {
             const localVarQueryParameter = {};
             // authentication bearerAuth required
             // http bearer authentication required
-            yield common_1.setBearerAuthToObject(localVarHeaderParameter, configuration);
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            yield (0, common_1.setBearerAuthToObject)(localVarHeaderParameter, configuration);
+            (0, common_1.setSearchParams)(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
             return {
-                url: common_1.toPathString(localVarUrlObj),
+                url: (0, common_1.toPathString)(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         }),
@@ -1454,9 +1454,9 @@ const SyncApiAxiosParamCreator = function (configuration) {
          */
         currentBlockNumber: (platform, network, options = {}) => __awaiter(this, void 0, void 0, function* () {
             // verify required parameter 'platform' is not null or undefined
-            common_1.assertParamExists('currentBlockNumber', 'platform', platform);
+            (0, common_1.assertParamExists)('currentBlockNumber', 'platform', platform);
             // verify required parameter 'network' is not null or undefined
-            common_1.assertParamExists('currentBlockNumber', 'network', network);
+            (0, common_1.assertParamExists)('currentBlockNumber', 'network', network);
             const localVarPath = `/{platform}/{network}/sync/block_number`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)));
@@ -1471,12 +1471,12 @@ const SyncApiAxiosParamCreator = function (configuration) {
             const localVarQueryParameter = {};
             // authentication bearerAuth required
             // http bearer authentication required
-            yield common_1.setBearerAuthToObject(localVarHeaderParameter, configuration);
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            yield (0, common_1.setBearerAuthToObject)(localVarHeaderParameter, configuration);
+            (0, common_1.setSearchParams)(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
             return {
-                url: common_1.toPathString(localVarUrlObj),
+                url: (0, common_1.toPathString)(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         }),
@@ -1488,7 +1488,7 @@ exports.SyncApiAxiosParamCreator = SyncApiAxiosParamCreator;
  * @export
  */
 const SyncApiFp = function (configuration) {
-    const localVarAxiosParamCreator = exports.SyncApiAxiosParamCreator(configuration);
+    const localVarAxiosParamCreator = (0, exports.SyncApiAxiosParamCreator)(configuration);
     return {
         /**
          *
@@ -1501,7 +1501,7 @@ const SyncApiFp = function (configuration) {
         currentBlockID(platform, network, options) {
             return __awaiter(this, void 0, void 0, function* () {
                 const localVarAxiosArgs = yield localVarAxiosParamCreator.currentBlockID(platform, network, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+                return (0, common_1.createRequestFunction)(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
             });
         },
         /**
@@ -1515,7 +1515,7 @@ const SyncApiFp = function (configuration) {
         currentBlockNumber(platform, network, options) {
             return __awaiter(this, void 0, void 0, function* () {
                 const localVarAxiosArgs = yield localVarAxiosParamCreator.currentBlockNumber(platform, network, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+                return (0, common_1.createRequestFunction)(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
             });
         },
     };
@@ -1526,7 +1526,7 @@ exports.SyncApiFp = SyncApiFp;
  * @export
  */
 const SyncApiFactory = function (configuration, basePath, axios) {
-    const localVarFp = exports.SyncApiFp(configuration);
+    const localVarFp = (0, exports.SyncApiFp)(configuration);
     return {
         /**
          *
@@ -1570,7 +1570,7 @@ class SyncApi extends base_1.BaseAPI {
      * @memberof SyncApi
      */
     currentBlockID(platform, network, options) {
-        return exports.SyncApiFp(this.configuration).currentBlockID(platform, network, options).then((request) => request(this.axios, this.basePath));
+        return (0, exports.SyncApiFp)(this.configuration).currentBlockID(platform, network, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      *
@@ -1582,7 +1582,7 @@ class SyncApi extends base_1.BaseAPI {
      * @memberof SyncApi
      */
     currentBlockNumber(platform, network, options) {
-        return exports.SyncApiFp(this.configuration).currentBlockNumber(platform, network, options).then((request) => request(this.axios, this.basePath));
+        return (0, exports.SyncApiFp)(this.configuration).currentBlockNumber(platform, network, options).then((request) => request(this.axios, this.basePath));
     }
 }
 exports.SyncApi = SyncApi;
@@ -1602,9 +1602,9 @@ const TransactionsApiAxiosParamCreator = function (configuration) {
          */
         feeEstimate: (platform, network, options = {}) => __awaiter(this, void 0, void 0, function* () {
             // verify required parameter 'platform' is not null or undefined
-            common_1.assertParamExists('feeEstimate', 'platform', platform);
+            (0, common_1.assertParamExists)('feeEstimate', 'platform', platform);
             // verify required parameter 'network' is not null or undefined
-            common_1.assertParamExists('feeEstimate', 'network', network);
+            (0, common_1.assertParamExists)('feeEstimate', 'network', network);
             const localVarPath = `/{platform}/{network}/tx/estimate_fee`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)));
@@ -1619,12 +1619,12 @@ const TransactionsApiAxiosParamCreator = function (configuration) {
             const localVarQueryParameter = {};
             // authentication bearerAuth required
             // http bearer authentication required
-            yield common_1.setBearerAuthToObject(localVarHeaderParameter, configuration);
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            yield (0, common_1.setBearerAuthToObject)(localVarHeaderParameter, configuration);
+            (0, common_1.setSearchParams)(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
             return {
-                url: common_1.toPathString(localVarUrlObj),
+                url: (0, common_1.toPathString)(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         }),
@@ -1639,11 +1639,11 @@ const TransactionsApiAxiosParamCreator = function (configuration) {
          */
         getTx: (platform, network, id, options = {}) => __awaiter(this, void 0, void 0, function* () {
             // verify required parameter 'platform' is not null or undefined
-            common_1.assertParamExists('getTx', 'platform', platform);
+            (0, common_1.assertParamExists)('getTx', 'platform', platform);
             // verify required parameter 'network' is not null or undefined
-            common_1.assertParamExists('getTx', 'network', network);
+            (0, common_1.assertParamExists)('getTx', 'network', network);
             // verify required parameter 'id' is not null or undefined
-            common_1.assertParamExists('getTx', 'id', id);
+            (0, common_1.assertParamExists)('getTx', 'id', id);
             const localVarPath = `/{platform}/{network}/tx/{id}`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)))
@@ -1659,12 +1659,12 @@ const TransactionsApiAxiosParamCreator = function (configuration) {
             const localVarQueryParameter = {};
             // authentication bearerAuth required
             // http bearer authentication required
-            yield common_1.setBearerAuthToObject(localVarHeaderParameter, configuration);
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            yield (0, common_1.setBearerAuthToObject)(localVarHeaderParameter, configuration);
+            (0, common_1.setSearchParams)(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
             return {
-                url: common_1.toPathString(localVarUrlObj),
+                url: (0, common_1.toPathString)(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         }),
@@ -1680,13 +1680,13 @@ const TransactionsApiAxiosParamCreator = function (configuration) {
          */
         getTxByHashAndIndex: (platform, network, id, index, options = {}) => __awaiter(this, void 0, void 0, function* () {
             // verify required parameter 'platform' is not null or undefined
-            common_1.assertParamExists('getTxByHashAndIndex', 'platform', platform);
+            (0, common_1.assertParamExists)('getTxByHashAndIndex', 'platform', platform);
             // verify required parameter 'network' is not null or undefined
-            common_1.assertParamExists('getTxByHashAndIndex', 'network', network);
+            (0, common_1.assertParamExists)('getTxByHashAndIndex', 'network', network);
             // verify required parameter 'id' is not null or undefined
-            common_1.assertParamExists('getTxByHashAndIndex', 'id', id);
+            (0, common_1.assertParamExists)('getTxByHashAndIndex', 'id', id);
             // verify required parameter 'index' is not null or undefined
-            common_1.assertParamExists('getTxByHashAndIndex', 'index', index);
+            (0, common_1.assertParamExists)('getTxByHashAndIndex', 'index', index);
             const localVarPath = `/{platform}/{network}/tx/{id}/{index}`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)))
@@ -1703,12 +1703,12 @@ const TransactionsApiAxiosParamCreator = function (configuration) {
             const localVarQueryParameter = {};
             // authentication bearerAuth required
             // http bearer authentication required
-            yield common_1.setBearerAuthToObject(localVarHeaderParameter, configuration);
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            yield (0, common_1.setBearerAuthToObject)(localVarHeaderParameter, configuration);
+            (0, common_1.setSearchParams)(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
             return {
-                url: common_1.toPathString(localVarUrlObj),
+                url: (0, common_1.toPathString)(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         }),
@@ -1723,11 +1723,11 @@ const TransactionsApiAxiosParamCreator = function (configuration) {
          */
         getTxConfirmations: (platform, network, id, options = {}) => __awaiter(this, void 0, void 0, function* () {
             // verify required parameter 'platform' is not null or undefined
-            common_1.assertParamExists('getTxConfirmations', 'platform', platform);
+            (0, common_1.assertParamExists)('getTxConfirmations', 'platform', platform);
             // verify required parameter 'network' is not null or undefined
-            common_1.assertParamExists('getTxConfirmations', 'network', network);
+            (0, common_1.assertParamExists)('getTxConfirmations', 'network', network);
             // verify required parameter 'id' is not null or undefined
-            common_1.assertParamExists('getTxConfirmations', 'id', id);
+            (0, common_1.assertParamExists)('getTxConfirmations', 'id', id);
             const localVarPath = `/{platform}/{network}/tx/{id}/confirmations`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)))
@@ -1743,12 +1743,12 @@ const TransactionsApiAxiosParamCreator = function (configuration) {
             const localVarQueryParameter = {};
             // authentication bearerAuth required
             // http bearer authentication required
-            yield common_1.setBearerAuthToObject(localVarHeaderParameter, configuration);
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            yield (0, common_1.setBearerAuthToObject)(localVarHeaderParameter, configuration);
+            (0, common_1.setSearchParams)(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
             return {
-                url: common_1.toPathString(localVarUrlObj),
+                url: (0, common_1.toPathString)(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         }),
@@ -1766,9 +1766,9 @@ const TransactionsApiAxiosParamCreator = function (configuration) {
          */
         getTxs: (platform, network, order, continuation, limit, assets, options = {}) => __awaiter(this, void 0, void 0, function* () {
             // verify required parameter 'platform' is not null or undefined
-            common_1.assertParamExists('getTxs', 'platform', platform);
+            (0, common_1.assertParamExists)('getTxs', 'platform', platform);
             // verify required parameter 'network' is not null or undefined
-            common_1.assertParamExists('getTxs', 'network', network);
+            (0, common_1.assertParamExists)('getTxs', 'network', network);
             const localVarPath = `/{platform}/{network}/txs`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)));
@@ -1783,7 +1783,7 @@ const TransactionsApiAxiosParamCreator = function (configuration) {
             const localVarQueryParameter = {};
             // authentication bearerAuth required
             // http bearer authentication required
-            yield common_1.setBearerAuthToObject(localVarHeaderParameter, configuration);
+            yield (0, common_1.setBearerAuthToObject)(localVarHeaderParameter, configuration);
             if (order !== undefined) {
                 localVarQueryParameter['order'] = order;
             }
@@ -1796,11 +1796,11 @@ const TransactionsApiAxiosParamCreator = function (configuration) {
             if (assets !== undefined) {
                 localVarQueryParameter['assets'] = assets;
             }
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            (0, common_1.setSearchParams)(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
             return {
-                url: common_1.toPathString(localVarUrlObj),
+                url: (0, common_1.toPathString)(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         }),
@@ -1815,11 +1815,11 @@ const TransactionsApiAxiosParamCreator = function (configuration) {
          */
         txSend: (platform, network, signedTx, options = {}) => __awaiter(this, void 0, void 0, function* () {
             // verify required parameter 'platform' is not null or undefined
-            common_1.assertParamExists('txSend', 'platform', platform);
+            (0, common_1.assertParamExists)('txSend', 'platform', platform);
             // verify required parameter 'network' is not null or undefined
-            common_1.assertParamExists('txSend', 'network', network);
+            (0, common_1.assertParamExists)('txSend', 'network', network);
             // verify required parameter 'signedTx' is not null or undefined
-            common_1.assertParamExists('txSend', 'signedTx', signedTx);
+            (0, common_1.assertParamExists)('txSend', 'signedTx', signedTx);
             const localVarPath = `/{platform}/{network}/tx/send`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)));
@@ -1834,14 +1834,14 @@ const TransactionsApiAxiosParamCreator = function (configuration) {
             const localVarQueryParameter = {};
             // authentication bearerAuth required
             // http bearer authentication required
-            yield common_1.setBearerAuthToObject(localVarHeaderParameter, configuration);
+            yield (0, common_1.setBearerAuthToObject)(localVarHeaderParameter, configuration);
             localVarHeaderParameter['Content-Type'] = 'application/json';
-            common_1.setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            (0, common_1.setSearchParams)(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = Object.assign(Object.assign(Object.assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
-            localVarRequestOptions.data = common_1.serializeDataIfNeeded(signedTx, localVarRequestOptions, configuration);
+            localVarRequestOptions.data = (0, common_1.serializeDataIfNeeded)(signedTx, localVarRequestOptions, configuration);
             return {
-                url: common_1.toPathString(localVarUrlObj),
+                url: (0, common_1.toPathString)(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         }),
@@ -1853,7 +1853,7 @@ exports.TransactionsApiAxiosParamCreator = TransactionsApiAxiosParamCreator;
  * @export
  */
 const TransactionsApiFp = function (configuration) {
-    const localVarAxiosParamCreator = exports.TransactionsApiAxiosParamCreator(configuration);
+    const localVarAxiosParamCreator = (0, exports.TransactionsApiAxiosParamCreator)(configuration);
     return {
         /**
          * Get a fee estimation in decimals from the ubiquity fee estimation service. Currently supported for Bitcoin and Ethereum. Endpoint will return 3 fee estimations fast, medium and slow
@@ -1866,7 +1866,7 @@ const TransactionsApiFp = function (configuration) {
         feeEstimate(platform, network, options) {
             return __awaiter(this, void 0, void 0, function* () {
                 const localVarAxiosArgs = yield localVarAxiosParamCreator.feeEstimate(platform, network, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+                return (0, common_1.createRequestFunction)(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
             });
         },
         /**
@@ -1881,7 +1881,7 @@ const TransactionsApiFp = function (configuration) {
         getTx(platform, network, id, options) {
             return __awaiter(this, void 0, void 0, function* () {
                 const localVarAxiosArgs = yield localVarAxiosParamCreator.getTx(platform, network, id, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+                return (0, common_1.createRequestFunction)(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
             });
         },
         /**
@@ -1897,7 +1897,7 @@ const TransactionsApiFp = function (configuration) {
         getTxByHashAndIndex(platform, network, id, index, options) {
             return __awaiter(this, void 0, void 0, function* () {
                 const localVarAxiosArgs = yield localVarAxiosParamCreator.getTxByHashAndIndex(platform, network, id, index, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+                return (0, common_1.createRequestFunction)(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
             });
         },
         /**
@@ -1912,7 +1912,7 @@ const TransactionsApiFp = function (configuration) {
         getTxConfirmations(platform, network, id, options) {
             return __awaiter(this, void 0, void 0, function* () {
                 const localVarAxiosArgs = yield localVarAxiosParamCreator.getTxConfirmations(platform, network, id, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+                return (0, common_1.createRequestFunction)(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
             });
         },
         /**
@@ -1930,7 +1930,7 @@ const TransactionsApiFp = function (configuration) {
         getTxs(platform, network, order, continuation, limit, assets, options) {
             return __awaiter(this, void 0, void 0, function* () {
                 const localVarAxiosArgs = yield localVarAxiosParamCreator.getTxs(platform, network, order, continuation, limit, assets, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+                return (0, common_1.createRequestFunction)(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
             });
         },
         /**
@@ -1945,7 +1945,7 @@ const TransactionsApiFp = function (configuration) {
         txSend(platform, network, signedTx, options) {
             return __awaiter(this, void 0, void 0, function* () {
                 const localVarAxiosArgs = yield localVarAxiosParamCreator.txSend(platform, network, signedTx, options);
-                return common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
+                return (0, common_1.createRequestFunction)(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration);
             });
         },
     };
@@ -1956,7 +1956,7 @@ exports.TransactionsApiFp = TransactionsApiFp;
  * @export
  */
 const TransactionsApiFactory = function (configuration, basePath, axios) {
-    const localVarFp = exports.TransactionsApiFp(configuration);
+    const localVarFp = (0, exports.TransactionsApiFp)(configuration);
     return {
         /**
          * Get a fee estimation in decimals from the ubiquity fee estimation service. Currently supported for Bitcoin and Ethereum. Endpoint will return 3 fee estimations fast, medium and slow
@@ -2053,7 +2053,7 @@ class TransactionsApi extends base_1.BaseAPI {
      * @memberof TransactionsApi
      */
     feeEstimate(platform, network, options) {
-        return exports.TransactionsApiFp(this.configuration).feeEstimate(platform, network, options).then((request) => request(this.axios, this.basePath));
+        return (0, exports.TransactionsApiFp)(this.configuration).feeEstimate(platform, network, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      *
@@ -2066,7 +2066,7 @@ class TransactionsApi extends base_1.BaseAPI {
      * @memberof TransactionsApi
      */
     getTx(platform, network, id, options) {
-        return exports.TransactionsApiFp(this.configuration).getTx(platform, network, id, options).then((request) => request(this.axios, this.basePath));
+        return (0, exports.TransactionsApiFp)(this.configuration).getTx(platform, network, id, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      *
@@ -2080,7 +2080,7 @@ class TransactionsApi extends base_1.BaseAPI {
      * @memberof TransactionsApi
      */
     getTxByHashAndIndex(platform, network, id, index, options) {
-        return exports.TransactionsApiFp(this.configuration).getTxByHashAndIndex(platform, network, id, index, options).then((request) => request(this.axios, this.basePath));
+        return (0, exports.TransactionsApiFp)(this.configuration).getTxByHashAndIndex(platform, network, id, index, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      *
@@ -2093,7 +2093,7 @@ class TransactionsApi extends base_1.BaseAPI {
      * @memberof TransactionsApi
      */
     getTxConfirmations(platform, network, id, options) {
-        return exports.TransactionsApiFp(this.configuration).getTxConfirmations(platform, network, id, options).then((request) => request(this.axios, this.basePath));
+        return (0, exports.TransactionsApiFp)(this.configuration).getTxConfirmations(platform, network, id, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * Gets transactions from oldest to newest. This call uses pagination.
@@ -2109,7 +2109,7 @@ class TransactionsApi extends base_1.BaseAPI {
      * @memberof TransactionsApi
      */
     getTxs(platform, network, order, continuation, limit, assets, options) {
-        return exports.TransactionsApiFp(this.configuration).getTxs(platform, network, order, continuation, limit, assets, options).then((request) => request(this.axios, this.basePath));
+        return (0, exports.TransactionsApiFp)(this.configuration).getTxs(platform, network, order, continuation, limit, assets, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * Submit a signed transaction to the network.  **Note**: A successful transaction may still be rejected on chain or not processed due to a too low fee. You can monitor successful transactions through Ubiquity websockets.
@@ -2122,7 +2122,7 @@ class TransactionsApi extends base_1.BaseAPI {
      * @memberof TransactionsApi
      */
     txSend(platform, network, signedTx, options) {
-        return exports.TransactionsApiFp(this.configuration).txSend(platform, network, signedTx, options).then((request) => request(this.axios, this.basePath));
+        return (0, exports.TransactionsApiFp)(this.configuration).txSend(platform, network, signedTx, options).then((request) => request(this.axios, this.basePath));
     }
 }
 exports.TransactionsApi = TransactionsApi;

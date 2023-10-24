@@ -375,7 +375,7 @@ export interface Contract {
  * @type Currency
  * @export
  */
-export declare type Currency = NativeCurrency | SmartTokenCurrency | TokenCurrency;
+export type Currency = NativeCurrency | SmartTokenCurrency | TokenCurrency;
 /**
  *
  * @export
@@ -902,7 +902,7 @@ export interface ReportField {
  * Additional metadata bespoke to specific protocols
  * @export
  */
-export declare type ReportFieldMeta = AlgorandMeta;
+export type ReportFieldMeta = AlgorandMeta;
 /**
  *
  * @export
@@ -1450,7 +1450,7 @@ export declare class AccountsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof AccountsApi
      */
-    getListOfBalancesByAddress(platform: string, network: string, address: string, assets?: string, options?: any): Promise<import("axios").AxiosResponse<Balance[]>>;
+    getListOfBalancesByAddress(platform: string, network: string, address: string, assets?: string, options?: any): Promise<import("axios").AxiosResponse<Balance[], any>>;
     /**
      * Returns the balances of accounts for all supported currencies.
      * @summary Balances Of Addresses
@@ -1464,7 +1464,7 @@ export declare class AccountsApi extends BaseAPI {
      */
     getListOfBalancesByAddresses(platform: string, network: string, accountsObj: AccountsObj, assets?: string, options?: any): Promise<import("axios").AxiosResponse<{
         [key: string]: Balance[];
-    }>>;
+    }, any>>;
     /**
      * Returns account activity
      * @summary A financial report for an address between a time period. Default timescale is within the last 30 days
@@ -1479,7 +1479,7 @@ export declare class AccountsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof AccountsApi
      */
-    getReportByAddress(platform: string, network: string, address: string, from?: number, to?: number, limit?: number, continuation?: string, options?: any): Promise<import("axios").AxiosResponse<Report>>;
+    getReportByAddress(platform: string, network: string, address: string, from?: number, to?: number, limit?: number, continuation?: string, options?: any): Promise<import("axios").AxiosResponse<Report, any>>;
     /**
      * Gets transactions that an address was involved with, from newest to oldest. This call uses pagination.
      * @summary Transactions Of Address
@@ -1494,7 +1494,7 @@ export declare class AccountsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof AccountsApi
      */
-    getTxsByAddress(platform: string, network: string, address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any): Promise<import("axios").AxiosResponse<TxPage>>;
+    getTxsByAddress(platform: string, network: string, address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any): Promise<import("axios").AxiosResponse<TxPage, any>>;
 }
 /**
  * BlocksApi - axios parameter creator
@@ -1618,7 +1618,7 @@ export declare class BlocksApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof BlocksApi
      */
-    getBlock(platform: string, network: string, key: string, options?: any): Promise<import("axios").AxiosResponse<Block>>;
+    getBlock(platform: string, network: string, key: string, options?: any): Promise<import("axios").AxiosResponse<Block, any>>;
     /**
      * Get minimal block identifier by block number or hash
      * @summary Block Identifier By Number/Hash
@@ -1629,7 +1629,7 @@ export declare class BlocksApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof BlocksApi
      */
-    getBlockIdentifier(platform: string, network: string, key: string, options?: any): Promise<import("axios").AxiosResponse<BlockIdentifier>>;
+    getBlockIdentifier(platform: string, network: string, key: string, options?: any): Promise<import("axios").AxiosResponse<BlockIdentifier, any>>;
     /**
      * Get minimal block identifiers from oldest to newest. This call uses pagination.
      * @summary Block Identifiers
@@ -1639,7 +1639,7 @@ export declare class BlocksApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof BlocksApi
      */
-    getBlockIdentifiers(platform: string, network: string, options?: any): Promise<import("axios").AxiosResponse<BlockIdentifierPage>>;
+    getBlockIdentifiers(platform: string, network: string, options?: any): Promise<import("axios").AxiosResponse<BlockIdentifierPage, any>>;
 }
 /**
  * NFTApi - axios parameter creator
@@ -1843,7 +1843,7 @@ export declare class NFTApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof NFTApi
      */
-    explorerGetCollection(protocol: string, network: string, id: string, options?: any): Promise<import("axios").AxiosResponse<GetCollectionResponse>>;
+    explorerGetCollection(protocol: string, network: string, id: string, options?: any): Promise<import("axios").AxiosResponse<GetCollectionResponse, any>>;
     /**
      *
      * @param {string} protocol Coin platform handle
@@ -1861,7 +1861,7 @@ export declare class NFTApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof NFTApi
      */
-    explorerListAssets(protocol: string, network: string, walletAddress?: string, contractAddress?: string, tokenIdValue?: number, collectionName?: string, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, attributes?: Array<string>, options?: any): Promise<import("axios").AxiosResponse<ListAssetsResponse>>;
+    explorerListAssets(protocol: string, network: string, walletAddress?: string, contractAddress?: string, tokenIdValue?: number, collectionName?: string, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, attributes?: Array<string>, options?: any): Promise<import("axios").AxiosResponse<ListAssetsResponse, any>>;
     /**
      *
      * @param {string} protocol Coin platform handle
@@ -1876,7 +1876,7 @@ export declare class NFTApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof NFTApi
      */
-    explorerListCollections(protocol: string, network: string, contractAddress?: Array<string>, collectionName?: Array<string>, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, options?: any): Promise<import("axios").AxiosResponse<ListCollectionResponse>>;
+    explorerListCollections(protocol: string, network: string, contractAddress?: Array<string>, collectionName?: Array<string>, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, options?: any): Promise<import("axios").AxiosResponse<ListCollectionResponse, any>>;
     /**
      *
      * @param {string} protocol Coin platform handle
@@ -1893,7 +1893,7 @@ export declare class NFTApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof NFTApi
      */
-    explorerListEvents(protocol: string, network: string, contractAddress?: string, walletAddress?: string, tokenId?: number, eventType?: string, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, options?: any): Promise<import("axios").AxiosResponse<ListEventResponse>>;
+    explorerListEvents(protocol: string, network: string, contractAddress?: string, walletAddress?: string, tokenId?: number, eventType?: string, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, options?: any): Promise<import("axios").AxiosResponse<ListEventResponse, any>>;
 }
 /**
  * PlatformsApi - axios parameter creator
@@ -1977,7 +1977,7 @@ export declare class PlatformsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof PlatformsApi
      */
-    getPlatformEndpoints(platform: string, network: string, options?: any): Promise<import("axios").AxiosResponse<PlatformDetail>>;
+    getPlatformEndpoints(platform: string, network: string, options?: any): Promise<import("axios").AxiosResponse<PlatformDetail, any>>;
     /**
      * Provides a list of supported platforms and networks.
      * @summary Platforms overview
@@ -1985,7 +1985,7 @@ export declare class PlatformsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof PlatformsApi
      */
-    getPlatformsList(options?: any): Promise<import("axios").AxiosResponse<PlatformsOverview>>;
+    getPlatformsList(options?: any): Promise<import("axios").AxiosResponse<PlatformsOverview, any>>;
 }
 /**
  * SyncApi - axios parameter creator
@@ -2075,7 +2075,7 @@ export declare class SyncApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof SyncApi
      */
-    currentBlockID(platform: string, network: string, options?: any): Promise<import("axios").AxiosResponse<string>>;
+    currentBlockID(platform: string, network: string, options?: any): Promise<import("axios").AxiosResponse<string, any>>;
     /**
      *
      * @summary Get current block number
@@ -2085,7 +2085,7 @@ export declare class SyncApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof SyncApi
      */
-    currentBlockNumber(platform: string, network: string, options?: any): Promise<import("axios").AxiosResponse<number>>;
+    currentBlockNumber(platform: string, network: string, options?: any): Promise<import("axios").AxiosResponse<number, any>>;
 }
 /**
  * TransactionsApi - axios parameter creator
@@ -2310,7 +2310,7 @@ export declare class TransactionsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TransactionsApi
      */
-    feeEstimate(platform: string, network: string, options?: any): Promise<import("axios").AxiosResponse<FeeEstimate>>;
+    feeEstimate(platform: string, network: string, options?: any): Promise<import("axios").AxiosResponse<FeeEstimate, any>>;
     /**
      *
      * @summary Transaction By Hash
@@ -2321,7 +2321,7 @@ export declare class TransactionsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TransactionsApi
      */
-    getTx(platform: string, network: string, id: string, options?: any): Promise<import("axios").AxiosResponse<Tx>>;
+    getTx(platform: string, network: string, id: string, options?: any): Promise<import("axios").AxiosResponse<Tx, any>>;
     /**
      *
      * @summary Transaction output by hash and index
@@ -2333,7 +2333,7 @@ export declare class TransactionsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TransactionsApi
      */
-    getTxByHashAndIndex(platform: string, network: string, id: string, index: number, options?: any): Promise<import("axios").AxiosResponse<TxOutput>>;
+    getTxByHashAndIndex(platform: string, network: string, id: string, index: number, options?: any): Promise<import("axios").AxiosResponse<TxOutput, any>>;
     /**
      *
      * @summary Transaction confirmations By Hash
@@ -2344,7 +2344,7 @@ export declare class TransactionsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TransactionsApi
      */
-    getTxConfirmations(platform: string, network: string, id: string, options?: any): Promise<import("axios").AxiosResponse<TxConfirmation>>;
+    getTxConfirmations(platform: string, network: string, id: string, options?: any): Promise<import("axios").AxiosResponse<TxConfirmation, any>>;
     /**
      * Gets transactions from oldest to newest. This call uses pagination.
      * @summary Latest transactions of a protocol
@@ -2358,7 +2358,7 @@ export declare class TransactionsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TransactionsApi
      */
-    getTxs(platform: string, network: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any): Promise<import("axios").AxiosResponse<TxPage>>;
+    getTxs(platform: string, network: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any): Promise<import("axios").AxiosResponse<TxPage, any>>;
     /**
      * Submit a signed transaction to the network.  **Note**: A successful transaction may still be rejected on chain or not processed due to a too low fee. You can monitor successful transactions through Ubiquity websockets.
      * @summary Submit a signed transaction
@@ -2369,5 +2369,5 @@ export declare class TransactionsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TransactionsApi
      */
-    txSend(platform: string, network: string, signedTx: SignedTx, options?: any): Promise<import("axios").AxiosResponse<TxReceipt>>;
+    txSend(platform: string, network: string, signedTx: SignedTx, options?: any): Promise<import("axios").AxiosResponse<TxReceipt, any>>;
 }
