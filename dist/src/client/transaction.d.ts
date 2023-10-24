@@ -4,11 +4,11 @@ declare class UnsignedTx {
     unsignedTx: string;
     constructor(id: string, unsignedTx: string);
 }
-declare type TxInput = {
+type TxInput = {
     hash: string;
     index: number;
 };
-declare type TxOutput = {
+type TxOutput = {
     address: string;
     amount: number;
 };
@@ -21,7 +21,7 @@ interface ICreateSignedTx<T> {
 interface IGetTxIdFromRawTx {
     getTxIdFromRawTransaction: (rawUnsignedTx: string) => string;
 }
-declare type BtcTxOptions = {
+type BtcTxOptions = {
     network?: string;
 };
 export declare const btcTransaction: {
@@ -29,7 +29,7 @@ export declare const btcTransaction: {
     createAndSign: (from: TxInput[], to: TxOutput[], key: string, options: BtcTxOptions) => Promise<string>;
     getTxIdFromRawTransaction: (rawUnsignedTx: string) => string;
 };
-declare type EthTxOptions = {
+type EthTxOptions = {
     fee: number;
     gasPrice: number;
     txData?: string;

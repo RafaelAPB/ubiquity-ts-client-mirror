@@ -1,29 +1,30 @@
+/// <reference types="ws" />
 import { BlockIdentifier, Tx } from "../generated";
 import WebSocket from "isomorphic-ws";
-export declare type TxItem = {
+export type TxItem = {
     subID: number;
     channel: string;
     revert: boolean;
     content: Tx;
 };
-export declare type BlockIdentifierItem = {
+export type BlockIdentifierItem = {
     subID: number;
     channel: string;
     revert: boolean;
     content: BlockIdentifier;
 };
-export declare type Item = TxItem | BlockIdentifierItem;
-export declare type TxHandler = (instance: UbiWebsocket, event: TxItem) => void;
-export declare type BlockIdentifierHandler = (instance: UbiWebsocket, event: BlockIdentifierItem) => void;
-export declare type Handler = TxHandler | BlockIdentifierHandler;
-export declare type Subscription = {
+export type Item = TxItem | BlockIdentifierItem;
+export type TxHandler = (instance: UbiWebsocket, event: TxItem) => void;
+export type BlockIdentifierHandler = (instance: UbiWebsocket, event: BlockIdentifierItem) => void;
+export type Handler = TxHandler | BlockIdentifierHandler;
+export type Subscription = {
     id: number;
     subID: number;
     type: string;
     detail?: any;
     handler: Handler;
 };
-export declare type SubscriptionRequest = {
+export type SubscriptionRequest = {
     id: number;
     method: string;
     params: {

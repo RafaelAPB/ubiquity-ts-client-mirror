@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Ubiquity REST API
- * Ubiquity provides a RESTful and uniform way to access blockchain resources, with a rich and reusable model across multiple cryptocurrencies.  [Documentation](https://app.blockdaemon.com/docs/ubiquity)  ### Protocols #### Mainnet The following protocols are currently supported: * bitcoin * ethereum * polkadot * xrp * algorand * stellar * dogecoin * oasis * near * terra * litecoin * bitcoincash * tezos  #### Testnet * bitcoin/testnet * ethereum/ropsten * dogecoin/testnet * litecoin/testnet * bitcoincash/testnet  #### Native Ubiquity provides native access to all Blockchain nodes it supports. * bitcoin/(mainnet | testnet) - [RPC Documentation](https://developer.bitcoin.org/reference/rpc/) * ethereum/(mainnet | ropsten) - [RPC Documentation](https://ethereum.org/en/developers/docs/apis/json-rpc/) * polkadot/mainnet - [Sidecar API Documentation](https://paritytech.github.io/substrate-api-sidecar/dist/) * polkadot/mainnet/http-rpc - [Polkadot RPC Documentation](https://polkadot.js.org/docs/substrate/rpc/) * algorand/mainnet - [Algod API Documentation](https://developer.algorand.org/docs/reference/rest-apis/algod/) * stellar/mainnet - [Stellar Horizon API Documentation](https://developers.stellar.org/api) * dogecoin/(mainnet | testnet) - [Dogecoin API Documentaion](https://developer.bitcoin.org/reference/rpc/) * oasis/mainnet - [Oasis Rosetta Gateway Documentation](https://www.rosetta-api.org/docs/api_identifiers.html#network-identifier) * near/mainnet - [NEAR RPC Documentation](https://docs.near.org/docs/api/rpc) * terra/mainnet - [Terra RPC Documentation](https://docs.terra.money/docs/develop/how-to/endpoints.html) * litecoin/mainnet - [Litecoin RPC Documentation](https://litecoin.info/index.php/Litecoin_API) * bitcoincash/mainnet - [Bitcoin Cash RPC Documentation](https://docs.bitcoincashnode.org/doc/json-rpc/) * tezos/mainnet - [Tezos RPC Documentation](https://tezos.gitlab.io/developer/rpc.html)   A full URL example: https://ubiquity.api.blockdaemon.com/v1/bitcoin/mainnet  ##### Pagination Certain resources contain a lot of data, more than what\'s practical to return for a single request. With the help of pagination, the data is split across multiple responses. Each response returns a subset of the items requested, and a continuation token.  To get the next batch of items, copy the returned continuation token to the continuation query parameter and repeat the request with the new URL. In case no continuation token is returned, there is no more data available. 
+ * Ubiquity provides a RESTful and uniform way to access blockchain resources, with a rich and reusable model across multiple cryptocurrencies.  [Documentation](https://app.blockdaemon.com/docs/ubiquity)  ### Protocols #### Mainnet The following protocols are currently supported: * bitcoin * ethereum * polkadot * xrp * algorand * stellar * dogecoin * oasis * near * terra * litecoin * bitcoincash * solana  #### Testnet * bitcoin/testnet * ethereum/ropsten * dogecoin/testnet * litecoin/testnet * bitcoincash/testnet  #### Native Ubiquity provides native access to all Blockchain nodes it supports. To access native functionality, use the protocol without the v2 prefix * bitcoin/(mainnet | testnet) - [RPC Documentation](https://developer.bitcoin.org/reference/rpc/) * ethereum/(mainnet | ropsten) - [RPC Documentation](https://ethereum.org/en/developers/docs/apis/json-rpc/) * polkadot/mainnet - [Sidecar API Documentation](https://paritytech.github.io/substrate-api-sidecar/dist/) * polkadot/mainnet/http-rpc - [Polkadot RPC Documentation](https://polkadot.js.org/docs/substrate/rpc/) * algorand/mainnet - [Algod API Documentation](https://developer.algorand.org/docs/reference/rest-apis/algod/v1/) * stellar/mainnet - [Stellar Horizon API Documentation](https://developers.stellar.org/api) * dogecoin/(mainnet | testnet) - [Dogecoin API Documentaion](https://developer.bitcoin.org/reference/rpc/) * oasis/mainnet - [Oasis Rosetta Gateway Documentation](https://www.rosetta-api.org/docs/api_identifiers.html#network-identifier) * near/mainnet - [NEAR RPC Documentation](https://docs.near.org/docs/api/rpc) * terra/mainnet - [Terra RPC Documentation](https://docs.terra.money/docs/develop/how-to/endpoints.html) * litecoin/mainnet - [Litecoin RPC Documentation](https://litecoin.info/index.php/Litecoin_API) * bitcoincash/mainnet - [Bitcoin Cash RPC Documentation](https://docs.bitcoincashnode.org/doc/json-rpc/) * solana/mainnet - [Solana RPC Documentation](https://docs.solana.com/developing/clients/jsonrpc-api)  A full URL example: https://ubiquity.api.blockdaemon.com/bitcoin/mainnet  ##### Pagination Certain resources contain a lot of data, more than what\'s practical to return for a single request. With the help of pagination, the data is split across multiple responses. Each response returns a subset of the items requested, and a continuation token.  To get the next batch of items, copy the returned continuation token to the continuation query parameter and repeat the request with the new URL. In case no continuation token is returned, there is no more data available. 
  *
  * The version of the OpenAPI document: 3.0.0
  * Contact: support@blockdaemon.com
@@ -13,14 +13,35 @@
  */
 
 
-import { Configuration } from './configuration';
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
+import type { Configuration } from './configuration';
+import type { AxiosPromise, AxiosInstance, AxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from './common';
+import type { RequestArgs } from './base';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from './base';
+import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError } from './base';
 
+/**
+ * 
+ * @export
+ * @interface AccountsBalancesMapValueValue
+ */
+export interface AccountsBalancesMapValueValue {
+    /**
+     * 
+     * @type {Currency}
+     * @memberof AccountsBalancesMapValueValue
+     */
+    'currency'?: Currency;
+    /**
+     * Integer string in smallest unit (Satoshis)
+     * @type {string}
+     * @memberof AccountsBalancesMapValueValue
+     */
+    'balance'?: string;
+}
 /**
  * 
  * @export
@@ -32,7 +53,7 @@ export interface AccountsObj {
      * @type {Array<string>}
      * @memberof AccountsObj
      */
-    addresses?: Array<string>;
+    'addresses'?: Array<string>;
 }
 /**
  * 
@@ -45,37 +66,37 @@ export interface AlgorandMeta {
      * @type {string}
      * @memberof AlgorandMeta
      */
-    type?: string;
+    'type'?: string;
     /**
      * 
      * @type {string}
      * @memberof AlgorandMeta
      */
-    sender_reward?: string;
+    'sender_reward'?: string;
     /**
      * 
      * @type {string}
      * @memberof AlgorandMeta
      */
-    recipient_reward?: string;
+    'recipient_reward'?: string;
     /**
      * 
      * @type {string}
      * @memberof AlgorandMeta
      */
-    close?: string;
+    'close'?: string;
     /**
      * 
      * @type {string}
      * @memberof AlgorandMeta
      */
-    close_amount?: string;
+    'close_amount'?: string;
     /**
      * 
      * @type {string}
      * @memberof AlgorandMeta
      */
-    close_reward?: string;
+    'close_reward'?: string;
 }
 /**
  * 
@@ -88,43 +109,43 @@ export interface Asset {
      * @type {number}
      * @memberof Asset
      */
-    token_id?: number;
+    'token_id'?: number;
     /**
      * 
      * @type {string}
      * @memberof Asset
      */
-    image_url?: string;
+    'image_url'?: string;
     /**
      * 
      * @type {string}
      * @memberof Asset
      */
-    name?: string;
+    'name'?: string;
     /**
      * 
      * @type {Contract}
      * @memberof Asset
      */
-    contract?: Contract;
+    'contract'?: Contract;
     /**
      * 
      * @type {Array<AssetWallet>}
      * @memberof Asset
      */
-    wallets?: Array<AssetWallet>;
+    'wallets'?: Array<AssetWallet>;
     /**
      * 
      * @type {Array<AssetTrait>}
      * @memberof Asset
      */
-    attributes?: Array<AssetTrait>;
+    'attributes'?: Array<AssetTrait>;
     /**
      * 
      * @type {number}
      * @memberof Asset
      */
-    mint_date?: number;
+    'mint_date'?: number;
 }
 /**
  * 
@@ -137,13 +158,13 @@ export interface AssetTrait {
      * @type {string}
      * @memberof AssetTrait
      */
-    trait_type?: string;
+    'trait_type'?: string;
     /**
      * 
      * @type {string}
      * @memberof AssetTrait
      */
-    value?: string;
+    'value'?: string;
 }
 /**
  * 
@@ -156,44 +177,75 @@ export interface AssetWallet {
      * @type {string}
      * @memberof AssetWallet
      */
-    address?: string;
+    'address'?: string;
+}
+/**
+ * Change of balance of a currency
+ * @export
+ * @interface BalanceChange
+ */
+export interface BalanceChange {
+    /**
+     * Balance before transaction
+     * @type {string}
+     * @memberof BalanceChange
+     */
+    'old'?: string;
+    /**
+     * Balance difference
+     * @type {string}
+     * @memberof BalanceChange
+     */
+    'delta'?: string;
+    /**
+     * Balance after transaction
+     * @type {string}
+     * @memberof BalanceChange
+     */
+    'new'?: string;
+    /**
+     * 
+     * @type {Currency}
+     * @memberof BalanceChange
+     */
+    'currency'?: Currency;
 }
 /**
  * Currency balances with asset paths as keys
  * @export
- * @interface Balance
+ * @interface BalanceV1
  */
-export interface Balance {
+export interface BalanceV1 {
     /**
      * 
      * @type {Currency}
-     * @memberof Balance
+     * @memberof BalanceV1
      */
-    currency?: Currency;
+    'currency'?: Currency;
     /**
      * 
      * @type {string}
-     * @memberof Balance
+     * @memberof BalanceV1
      */
-    confirmed_balance?: string;
+    'confirmed_balance'?: string;
     /**
      * 
      * @type {string}
-     * @memberof Balance
+     * @memberof BalanceV1
      */
-    pending_balance?: string;
+    'pending_balance'?: string;
     /**
      * 
      * @type {number}
-     * @memberof Balance
+     * @memberof BalanceV1
      */
-    confirmed_nonce?: number;
+    'confirmed_nonce'?: number;
     /**
      * 
      * @type {number}
-     * @memberof Balance
+     * @memberof BalanceV1
      */
-    confirmed_block?: number;
+    'confirmed_block'?: number;
 }
 /**
  * 
@@ -206,37 +258,43 @@ export interface Block {
      * @type {number}
      * @memberof Block
      */
-    number?: number;
+    'number'?: number;
     /**
      * Block hash
      * @type {string}
      * @memberof Block
      */
-    id?: string;
+    'id'?: string;
     /**
      * Parent block hash
      * @type {string}
      * @memberof Block
      */
-    parent_id?: string;
+    'parent_id'?: string;
     /**
      * Unix timestamp
      * @type {number}
      * @memberof Block
      */
-    date?: number;
+    'date'?: number;
     /**
-     * Amount of transaction in the block
-     * @type {number}
+     * Complete list of transaction IDs
+     * @type {Array<string>}
      * @memberof Block
      */
-    num_txs?: number;
+    'tx_ids'?: Array<string>;
     /**
      * Partial list of normalized transactions (not filtered or unknown model)
      * @type {Array<Tx>}
      * @memberof Block
      */
-    txs?: Array<Tx>;
+    'txs'?: Array<Tx>;
+    /**
+     * Coin supplies with asset paths as keys
+     * @type {{ [key: string]: Supply; }}
+     * @memberof Block
+     */
+    'supply'?: { [key: string]: Supply; };
 }
 /**
  * 
@@ -249,50 +307,62 @@ export interface BlockIdentifier {
      * @type {number}
      * @memberof BlockIdentifier
      */
-    number?: number;
+    'number'?: number;
     /**
      * Block hash
      * @type {string}
      * @memberof BlockIdentifier
      */
-    id?: string;
+    'id'?: string;
     /**
      * Parent block hash
      * @type {string}
      * @memberof BlockIdentifier
      */
-    parent_id?: string;
-    /**
-     * Unix timestamp
-     * @type {number}
-     * @memberof BlockIdentifier
-     */
-    date?: number;
+    'parent_id'?: string;
 }
 /**
  * 
  * @export
- * @interface BlockIdentifierPage
+ * @interface Coin
  */
-export interface BlockIdentifierPage {
+export interface Coin {
     /**
-     * Number of items in block identifiers
+     * Platform handle (platform var in path)
+     * @type {string}
+     * @memberof Coin
+     */
+    'handle'?: string;
+    /**
+     * SatoshiLabs 0044, registered coin types: https://github.com/satoshilabs/slips/blob/master/slip-0044.md
      * @type {number}
-     * @memberof BlockIdentifierPage
+     * @memberof Coin
      */
-    total?: number;
+    'slip44'?: number;
     /**
-     * 
-     * @type {Array<BlockIdentifier>}
-     * @memberof BlockIdentifierPage
+     * Symbol of native currency
+     * @type {string}
+     * @memberof Coin
      */
-    items?: Array<BlockIdentifier>;
+    'symbol'?: string;
     /**
-     * Token to get the next page
+     * Name of platform
+     * @type {string}
+     * @memberof Coin
+     */
+    'name'?: string;
+    /**
+     * Average time between blocks (milliseconds)
      * @type {number}
-     * @memberof BlockIdentifierPage
+     * @memberof Coin
      */
-    continuation?: number | null;
+    'block_time'?: number;
+    /**
+     * Random address seen on chain (optional)
+     * @type {string}
+     * @memberof Coin
+     */
+    'sample_address'?: string;
 }
 /**
  * 
@@ -305,37 +375,37 @@ export interface Collection {
      * @type {string}
      * @memberof Collection
      */
-    id?: string;
+    'id'?: string;
     /**
      * 
      * @type {string}
      * @memberof Collection
      */
-    name?: string;
+    'name'?: string;
     /**
      * 
      * @type {string}
      * @memberof Collection
      */
-    description?: string;
+    'description'?: string;
     /**
      * 
      * @type {string}
      * @memberof Collection
      */
-    image_url?: string;
+    'image_url'?: string;
     /**
      * 
      * @type {Array<Contract>}
      * @memberof Collection
      */
-    contracts?: Array<Contract>;
+    'contracts'?: Array<Contract>;
     /**
      * 
      * @type {object}
      * @memberof Collection
      */
-    meta?: object;
+    'meta'?: object;
 }
 /**
  * 
@@ -348,44 +418,57 @@ export interface Contract {
      * @type {string}
      * @memberof Contract
      */
-    address?: string;
+    'address'?: string;
     /**
      * 
      * @type {string}
      * @memberof Contract
      */
-    name?: string;
+    'name'?: string;
     /**
      * 
      * @type {string}
      * @memberof Contract
      */
-    symbol?: string;
+    'symbol'?: string;
     /**
      * 
      * @type {string}
      * @memberof Contract
      */
-    description?: string;
+    'description'?: string;
     /**
      * 
      * @type {string}
      * @memberof Contract
      */
-    image_url?: string;
+    'image_url'?: string;
     /**
      * 
      * @type {string}
      * @memberof Contract
      */
-    type?: string;
+    'type'?: string;
 }
 /**
  * @type Currency
  * @export
  */
-export type Currency = NativeCurrency | SmartTokenCurrency | TokenCurrency;
+export type Currency = { type: 'native' } & NativeCurrency | { type: 'smart_token' } & SmartTokenCurrency | { type: 'token' } & TokenCurrency;
 
+/**
+ * Effects are the state changes on an account
+ * @export
+ * @interface Effect
+ */
+export interface Effect {
+    /**
+     * Balance changes by asset
+     * @type {{ [key: string]: BalanceChange; }}
+     * @memberof Effect
+     */
+    'balance_changes'?: { [key: string]: BalanceChange; };
+}
 /**
  * 
  * @export
@@ -397,73 +480,92 @@ export interface Event {
      * @type {number}
      * @memberof Event
      */
-    amount?: number | null;
+    'amount'?: number | null;
     /**
      * 
      * @type {string}
      * @memberof Event
      */
-    block_id?: string;
+    'block_id'?: string;
     /**
      * 
      * @type {number}
      * @memberof Event
      */
-    block_number?: number;
+    'block_number'?: number;
     /**
      * 
      * @type {number}
      * @memberof Event
      */
-    date?: number;
+    'date'?: number;
     /**
      * 
      * @type {number}
      * @memberof Event
      */
-    decimals?: number | null;
+    'decimals'?: number | null;
     /**
      * 
      * @type {string}
      * @memberof Event
      */
-    denomination?: string | null;
+    'denomination'?: string | null;
     /**
      * 
      * @type {string}
      * @memberof Event
      */
-    destination?: string | null;
+    'destination'?: string | null;
     /**
      * 
      * @type {string}
      * @memberof Event
      */
-    id?: string;
+    'id'?: string;
     /**
      * 
      * @type {any}
      * @memberof Event
      */
-    meta?: any | null;
+    'meta'?: any;
     /**
      * 
      * @type {string}
      * @memberof Event
      */
-    source?: string | null;
+    'source'?: string | null;
     /**
      * 
      * @type {string}
      * @memberof Event
      */
-    transaction_id?: string;
+    'transaction_id'?: string;
     /**
      * 
      * @type {string}
      * @memberof Event
      */
-    type?: string;
+    'type'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface Fee
+ */
+export interface Fee {
+    /**
+     * Integer string in smallest unit (Satoshis)
+     * @type {string}
+     * @memberof Fee
+     */
+    'amount': string;
+    /**
+     * Destination
+     * @type {string}
+     * @memberof Fee
+     */
+    'destination': string;
 }
 /**
  * 
@@ -476,13 +578,13 @@ export interface FeeEstimate {
      * @type {number}
      * @memberof FeeEstimate
      */
-    most_recent_block?: number;
+    'most_recent_block'?: number;
     /**
      * 
      * @type {FeeEstimateEstimatedFees}
      * @memberof FeeEstimate
      */
-    estimated_fees?: FeeEstimateEstimatedFees;
+    'estimated_fees'?: FeeEstimateEstimatedFees;
 }
 /**
  * Object containing fast, medium, slow fees
@@ -495,19 +597,19 @@ export interface FeeEstimateEstimatedFees {
      * @type {any}
      * @memberof FeeEstimateEstimatedFees
      */
-    fast?: any | null;
+    'fast'?: any;
     /**
      * 
      * @type {any}
      * @memberof FeeEstimateEstimatedFees
      */
-    medium?: any | null;
+    'medium'?: any;
     /**
      * 
      * @type {any}
      * @memberof FeeEstimateEstimatedFees
      */
-    slow?: any | null;
+    'slow'?: any;
 }
 /**
  * 
@@ -520,7 +622,7 @@ export interface GetCollectionResponse {
      * @type {Collection}
      * @memberof GetCollectionResponse
      */
-    collection?: Collection;
+    'collection'?: Collection;
 }
 /**
  * 
@@ -533,13 +635,13 @@ export interface ListAssetsResponse {
      * @type {Array<Asset>}
      * @memberof ListAssetsResponse
      */
-    data?: Array<Asset>;
+    'data'?: Array<Asset>;
     /**
      * 
      * @type {Meta}
      * @memberof ListAssetsResponse
      */
-    meta?: Meta;
+    'meta'?: Meta;
 }
 /**
  * 
@@ -552,13 +654,13 @@ export interface ListCollectionResponse {
      * @type {Array<Collection>}
      * @memberof ListCollectionResponse
      */
-    data?: Array<Collection>;
+    'data'?: Array<Collection>;
     /**
      * 
      * @type {Meta}
      * @memberof ListCollectionResponse
      */
-    meta?: Meta;
+    'meta'?: Meta;
 }
 /**
  * 
@@ -571,13 +673,13 @@ export interface ListEventResponse {
      * @type {Array<NFTEvent>}
      * @memberof ListEventResponse
      */
-    data?: Array<NFTEvent>;
+    'data'?: Array<NFTEvent>;
     /**
      * 
      * @type {Meta}
      * @memberof ListEventResponse
      */
-    meta?: Meta;
+    'meta'?: Meta;
 }
 /**
  * 
@@ -590,7 +692,7 @@ export interface Meta {
      * @type {Paging}
      * @memberof Meta
      */
-    paging?: Paging;
+    'paging'?: Paging;
 }
 /**
  * 
@@ -603,31 +705,99 @@ export interface ModelError {
      * @type {string}
      * @memberof ModelError
      */
-    type?: string;
+    'type'?: string;
     /**
      * Numeric error code
      * @type {number}
      * @memberof ModelError
      */
-    code?: number;
+    'code'?: number;
     /**
      * Short error description
      * @type {string}
      * @memberof ModelError
      */
-    title?: string;
+    'title'?: string;
     /**
      * HTTP status of the error
      * @type {number}
      * @memberof ModelError
      */
-    status?: number;
+    'status'?: number;
     /**
      * Long error description
      * @type {string}
      * @memberof ModelError
      */
-    detail?: string;
+    'detail'?: string;
+}
+/**
+ * Transfer of currency in the UTXO model
+ * @export
+ * @interface MultiTransfer
+ */
+export interface MultiTransfer {
+    /**
+     * 
+     * @type {Array<Utxo>}
+     * @memberof MultiTransfer
+     */
+    'inputs': Array<Utxo>;
+    /**
+     * 
+     * @type {Array<Utxo>}
+     * @memberof MultiTransfer
+     */
+    'outputs': Array<Utxo>;
+    /**
+     * 
+     * @type {Currency}
+     * @memberof MultiTransfer
+     */
+    'currency': Currency;
+    /**
+     * Integer string in smallest unit (Satoshis)
+     * @type {string}
+     * @memberof MultiTransfer
+     */
+    'total_in': string;
+    /**
+     * Integer string in smallest unit (Satoshis)
+     * @type {string}
+     * @memberof MultiTransfer
+     */
+    'total_out': string;
+    /**
+     * Integer string in smallest unit (Satoshis)
+     * @type {string}
+     * @memberof MultiTransfer
+     */
+    'unspent': string;
+}
+/**
+ * 
+ * @export
+ * @interface MultiTransferOperation
+ */
+export interface MultiTransferOperation {
+    /**
+     * 
+     * @type {string}
+     * @memberof MultiTransferOperation
+     */
+    'type': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MultiTransferOperation
+     */
+    'event'?: string;
+    /**
+     * 
+     * @type {MultiTransfer}
+     * @memberof MultiTransferOperation
+     */
+    'detail': MultiTransfer;
 }
 /**
  * 
@@ -640,43 +810,43 @@ export interface NFTEvent {
      * @type {string}
      * @memberof NFTEvent
      */
-    contract_address?: string;
+    'contract_address'?: string;
     /**
      * 
      * @type {number}
      * @memberof NFTEvent
      */
-    token_id?: number;
+    'token_id'?: number;
     /**
      * 
      * @type {string}
      * @memberof NFTEvent
      */
-    event_type?: string;
+    'event_type'?: string;
     /**
      * 
      * @type {number}
      * @memberof NFTEvent
      */
-    timestamp?: number;
+    'timestamp'?: number;
     /**
      * 
      * @type {string}
      * @memberof NFTEvent
      */
-    from_account?: string;
+    'from_account'?: string;
     /**
      * 
      * @type {string}
      * @memberof NFTEvent
      */
-    to_account?: string;
+    'to_account'?: string;
     /**
      * 
      * @type {object}
      * @memberof NFTEvent
      */
-    transaction?: object;
+    'transaction'?: object;
 }
 /**
  * 
@@ -689,32 +859,38 @@ export interface NativeCurrency {
      * @type {string}
      * @memberof NativeCurrency
      */
-    asset_path: string;
+    'asset_path': string;
     /**
      * Currency symbol
      * @type {string}
      * @memberof NativeCurrency
      */
-    symbol?: string;
+    'symbol'?: string;
     /**
      * Name of currency
      * @type {string}
      * @memberof NativeCurrency
      */
-    name?: string;
+    'name'?: string;
     /**
      * Decimal places right to the comma
      * @type {number}
      * @memberof NativeCurrency
      */
-    decimals?: number;
+    'decimals'?: number;
     /**
      * 
      * @type {string}
      * @memberof NativeCurrency
      */
-    type: string;
+    'type': string;
 }
+/**
+ * @type Operation
+ * @export
+ */
+export type Operation = { type: 'multi_transfer' } & MultiTransferOperation | { type: 'transfer' } & TransferOperation;
+
 /**
  * 
  * @export
@@ -726,7 +902,7 @@ export interface Paging {
      * @type {string}
      * @memberof Paging
      */
-    next_page_token?: string;
+    'next_page_token'?: string;
 }
 /**
  * 
@@ -739,25 +915,44 @@ export interface PlatformDetail {
      * @type {string}
      * @memberof PlatformDetail
      */
-    source?: string;
+    'source'?: string;
     /**
      * 
      * @type {string}
      * @memberof PlatformDetail
      */
-    handle?: string;
+    'handle'?: string;
     /**
      * 
      * @type {number}
      * @memberof PlatformDetail
      */
-    genesis_number?: number;
+    'genesis_number'?: number;
     /**
      * 
      * @type {Array<string>}
      * @memberof PlatformDetail
      */
-    endpoints?: Array<string>;
+    'endpoints'?: Array<string>;
+}
+/**
+ * 
+ * @export
+ * @interface PlatformEndpoint
+ */
+export interface PlatformEndpoint {
+    /**
+     * 
+     * @type {string}
+     * @memberof PlatformEndpoint
+     */
+    'path'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PlatformEndpoint
+     */
+    'example'?: string;
 }
 /**
  * 
@@ -767,29 +962,29 @@ export interface PlatformDetail {
 export interface PlatformsOverview {
     /**
      * List of items each describing a pair of supported platform and network.
-     * @type {Array<PlatformsOverviewPlatforms>}
+     * @type {Array<PlatformsOverviewPlatformsInner>}
      * @memberof PlatformsOverview
      */
-    platforms?: Array<PlatformsOverviewPlatforms>;
+    'platforms'?: Array<PlatformsOverviewPlatformsInner>;
 }
 /**
  * 
  * @export
- * @interface PlatformsOverviewPlatforms
+ * @interface PlatformsOverviewPlatformsInner
  */
-export interface PlatformsOverviewPlatforms {
+export interface PlatformsOverviewPlatformsInner {
     /**
      * 
      * @type {string}
-     * @memberof PlatformsOverviewPlatforms
+     * @memberof PlatformsOverviewPlatformsInner
      */
-    handle?: string;
+    'handle'?: string;
     /**
      * 
      * @type {string}
-     * @memberof PlatformsOverviewPlatforms
+     * @memberof PlatformsOverviewPlatformsInner
      */
-    network?: string;
+    'network'?: string;
 }
 /**
  * 
@@ -802,25 +997,25 @@ export interface Report {
      * @type {Array<ReportField>}
      * @memberof Report
      */
-    fields: Array<ReportField>;
+    'fields': Array<ReportField>;
     /**
      * The number of transactions in the report
      * @type {number}
      * @memberof Report
      */
-    items: number;
+    'items': number;
     /**
      * The limit number provided in the request or the default
      * @type {number}
      * @memberof Report
      */
-    limit?: number;
+    'limit'?: number;
     /**
      * Continuation token to send in the next request if there are more items
      * @type {string}
      * @memberof Report
      */
-    continuation?: string;
+    'continuation'?: string;
 }
 /**
  * 
@@ -833,86 +1028,86 @@ export interface ReportField {
      * @type {string}
      * @memberof ReportField
      */
-    protocol: string;
+    'protocol': string;
     /**
      * The wallet/account the transaction occurred
      * @type {string}
      * @memberof ReportField
      */
-    address: string;
+    'address': string;
     /**
      * The currency symbol
      * @type {string}
      * @memberof ReportField
      */
-    currency: string;
+    'currency': string;
     /**
      * The ID of the event within a transaction
      * @type {string}
      * @memberof ReportField
      */
-    event_id: string;
+    'event_id': string;
     /**
      * The block number the transaction occurred on
      * @type {number}
      * @memberof ReportField
      */
-    block: number;
+    'block': number;
     /**
      * The unix timestamp when the transaction was added to a block
      * @type {number}
      * @memberof ReportField
      */
-    timestamp: number;
+    'timestamp': number;
     /**
      * The transaction ID
      * @type {string}
      * @memberof ReportField
      */
-    hash: string;
+    'hash': string;
     /**
      * The action type e.g. Transfer, Deposit, Staking Reward etc..
      * @type {string}
      * @memberof ReportField
      */
-    action: string;
+    'action': string;
     /**
      * The amount of currency involved in the transaction (smallest unit)
      * @type {string}
      * @memberof ReportField
      */
-    value: string;
+    'value': string;
     /**
      * The address where the funds originated
      * @type {string}
      * @memberof ReportField
      */
-    sender_address: string;
+    'sender_address': string;
     /**
      * How much was charged as a fee for processing the transaction
      * @type {string}
      * @memberof ReportField
      */
-    fee: string;
+    'fee': string;
     /**
      * The number of decimals in one coin, used to convert smallest unit to 1 whole coin if needed
      * @type {number}
      * @memberof ReportField
      */
-    decimals: number;
+    'decimals': number;
     /**
      * 
      * @type {ReportFieldMeta}
      * @memberof ReportField
      */
-    meta?: ReportFieldMeta | null;
+    'meta'?: ReportFieldMeta | null;
 }
 /**
  * @type ReportFieldMeta
  * Additional metadata bespoke to specific protocols
  * @export
  */
-export type ReportFieldMeta = AlgorandMeta;
+export type ReportFieldMeta = { type: 'algorand_meta' } & AlgorandMeta;
 
 /**
  * 
@@ -925,7 +1120,7 @@ export interface SignedTx {
      * @type {string}
      * @memberof SignedTx
      */
-    tx: string;
+    'tx': string;
 }
 /**
  * 
@@ -938,13 +1133,13 @@ export interface SmartToken {
      * @type {string}
      * @memberof SmartToken
      */
-    type: string;
+    'type': string;
     /**
      * Address of contract
      * @type {string}
      * @memberof SmartToken
      */
-    contract: string;
+    'contract': string;
 }
 /**
  * 
@@ -957,37 +1152,74 @@ export interface SmartTokenCurrency {
      * @type {string}
      * @memberof SmartTokenCurrency
      */
-    asset_path: string;
+    'asset_path': string;
     /**
      * Currency symbol
      * @type {string}
      * @memberof SmartTokenCurrency
      */
-    symbol?: string;
+    'symbol'?: string;
     /**
      * Name of currency
      * @type {string}
      * @memberof SmartTokenCurrency
      */
-    name?: string;
+    'name'?: string;
     /**
      * Decimal places right to the comma
      * @type {number}
      * @memberof SmartTokenCurrency
      */
-    decimals?: number;
+    'decimals'?: number;
     /**
      * 
      * @type {string}
      * @memberof SmartTokenCurrency
      */
-    type: string;
+    'type': string;
     /**
      * 
      * @type {SmartToken}
      * @memberof SmartTokenCurrency
      */
-    detail?: SmartToken;
+    'detail'?: SmartToken;
+}
+/**
+ * 
+ * @export
+ * @interface Supply
+ */
+export interface Supply {
+    /**
+     * Maximum supply
+     * @type {string}
+     * @memberof Supply
+     */
+    'maximum'?: string;
+    /**
+     * Total supply at block height, excluding burnt coins
+     * @type {string}
+     * @memberof Supply
+     */
+    'total'?: string;
+    /**
+     * Total coins created historically up until this block
+     * @type {string}
+     * @memberof Supply
+     */
+    'total_created'?: string;
+    /**
+     * Total coins burnt historically up until this block
+     * @type {string}
+     * @memberof Supply
+     */
+    'total_burnt'?: string;
+    /**
+     * Coins created at this block
+     * @type {string}
+     * @memberof Supply
+     */
+    'created'?: string;
 }
 /**
  * 
@@ -1000,19 +1232,19 @@ export interface Token {
      * @type {string}
      * @memberof Token
      */
-    type: string;
+    'type': string;
     /**
      * Token identifier
      * @type {string}
      * @memberof Token
      */
-    id: string;
+    'id': string;
     /**
      * Address that created token
      * @type {string}
      * @memberof Token
      */
-    creator?: string;
+    'creator'?: string;
 }
 /**
  * 
@@ -1025,37 +1257,99 @@ export interface TokenCurrency {
      * @type {string}
      * @memberof TokenCurrency
      */
-    asset_path: string;
+    'asset_path': string;
     /**
      * Currency symbol
      * @type {string}
      * @memberof TokenCurrency
      */
-    symbol?: string;
+    'symbol'?: string;
     /**
      * Name of currency
      * @type {string}
      * @memberof TokenCurrency
      */
-    name?: string;
+    'name'?: string;
     /**
      * Decimal places right to the comma
      * @type {number}
      * @memberof TokenCurrency
      */
-    decimals?: number;
+    'decimals'?: number;
     /**
      * 
      * @type {string}
      * @memberof TokenCurrency
      */
-    type: string;
+    'type': string;
     /**
      * 
      * @type {Token}
      * @memberof TokenCurrency
      */
-    detail?: Token;
+    'detail'?: Token;
+}
+/**
+ * Transfer of currency from one account to another
+ * @export
+ * @interface Transfer
+ */
+export interface Transfer {
+    /**
+     * Sender address
+     * @type {string}
+     * @memberof Transfer
+     */
+    'from': string;
+    /**
+     * Receiver address
+     * @type {string}
+     * @memberof Transfer
+     */
+    'to': string;
+    /**
+     * 
+     * @type {Currency}
+     * @memberof Transfer
+     */
+    'currency': Currency;
+    /**
+     * Integer string in smallest unit (Satoshis)
+     * @type {string}
+     * @memberof Transfer
+     */
+    'value': string;
+    /**
+     * 
+     * @type {Fee}
+     * @memberof Transfer
+     */
+    'fee'?: Fee;
+}
+/**
+ * 
+ * @export
+ * @interface TransferOperation
+ */
+export interface TransferOperation {
+    /**
+     * 
+     * @type {string}
+     * @memberof TransferOperation
+     */
+    'type': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransferOperation
+     */
+    'event'?: string;
+    /**
+     * 
+     * @type {Transfer}
+     * @memberof TransferOperation
+     */
+    'detail': Transfer;
 }
 /**
  * 
@@ -1068,65 +1362,75 @@ export interface Tx {
      * @type {string}
      * @memberof Tx
      */
-    id?: string;
+    'id'?: string;
     /**
-     * Unix timestamp
+     * SLIP-44 coin ID
      * @type {number}
      * @memberof Tx
      */
-    date?: number;
+    'slip44'?: number;
     /**
-     * ID of block if mined, otherwise omitted.
-     * @type {string}
+     * List of involved addresses (excluding contracts)
+     * @type {Set<string>}
      * @memberof Tx
      */
-    block_id?: string | null;
-    /**
-     * Result status of the transaction.
-     * @type {string}
-     * @memberof Tx
-     */
-    status?: TxStatusEnum;
+    'addresses'?: Set<string> | null;
     /**
      * List of moved assets by asset path
      * @type {Set<string>}
      * @memberof Tx
      */
-    assets?: Set<string> | null;
+    'assets'?: Set<string> | null;
     /**
-     * 
+     * Unix timestamp
      * @type {number}
      * @memberof Tx
      */
-    nonce?: number;
+    'date'?: number;
     /**
-     * 
+     * Number of block if mined, otherwise omitted.
      * @type {number}
      * @memberof Tx
      */
-    num_events?: number;
+    'height'?: number | null;
     /**
-     * 
-     * @type {any}
+     * ID of block if mined, otherwise omitted.
+     * @type {string}
      * @memberof Tx
      */
-    meta?: any | null;
+    'block_id'?: string | null;
     /**
-     * 
-     * @type {Array<Event>}
+     * Result status of the transaction.
+     * @type {string}
      * @memberof Tx
      */
-    events?: Array<Event> | null;
+    'status'?: TxStatusEnum;
+    /**
+     * List of tags for this transaction
+     * @type {Set<string>}
+     * @memberof Tx
+     */
+    'tags'?: Set<string> | null;
+    /**
+     * Operations in this transaction (opaque keys).
+     * @type {{ [key: string]: Operation; }}
+     * @memberof Tx
+     */
+    'operations'?: { [key: string]: Operation; };
+    /**
+     * Effects by address, if supported
+     * @type {{ [key: string]: Effect; }}
+     * @memberof Tx
+     */
+    'effects'?: { [key: string]: Effect; };
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
-export enum TxStatusEnum {
-    Completed = 'completed',
-    Failed = 'failed'
-}
+export const TxStatusEnum = {
+    Completed: 'completed',
+    Failed: 'failed'
+} as const;
+
+export type TxStatusEnum = typeof TxStatusEnum[keyof typeof TxStatusEnum];
 
 /**
  * 
@@ -1139,19 +1443,38 @@ export interface TxConfirmation {
      * @type {number}
      * @memberof TxConfirmation
      */
-    current_height?: number;
+    'current_height'?: number;
     /**
      * Transaction hash
      * @type {string}
      * @memberof TxConfirmation
      */
-    tx_id?: string;
+    'tx_id'?: string;
     /**
      * Total transaction confirmations
      * @type {number}
      * @memberof TxConfirmation
      */
-    confirmations?: number;
+    'confirmations'?: number;
+}
+/**
+ * A list of recipients
+ * @export
+ * @interface TxDestination
+ */
+export interface TxDestination {
+    /**
+     * 
+     * @type {string}
+     * @memberof TxDestination
+     */
+    'destination': string;
+    /**
+     * The amount you wish to transfer
+     * @type {string}
+     * @memberof TxDestination
+     */
+    'amount': string;
 }
 /**
  * Transaction
@@ -1164,31 +1487,31 @@ export interface TxMinify {
      * @type {string}
      * @memberof TxMinify
      */
-    id?: string;
+    'id'?: string;
     /**
      * Unix timestamp
      * @type {number}
      * @memberof TxMinify
      */
-    date?: number;
+    'date'?: number;
     /**
      * ID of block.
      * @type {string}
      * @memberof TxMinify
      */
-    block_id?: string | null;
+    'block_id'?: string | null;
     /**
      * Height of block,
      * @type {number}
      * @memberof TxMinify
      */
-    block_number?: number | null;
+    'block_number'?: number | null;
     /**
      * Total transaction confirmations
      * @type {number}
      * @memberof TxMinify
      */
-    confirmations?: number;
+    'confirmations'?: number;
 }
 /**
  * 
@@ -1201,41 +1524,39 @@ export interface TxOutput {
      * @type {string}
      * @memberof TxOutput
      */
-    status?: TxOutputStatusEnum;
+    'status'?: TxOutputStatusEnum;
     /**
      * If the transaction output was spent or not, if the value is true the `spent` transaction object will be presented
      * @type {boolean}
      * @memberof TxOutput
      */
-    is_spent?: boolean;
+    'is_spent'?: boolean;
     /**
      * Amount of transaction output
      * @type {number}
      * @memberof TxOutput
      */
-    value?: number | null;
+    'value'?: number | null;
     /**
      * 
      * @type {TxMinify}
      * @memberof TxOutput
      */
-    mined?: TxMinify | null;
+    'mined'?: TxMinify | null;
     /**
      * 
      * @type {TxMinify}
      * @memberof TxOutput
      */
-    spent?: TxMinify | null;
+    'spent'?: TxMinify | null;
 }
 
-/**
-    * @export
-    * @enum {string}
-    */
-export enum TxOutputStatusEnum {
-    Mined = 'mined',
-    Unknown = 'unknown'
-}
+export const TxOutputStatusEnum = {
+    Mined: 'mined',
+    Unknown: 'unknown'
+} as const;
+
+export type TxOutputStatusEnum = typeof TxOutputStatusEnum[keyof typeof TxOutputStatusEnum];
 
 /**
  * 
@@ -1248,19 +1569,44 @@ export interface TxPage {
      * @type {number}
      * @memberof TxPage
      */
-    total?: number;
+    'total'?: number;
     /**
      * 
      * @type {Array<Tx>}
      * @memberof TxPage
      */
-    items?: Array<Tx>;
+    'items'?: Array<Tx>;
     /**
      * Token to get the next page
      * @type {string}
      * @memberof TxPage
      */
-    continuation?: string | null;
+    'continuation'?: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface TxPageV1
+ */
+export interface TxPageV1 {
+    /**
+     * Number of items in txs
+     * @type {number}
+     * @memberof TxPageV1
+     */
+    'total'?: number;
+    /**
+     * 
+     * @type {Array<TxV1>}
+     * @memberof TxPageV1
+     */
+    'items'?: Array<TxV1>;
+    /**
+     * Token to get the next page
+     * @type {string}
+     * @memberof TxPageV1
+     */
+    'continuation'?: string | null;
 }
 /**
  * 
@@ -1273,7 +1619,95 @@ export interface TxReceipt {
      * @type {string}
      * @memberof TxReceipt
      */
-    id: string;
+    'id': string;
+}
+/**
+ * 
+ * @export
+ * @interface TxV1
+ */
+export interface TxV1 {
+    /**
+     * Unique transaction identifier
+     * @type {string}
+     * @memberof TxV1
+     */
+    'id'?: string;
+    /**
+     * Unix timestamp
+     * @type {number}
+     * @memberof TxV1
+     */
+    'date'?: number;
+    /**
+     * ID of block if mined, otherwise omitted.
+     * @type {string}
+     * @memberof TxV1
+     */
+    'block_id'?: string | null;
+    /**
+     * Result status of the transaction.
+     * @type {string}
+     * @memberof TxV1
+     */
+    'status'?: TxV1StatusEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof TxV1
+     */
+    'nonce'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TxV1
+     */
+    'num_events'?: number;
+    /**
+     * 
+     * @type {any}
+     * @memberof TxV1
+     */
+    'meta'?: any;
+    /**
+     * 
+     * @type {Array<Event>}
+     * @memberof TxV1
+     */
+    'events'?: Array<Event> | null;
+}
+
+export const TxV1StatusEnum = {
+    Completed: 'completed',
+    Failed: 'failed'
+} as const;
+
+export type TxV1StatusEnum = typeof TxV1StatusEnum[keyof typeof TxV1StatusEnum];
+
+/**
+ * An unspent transaction output
+ * @export
+ * @interface Utxo
+ */
+export interface Utxo {
+    /**
+     * Asset path of transferred currency
+     * @type {string}
+     * @memberof Utxo
+     */
+    'asset_path'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Utxo
+     */
+    'address'?: string;
+    /**
+     * Integer string in smallest unit (Satoshis)
+     * @type {string}
+     * @memberof Utxo
+     */
+    'value'?: string;
 }
 
 /**
@@ -1292,14 +1726,14 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getListOfBalancesByAddress: async (platform: string, network: string, address: string, assets?: string, options: any = {}): Promise<RequestArgs> => {
+        getBalancesByAddress: async (platform: string, network: string, address: string, assets?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'platform' is not null or undefined
-            assertParamExists('getListOfBalancesByAddress', 'platform', platform)
+            assertParamExists('getBalancesByAddress', 'platform', platform)
             // verify required parameter 'network' is not null or undefined
-            assertParamExists('getListOfBalancesByAddress', 'network', network)
+            assertParamExists('getBalancesByAddress', 'network', network)
             // verify required parameter 'address' is not null or undefined
-            assertParamExists('getListOfBalancesByAddress', 'address', address)
-            const localVarPath = `/{platform}/{network}/account/{address}`
+            assertParamExists('getBalancesByAddress', 'address', address)
+            const localVarPath = `/v2/{platform}/{network}/account/{address}`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)))
                 .replace(`{${"address"}}`, encodeURIComponent(String(address)));
@@ -1324,7 +1758,7 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
 
 
     
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -1343,14 +1777,14 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getListOfBalancesByAddresses: async (platform: string, network: string, accountsObj: AccountsObj, assets?: string, options: any = {}): Promise<RequestArgs> => {
+        getBalancesByAddresses: async (platform: string, network: string, accountsObj: AccountsObj, assets?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'platform' is not null or undefined
-            assertParamExists('getListOfBalancesByAddresses', 'platform', platform)
+            assertParamExists('getBalancesByAddresses', 'platform', platform)
             // verify required parameter 'network' is not null or undefined
-            assertParamExists('getListOfBalancesByAddresses', 'network', network)
+            assertParamExists('getBalancesByAddresses', 'network', network)
             // verify required parameter 'accountsObj' is not null or undefined
-            assertParamExists('getListOfBalancesByAddresses', 'accountsObj', accountsObj)
-            const localVarPath = `/{platform}/{network}/accounts`
+            assertParamExists('getBalancesByAddresses', 'accountsObj', accountsObj)
+            const localVarPath = `/v2/{platform}/{network}/accounts`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -1376,7 +1810,101 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(accountsObj, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns the account balances for all supported currencies. 
+         * @summary Balances Of Address
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} address Account address
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getListOfBalancesByAddress: async (platform: string, network: string, address: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'platform' is not null or undefined
+            assertParamExists('getListOfBalancesByAddress', 'platform', platform)
+            // verify required parameter 'network' is not null or undefined
+            assertParamExists('getListOfBalancesByAddress', 'network', network)
+            // verify required parameter 'address' is not null or undefined
+            assertParamExists('getListOfBalancesByAddress', 'address', address)
+            const localVarPath = `/v1/{platform}/{network}/account/{address}`
+                .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
+                .replace(`{${"network"}}`, encodeURIComponent(String(network)))
+                .replace(`{${"address"}}`, encodeURIComponent(String(address)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns the balances of accounts for all supported currencies. 
+         * @summary Balances Of Addresses
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {AccountsObj} accountsObj 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getListOfBalancesByAddresses: async (platform: string, network: string, accountsObj: AccountsObj, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'platform' is not null or undefined
+            assertParamExists('getListOfBalancesByAddresses', 'platform', platform)
+            // verify required parameter 'network' is not null or undefined
+            assertParamExists('getListOfBalancesByAddresses', 'network', network)
+            // verify required parameter 'accountsObj' is not null or undefined
+            assertParamExists('getListOfBalancesByAddresses', 'accountsObj', accountsObj)
+            const localVarPath = `/v1/{platform}/{network}/accounts`
+                .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
+                .replace(`{${"network"}}`, encodeURIComponent(String(network)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(accountsObj, localVarRequestOptions, configuration)
@@ -1399,14 +1927,14 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getReportByAddress: async (platform: string, network: string, address: string, from?: number, to?: number, limit?: number, continuation?: string, options: any = {}): Promise<RequestArgs> => {
+        getReportByAddress: async (platform: string, network: string, address: string, from?: number, to?: number, limit?: number, continuation?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'platform' is not null or undefined
             assertParamExists('getReportByAddress', 'platform', platform)
             // verify required parameter 'network' is not null or undefined
             assertParamExists('getReportByAddress', 'network', network)
             // verify required parameter 'address' is not null or undefined
             assertParamExists('getReportByAddress', 'address', address)
-            const localVarPath = `/{platform}/{network}/account/{address}/report`
+            const localVarPath = `/v1/{platform}/{network}/account/{address}/report`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)))
                 .replace(`{${"address"}}`, encodeURIComponent(String(address)));
@@ -1443,7 +1971,7 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
 
 
     
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -1458,21 +1986,21 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
          * @param {string} platform Coin platform handle
          * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {string} address Account address
-         * @param {'desc' | 'asc'} [order] Pagination order
+         * @param {GetTxsByAddressOrderEnum} [order] Pagination order
          * @param {string} [continuation] Continuation token from earlier response
          * @param {number} [limit] Max number of items to return in a response. Defaults to 25 and is capped at 100. 
          * @param {string} [assets] Comma-separated list of asset paths to filter. If the list is empty, or all elements are empty, this filter has no effect.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTxsByAddress: async (platform: string, network: string, address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options: any = {}): Promise<RequestArgs> => {
+        getTxsByAddress: async (platform: string, network: string, address: string, order?: GetTxsByAddressOrderEnum, continuation?: string, limit?: number, assets?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'platform' is not null or undefined
             assertParamExists('getTxsByAddress', 'platform', platform)
             // verify required parameter 'network' is not null or undefined
             assertParamExists('getTxsByAddress', 'network', network)
             // verify required parameter 'address' is not null or undefined
             assertParamExists('getTxsByAddress', 'address', address)
-            const localVarPath = `/{platform}/{network}/account/{address}/txs`
+            const localVarPath = `/v1/{platform}/{network}/account/{address}/txs`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)))
                 .replace(`{${"address"}}`, encodeURIComponent(String(address)));
@@ -1509,7 +2037,139 @@ export const AccountsApiAxiosParamCreator = function (configuration?: Configurat
 
 
     
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns account activity 
+         * @summary A financial report for an address between a time period. Default timescale is within the last 30 days
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} address Account address
+         * @param {number} [from] Unix Timestamp from where to start
+         * @param {number} [to] Unix Timestamp from where to end
+         * @param {number} [limit] Max number of items to return in a response. Defaults to 50k and is capped at 100k. 
+         * @param {string} [continuation] Continuation token from earlier response
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v2GetReportByAddress: async (platform: string, network: string, address: string, from?: number, to?: number, limit?: number, continuation?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'platform' is not null or undefined
+            assertParamExists('v2GetReportByAddress', 'platform', platform)
+            // verify required parameter 'network' is not null or undefined
+            assertParamExists('v2GetReportByAddress', 'network', network)
+            // verify required parameter 'address' is not null or undefined
+            assertParamExists('v2GetReportByAddress', 'address', address)
+            const localVarPath = `/v2/{platform}/{network}/account/{address}/report`
+                .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
+                .replace(`{${"network"}}`, encodeURIComponent(String(network)))
+                .replace(`{${"address"}}`, encodeURIComponent(String(address)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (from !== undefined) {
+                localVarQueryParameter['from'] = from;
+            }
+
+            if (to !== undefined) {
+                localVarQueryParameter['to'] = to;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (continuation !== undefined) {
+                localVarQueryParameter['continuation'] = continuation;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Gets transactions that an address was involved with, from newest to oldest. This call uses pagination. 
+         * @summary Transactions Of Address
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} address Account address
+         * @param {V2GetTxsByAddressOrderEnum} [order] Pagination order
+         * @param {string} [continuation] Continuation token from earlier response
+         * @param {number} [limit] Max number of items to return in a response. Defaults to 25 and is capped at 100. 
+         * @param {string} [assets] Comma-separated list of asset paths to filter. If the list is empty, or all elements are empty, this filter has no effect.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v2GetTxsByAddress: async (platform: string, network: string, address: string, order?: V2GetTxsByAddressOrderEnum, continuation?: string, limit?: number, assets?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'platform' is not null or undefined
+            assertParamExists('v2GetTxsByAddress', 'platform', platform)
+            // verify required parameter 'network' is not null or undefined
+            assertParamExists('v2GetTxsByAddress', 'network', network)
+            // verify required parameter 'address' is not null or undefined
+            assertParamExists('v2GetTxsByAddress', 'address', address)
+            const localVarPath = `/v2/{platform}/{network}/account/{address}/txs`
+                .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
+                .replace(`{${"network"}}`, encodeURIComponent(String(network)))
+                .replace(`{${"address"}}`, encodeURIComponent(String(address)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (order !== undefined) {
+                localVarQueryParameter['order'] = order;
+            }
+
+            if (continuation !== undefined) {
+                localVarQueryParameter['continuation'] = continuation;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (assets !== undefined) {
+                localVarQueryParameter['assets'] = assets;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -1538,8 +2198,8 @@ export const AccountsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getListOfBalancesByAddress(platform: string, network: string, address: string, assets?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Balance>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getListOfBalancesByAddress(platform, network, address, assets, options);
+        async getBalancesByAddress(platform: string, network: string, address: string, assets?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<{ [key: string]: AccountsBalancesMapValueValue; }>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getBalancesByAddress(platform, network, address, assets, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1552,8 +2212,34 @@ export const AccountsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getListOfBalancesByAddresses(platform: string, network: string, accountsObj: AccountsObj, assets?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<{ [key: string]: Array<Balance>; }>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getListOfBalancesByAddresses(platform, network, accountsObj, assets, options);
+        async getBalancesByAddresses(platform: string, network: string, accountsObj: AccountsObj, assets?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<{ [key: string]: { [key: string]: AccountsBalancesMapValueValue; }; }>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getBalancesByAddresses(platform, network, accountsObj, assets, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Returns the account balances for all supported currencies. 
+         * @summary Balances Of Address
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} address Account address
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getListOfBalancesByAddress(platform: string, network: string, address: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<BalanceV1>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getListOfBalancesByAddress(platform, network, address, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Returns the balances of accounts for all supported currencies. 
+         * @summary Balances Of Addresses
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {AccountsObj} accountsObj 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getListOfBalancesByAddresses(platform: string, network: string, accountsObj: AccountsObj, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<{ [key: string]: Array<BalanceV1>; }>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getListOfBalancesByAddresses(platform, network, accountsObj, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1569,7 +2255,7 @@ export const AccountsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getReportByAddress(platform: string, network: string, address: string, from?: number, to?: number, limit?: number, continuation?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Report>> {
+        async getReportByAddress(platform: string, network: string, address: string, from?: number, to?: number, limit?: number, continuation?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Report>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getReportByAddress(platform, network, address, from, to, limit, continuation, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -1579,15 +2265,49 @@ export const AccountsApiFp = function(configuration?: Configuration) {
          * @param {string} platform Coin platform handle
          * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {string} address Account address
-         * @param {'desc' | 'asc'} [order] Pagination order
+         * @param {GetTxsByAddressOrderEnum} [order] Pagination order
          * @param {string} [continuation] Continuation token from earlier response
          * @param {number} [limit] Max number of items to return in a response. Defaults to 25 and is capped at 100. 
          * @param {string} [assets] Comma-separated list of asset paths to filter. If the list is empty, or all elements are empty, this filter has no effect.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getTxsByAddress(platform: string, network: string, address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TxPage>> {
+        async getTxsByAddress(platform: string, network: string, address: string, order?: GetTxsByAddressOrderEnum, continuation?: string, limit?: number, assets?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TxPageV1>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getTxsByAddress(platform, network, address, order, continuation, limit, assets, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Returns account activity 
+         * @summary A financial report for an address between a time period. Default timescale is within the last 30 days
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} address Account address
+         * @param {number} [from] Unix Timestamp from where to start
+         * @param {number} [to] Unix Timestamp from where to end
+         * @param {number} [limit] Max number of items to return in a response. Defaults to 50k and is capped at 100k. 
+         * @param {string} [continuation] Continuation token from earlier response
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v2GetReportByAddress(platform: string, network: string, address: string, from?: number, to?: number, limit?: number, continuation?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Report>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v2GetReportByAddress(platform, network, address, from, to, limit, continuation, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Gets transactions that an address was involved with, from newest to oldest. This call uses pagination. 
+         * @summary Transactions Of Address
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} address Account address
+         * @param {V2GetTxsByAddressOrderEnum} [order] Pagination order
+         * @param {string} [continuation] Continuation token from earlier response
+         * @param {number} [limit] Max number of items to return in a response. Defaults to 25 and is capped at 100. 
+         * @param {string} [assets] Comma-separated list of asset paths to filter. If the list is empty, or all elements are empty, this filter has no effect.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v2GetTxsByAddress(platform: string, network: string, address: string, order?: V2GetTxsByAddressOrderEnum, continuation?: string, limit?: number, assets?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TxPage>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v2GetTxsByAddress(platform, network, address, order, continuation, limit, assets, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -1610,8 +2330,8 @@ export const AccountsApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getListOfBalancesByAddress(platform: string, network: string, address: string, assets?: string, options?: any): AxiosPromise<Array<Balance>> {
-            return localVarFp.getListOfBalancesByAddress(platform, network, address, assets, options).then((request) => request(axios, basePath));
+        getBalancesByAddress(platform: string, network: string, address: string, assets?: string, options?: any): AxiosPromise<{ [key: string]: AccountsBalancesMapValueValue; }> {
+            return localVarFp.getBalancesByAddress(platform, network, address, assets, options).then((request) => request(axios, basePath));
         },
         /**
          * Returns the balances of accounts for all supported currencies. 
@@ -1623,8 +2343,32 @@ export const AccountsApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getListOfBalancesByAddresses(platform: string, network: string, accountsObj: AccountsObj, assets?: string, options?: any): AxiosPromise<{ [key: string]: Array<Balance>; }> {
-            return localVarFp.getListOfBalancesByAddresses(platform, network, accountsObj, assets, options).then((request) => request(axios, basePath));
+        getBalancesByAddresses(platform: string, network: string, accountsObj: AccountsObj, assets?: string, options?: any): AxiosPromise<{ [key: string]: { [key: string]: AccountsBalancesMapValueValue; }; }> {
+            return localVarFp.getBalancesByAddresses(platform, network, accountsObj, assets, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Returns the account balances for all supported currencies. 
+         * @summary Balances Of Address
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} address Account address
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getListOfBalancesByAddress(platform: string, network: string, address: string, options?: any): AxiosPromise<Array<BalanceV1>> {
+            return localVarFp.getListOfBalancesByAddress(platform, network, address, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Returns the balances of accounts for all supported currencies. 
+         * @summary Balances Of Addresses
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {AccountsObj} accountsObj 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getListOfBalancesByAddresses(platform: string, network: string, accountsObj: AccountsObj, options?: any): AxiosPromise<{ [key: string]: Array<BalanceV1>; }> {
+            return localVarFp.getListOfBalancesByAddresses(platform, network, accountsObj, options).then((request) => request(axios, basePath));
         },
         /**
          * Returns account activity 
@@ -1648,15 +2392,47 @@ export const AccountsApiFactory = function (configuration?: Configuration, baseP
          * @param {string} platform Coin platform handle
          * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {string} address Account address
-         * @param {'desc' | 'asc'} [order] Pagination order
+         * @param {GetTxsByAddressOrderEnum} [order] Pagination order
          * @param {string} [continuation] Continuation token from earlier response
          * @param {number} [limit] Max number of items to return in a response. Defaults to 25 and is capped at 100. 
          * @param {string} [assets] Comma-separated list of asset paths to filter. If the list is empty, or all elements are empty, this filter has no effect.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTxsByAddress(platform: string, network: string, address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any): AxiosPromise<TxPage> {
+        getTxsByAddress(platform: string, network: string, address: string, order?: GetTxsByAddressOrderEnum, continuation?: string, limit?: number, assets?: string, options?: any): AxiosPromise<TxPageV1> {
             return localVarFp.getTxsByAddress(platform, network, address, order, continuation, limit, assets, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Returns account activity 
+         * @summary A financial report for an address between a time period. Default timescale is within the last 30 days
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} address Account address
+         * @param {number} [from] Unix Timestamp from where to start
+         * @param {number} [to] Unix Timestamp from where to end
+         * @param {number} [limit] Max number of items to return in a response. Defaults to 50k and is capped at 100k. 
+         * @param {string} [continuation] Continuation token from earlier response
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v2GetReportByAddress(platform: string, network: string, address: string, from?: number, to?: number, limit?: number, continuation?: string, options?: any): AxiosPromise<Report> {
+            return localVarFp.v2GetReportByAddress(platform, network, address, from, to, limit, continuation, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Gets transactions that an address was involved with, from newest to oldest. This call uses pagination. 
+         * @summary Transactions Of Address
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {string} address Account address
+         * @param {V2GetTxsByAddressOrderEnum} [order] Pagination order
+         * @param {string} [continuation] Continuation token from earlier response
+         * @param {number} [limit] Max number of items to return in a response. Defaults to 25 and is capped at 100. 
+         * @param {string} [assets] Comma-separated list of asset paths to filter. If the list is empty, or all elements are empty, this filter has no effect.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v2GetTxsByAddress(platform: string, network: string, address: string, order?: V2GetTxsByAddressOrderEnum, continuation?: string, limit?: number, assets?: string, options?: any): AxiosPromise<TxPage> {
+            return localVarFp.v2GetTxsByAddress(platform, network, address, order, continuation, limit, assets, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1679,8 +2455,8 @@ export class AccountsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof AccountsApi
      */
-    public getListOfBalancesByAddress(platform: string, network: string, address: string, assets?: string, options?: any) {
-        return AccountsApiFp(this.configuration).getListOfBalancesByAddress(platform, network, address, assets, options).then((request) => request(this.axios, this.basePath));
+    public getBalancesByAddress(platform: string, network: string, address: string, assets?: string, options?: AxiosRequestConfig) {
+        return AccountsApiFp(this.configuration).getBalancesByAddress(platform, network, address, assets, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1694,8 +2470,36 @@ export class AccountsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof AccountsApi
      */
-    public getListOfBalancesByAddresses(platform: string, network: string, accountsObj: AccountsObj, assets?: string, options?: any) {
-        return AccountsApiFp(this.configuration).getListOfBalancesByAddresses(platform, network, accountsObj, assets, options).then((request) => request(this.axios, this.basePath));
+    public getBalancesByAddresses(platform: string, network: string, accountsObj: AccountsObj, assets?: string, options?: AxiosRequestConfig) {
+        return AccountsApiFp(this.configuration).getBalancesByAddresses(platform, network, accountsObj, assets, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Returns the account balances for all supported currencies. 
+     * @summary Balances Of Address
+     * @param {string} platform Coin platform handle
+     * @param {string} network Which network to target. Available networks can be found with /{platform}
+     * @param {string} address Account address
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountsApi
+     */
+    public getListOfBalancesByAddress(platform: string, network: string, address: string, options?: AxiosRequestConfig) {
+        return AccountsApiFp(this.configuration).getListOfBalancesByAddress(platform, network, address, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Returns the balances of accounts for all supported currencies. 
+     * @summary Balances Of Addresses
+     * @param {string} platform Coin platform handle
+     * @param {string} network Which network to target. Available networks can be found with /{platform}
+     * @param {AccountsObj} accountsObj 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountsApi
+     */
+    public getListOfBalancesByAddresses(platform: string, network: string, accountsObj: AccountsObj, options?: AxiosRequestConfig) {
+        return AccountsApiFp(this.configuration).getListOfBalancesByAddresses(platform, network, accountsObj, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1712,7 +2516,7 @@ export class AccountsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof AccountsApi
      */
-    public getReportByAddress(platform: string, network: string, address: string, from?: number, to?: number, limit?: number, continuation?: string, options?: any) {
+    public getReportByAddress(platform: string, network: string, address: string, from?: number, to?: number, limit?: number, continuation?: string, options?: AxiosRequestConfig) {
         return AccountsApiFp(this.configuration).getReportByAddress(platform, network, address, from, to, limit, continuation, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1722,7 +2526,7 @@ export class AccountsApi extends BaseAPI {
      * @param {string} platform Coin platform handle
      * @param {string} network Which network to target. Available networks can be found with /{platform}
      * @param {string} address Account address
-     * @param {'desc' | 'asc'} [order] Pagination order
+     * @param {GetTxsByAddressOrderEnum} [order] Pagination order
      * @param {string} [continuation] Continuation token from earlier response
      * @param {number} [limit] Max number of items to return in a response. Defaults to 25 and is capped at 100. 
      * @param {string} [assets] Comma-separated list of asset paths to filter. If the list is empty, or all elements are empty, this filter has no effect.
@@ -1730,10 +2534,63 @@ export class AccountsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof AccountsApi
      */
-    public getTxsByAddress(platform: string, network: string, address: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any) {
+    public getTxsByAddress(platform: string, network: string, address: string, order?: GetTxsByAddressOrderEnum, continuation?: string, limit?: number, assets?: string, options?: AxiosRequestConfig) {
         return AccountsApiFp(this.configuration).getTxsByAddress(platform, network, address, order, continuation, limit, assets, options).then((request) => request(this.axios, this.basePath));
     }
+
+    /**
+     * Returns account activity 
+     * @summary A financial report for an address between a time period. Default timescale is within the last 30 days
+     * @param {string} platform Coin platform handle
+     * @param {string} network Which network to target. Available networks can be found with /{platform}
+     * @param {string} address Account address
+     * @param {number} [from] Unix Timestamp from where to start
+     * @param {number} [to] Unix Timestamp from where to end
+     * @param {number} [limit] Max number of items to return in a response. Defaults to 50k and is capped at 100k. 
+     * @param {string} [continuation] Continuation token from earlier response
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountsApi
+     */
+    public v2GetReportByAddress(platform: string, network: string, address: string, from?: number, to?: number, limit?: number, continuation?: string, options?: AxiosRequestConfig) {
+        return AccountsApiFp(this.configuration).v2GetReportByAddress(platform, network, address, from, to, limit, continuation, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Gets transactions that an address was involved with, from newest to oldest. This call uses pagination. 
+     * @summary Transactions Of Address
+     * @param {string} platform Coin platform handle
+     * @param {string} network Which network to target. Available networks can be found with /{platform}
+     * @param {string} address Account address
+     * @param {V2GetTxsByAddressOrderEnum} [order] Pagination order
+     * @param {string} [continuation] Continuation token from earlier response
+     * @param {number} [limit] Max number of items to return in a response. Defaults to 25 and is capped at 100. 
+     * @param {string} [assets] Comma-separated list of asset paths to filter. If the list is empty, or all elements are empty, this filter has no effect.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountsApi
+     */
+    public v2GetTxsByAddress(platform: string, network: string, address: string, order?: V2GetTxsByAddressOrderEnum, continuation?: string, limit?: number, assets?: string, options?: AxiosRequestConfig) {
+        return AccountsApiFp(this.configuration).v2GetTxsByAddress(platform, network, address, order, continuation, limit, assets, options).then((request) => request(this.axios, this.basePath));
+    }
 }
+
+/**
+ * @export
+ */
+export const GetTxsByAddressOrderEnum = {
+    Desc: 'desc',
+    Asc: 'asc'
+} as const;
+export type GetTxsByAddressOrderEnum = typeof GetTxsByAddressOrderEnum[keyof typeof GetTxsByAddressOrderEnum];
+/**
+ * @export
+ */
+export const V2GetTxsByAddressOrderEnum = {
+    Desc: 'desc',
+    Asc: 'asc'
+} as const;
+export type V2GetTxsByAddressOrderEnum = typeof V2GetTxsByAddressOrderEnum[keyof typeof V2GetTxsByAddressOrderEnum];
 
 
 /**
@@ -1751,14 +2608,14 @@ export const BlocksApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getBlock: async (platform: string, network: string, key: string, options: any = {}): Promise<RequestArgs> => {
+        getBlock: async (platform: string, network: string, key: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'platform' is not null or undefined
             assertParamExists('getBlock', 'platform', platform)
             // verify required parameter 'network' is not null or undefined
             assertParamExists('getBlock', 'network', network)
             // verify required parameter 'key' is not null or undefined
             assertParamExists('getBlock', 'key', key)
-            const localVarPath = `/{platform}/{network}/block/{key}`
+            const localVarPath = `/v2/{platform}/{network}/block/{key}`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)))
                 .replace(`{${"key"}}`, encodeURIComponent(String(key)));
@@ -1779,7 +2636,7 @@ export const BlocksApiAxiosParamCreator = function (configuration?: Configuratio
 
 
     
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -1797,14 +2654,14 @@ export const BlocksApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getBlockIdentifier: async (platform: string, network: string, key: string, options: any = {}): Promise<RequestArgs> => {
+        getBlockIdentifier: async (platform: string, network: string, key: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'platform' is not null or undefined
             assertParamExists('getBlockIdentifier', 'platform', platform)
             // verify required parameter 'network' is not null or undefined
             assertParamExists('getBlockIdentifier', 'network', network)
             // verify required parameter 'key' is not null or undefined
             assertParamExists('getBlockIdentifier', 'key', key)
-            const localVarPath = `/{platform}/{network}/block_identifier/{key}`
+            const localVarPath = `/v2/{platform}/{network}/block_identifier/{key}`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)))
                 .replace(`{${"key"}}`, encodeURIComponent(String(key)));
@@ -1825,49 +2682,7 @@ export const BlocksApiAxiosParamCreator = function (configuration?: Configuratio
 
 
     
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Get minimal block identifiers from oldest to newest. This call uses pagination. 
-         * @summary Block Identifiers
-         * @param {string} platform Coin platform handle
-         * @param {string} network Which network to target. Available networks can be found with /{platform}
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getBlockIdentifiers: async (platform: string, network: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'platform' is not null or undefined
-            assertParamExists('getBlockIdentifiers', 'platform', platform)
-            // verify required parameter 'network' is not null or undefined
-            assertParamExists('getBlockIdentifiers', 'network', network)
-            const localVarPath = `/{platform}/{network}/block_identifiers`
-                .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
-                .replace(`{${"network"}}`, encodeURIComponent(String(network)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearerAuth required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -1895,7 +2710,7 @@ export const BlocksApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getBlock(platform: string, network: string, key: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Block>> {
+        async getBlock(platform: string, network: string, key: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Block>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getBlock(platform, network, key, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -1908,20 +2723,8 @@ export const BlocksApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getBlockIdentifier(platform: string, network: string, key: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BlockIdentifier>> {
+        async getBlockIdentifier(platform: string, network: string, key: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BlockIdentifier>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getBlockIdentifier(platform, network, key, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * Get minimal block identifiers from oldest to newest. This call uses pagination. 
-         * @summary Block Identifiers
-         * @param {string} platform Coin platform handle
-         * @param {string} network Which network to target. Available networks can be found with /{platform}
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getBlockIdentifiers(platform: string, network: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BlockIdentifierPage>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getBlockIdentifiers(platform, network, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -1958,17 +2761,6 @@ export const BlocksApiFactory = function (configuration?: Configuration, basePat
         getBlockIdentifier(platform: string, network: string, key: string, options?: any): AxiosPromise<BlockIdentifier> {
             return localVarFp.getBlockIdentifier(platform, network, key, options).then((request) => request(axios, basePath));
         },
-        /**
-         * Get minimal block identifiers from oldest to newest. This call uses pagination. 
-         * @summary Block Identifiers
-         * @param {string} platform Coin platform handle
-         * @param {string} network Which network to target. Available networks can be found with /{platform}
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getBlockIdentifiers(platform: string, network: string, options?: any): AxiosPromise<BlockIdentifierPage> {
-            return localVarFp.getBlockIdentifiers(platform, network, options).then((request) => request(axios, basePath));
-        },
     };
 };
 
@@ -1989,7 +2781,7 @@ export class BlocksApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof BlocksApi
      */
-    public getBlock(platform: string, network: string, key: string, options?: any) {
+    public getBlock(platform: string, network: string, key: string, options?: AxiosRequestConfig) {
         return BlocksApiFp(this.configuration).getBlock(platform, network, key, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2003,23 +2795,11 @@ export class BlocksApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof BlocksApi
      */
-    public getBlockIdentifier(platform: string, network: string, key: string, options?: any) {
+    public getBlockIdentifier(platform: string, network: string, key: string, options?: AxiosRequestConfig) {
         return BlocksApiFp(this.configuration).getBlockIdentifier(platform, network, key, options).then((request) => request(this.axios, this.basePath));
     }
-
-    /**
-     * Get minimal block identifiers from oldest to newest. This call uses pagination. 
-     * @summary Block Identifiers
-     * @param {string} platform Coin platform handle
-     * @param {string} network Which network to target. Available networks can be found with /{platform}
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BlocksApi
-     */
-    public getBlockIdentifiers(platform: string, network: string, options?: any) {
-        return BlocksApiFp(this.configuration).getBlockIdentifiers(platform, network, options).then((request) => request(this.axios, this.basePath));
-    }
 }
+
 
 
 /**
@@ -2036,14 +2816,14 @@ export const NFTApiAxiosParamCreator = function (configuration?: Configuration) 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        explorerGetCollection: async (protocol: string, network: string, id: string, options: any = {}): Promise<RequestArgs> => {
+        explorerGetCollection: async (protocol: string, network: string, id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'protocol' is not null or undefined
             assertParamExists('explorerGetCollection', 'protocol', protocol)
             // verify required parameter 'network' is not null or undefined
             assertParamExists('explorerGetCollection', 'network', network)
             // verify required parameter 'id' is not null or undefined
             assertParamExists('explorerGetCollection', 'id', id)
-            const localVarPath = `/nft/{protocol}/{network}/collection/{id}`
+            const localVarPath = `/v1/nft/{protocol}/{network}/collection/{id}`
                 .replace(`{${"protocol"}}`, encodeURIComponent(String(protocol)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)))
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
@@ -2064,7 +2844,7 @@ export const NFTApiAxiosParamCreator = function (configuration?: Configuration) 
 
 
     
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -2089,12 +2869,12 @@ export const NFTApiAxiosParamCreator = function (configuration?: Configuration) 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        explorerListAssets: async (protocol: string, network: string, walletAddress?: string, contractAddress?: string, tokenIdValue?: number, collectionName?: string, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, attributes?: Array<string>, options: any = {}): Promise<RequestArgs> => {
+        explorerListAssets: async (protocol: string, network: string, walletAddress?: string, contractAddress?: string, tokenIdValue?: number, collectionName?: string, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, attributes?: Array<string>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'protocol' is not null or undefined
             assertParamExists('explorerListAssets', 'protocol', protocol)
             // verify required parameter 'network' is not null or undefined
             assertParamExists('explorerListAssets', 'network', network)
-            const localVarPath = `/nft/{protocol}/{network}/assets`
+            const localVarPath = `/v1/nft/{protocol}/{network}/assets`
                 .replace(`{${"protocol"}}`, encodeURIComponent(String(protocol)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -2150,7 +2930,7 @@ export const NFTApiAxiosParamCreator = function (configuration?: Configuration) 
 
 
     
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -2172,12 +2952,12 @@ export const NFTApiAxiosParamCreator = function (configuration?: Configuration) 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        explorerListCollections: async (protocol: string, network: string, contractAddress?: Array<string>, collectionName?: Array<string>, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, options: any = {}): Promise<RequestArgs> => {
+        explorerListCollections: async (protocol: string, network: string, contractAddress?: Array<string>, collectionName?: Array<string>, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'protocol' is not null or undefined
             assertParamExists('explorerListCollections', 'protocol', protocol)
             // verify required parameter 'network' is not null or undefined
             assertParamExists('explorerListCollections', 'network', network)
-            const localVarPath = `/nft/{protocol}/{network}/collections`
+            const localVarPath = `/v1/nft/{protocol}/{network}/collections`
                 .replace(`{${"protocol"}}`, encodeURIComponent(String(protocol)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -2221,7 +3001,7 @@ export const NFTApiAxiosParamCreator = function (configuration?: Configuration) 
 
 
     
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -2245,12 +3025,12 @@ export const NFTApiAxiosParamCreator = function (configuration?: Configuration) 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        explorerListEvents: async (protocol: string, network: string, contractAddress?: string, walletAddress?: string, tokenId?: number, eventType?: string, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, options: any = {}): Promise<RequestArgs> => {
+        explorerListEvents: async (protocol: string, network: string, contractAddress?: string, walletAddress?: string, tokenId?: number, eventType?: string, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'protocol' is not null or undefined
             assertParamExists('explorerListEvents', 'protocol', protocol)
             // verify required parameter 'network' is not null or undefined
             assertParamExists('explorerListEvents', 'network', network)
-            const localVarPath = `/nft/{protocol}/{network}/events`
+            const localVarPath = `/v1/nft/{protocol}/{network}/events`
                 .replace(`{${"protocol"}}`, encodeURIComponent(String(protocol)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -2302,7 +3082,7 @@ export const NFTApiAxiosParamCreator = function (configuration?: Configuration) 
 
 
     
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -2329,7 +3109,7 @@ export const NFTApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async explorerGetCollection(protocol: string, network: string, id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetCollectionResponse>> {
+        async explorerGetCollection(protocol: string, network: string, id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetCollectionResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.explorerGetCollection(protocol, network, id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -2349,7 +3129,7 @@ export const NFTApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async explorerListAssets(protocol: string, network: string, walletAddress?: string, contractAddress?: string, tokenIdValue?: number, collectionName?: string, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, attributes?: Array<string>, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListAssetsResponse>> {
+        async explorerListAssets(protocol: string, network: string, walletAddress?: string, contractAddress?: string, tokenIdValue?: number, collectionName?: string, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, attributes?: Array<string>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListAssetsResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.explorerListAssets(protocol, network, walletAddress, contractAddress, tokenIdValue, collectionName, sortBy, order, pageSize, pageToken, attributes, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -2366,7 +3146,7 @@ export const NFTApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async explorerListCollections(protocol: string, network: string, contractAddress?: Array<string>, collectionName?: Array<string>, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListCollectionResponse>> {
+        async explorerListCollections(protocol: string, network: string, contractAddress?: Array<string>, collectionName?: Array<string>, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListCollectionResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.explorerListCollections(protocol, network, contractAddress, collectionName, sortBy, order, pageSize, pageToken, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -2385,7 +3165,7 @@ export const NFTApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async explorerListEvents(protocol: string, network: string, contractAddress?: string, walletAddress?: string, tokenId?: number, eventType?: string, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListEventResponse>> {
+        async explorerListEvents(protocol: string, network: string, contractAddress?: string, walletAddress?: string, tokenId?: number, eventType?: string, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListEventResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.explorerListEvents(protocol, network, contractAddress, walletAddress, tokenId, eventType, sortBy, order, pageSize, pageToken, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -2482,7 +3262,7 @@ export class NFTApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof NFTApi
      */
-    public explorerGetCollection(protocol: string, network: string, id: string, options?: any) {
+    public explorerGetCollection(protocol: string, network: string, id: string, options?: AxiosRequestConfig) {
         return NFTApiFp(this.configuration).explorerGetCollection(protocol, network, id, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2503,7 +3283,7 @@ export class NFTApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof NFTApi
      */
-    public explorerListAssets(protocol: string, network: string, walletAddress?: string, contractAddress?: string, tokenIdValue?: number, collectionName?: string, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, attributes?: Array<string>, options?: any) {
+    public explorerListAssets(protocol: string, network: string, walletAddress?: string, contractAddress?: string, tokenIdValue?: number, collectionName?: string, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, attributes?: Array<string>, options?: AxiosRequestConfig) {
         return NFTApiFp(this.configuration).explorerListAssets(protocol, network, walletAddress, contractAddress, tokenIdValue, collectionName, sortBy, order, pageSize, pageToken, attributes, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2521,7 +3301,7 @@ export class NFTApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof NFTApi
      */
-    public explorerListCollections(protocol: string, network: string, contractAddress?: Array<string>, collectionName?: Array<string>, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, options?: any) {
+    public explorerListCollections(protocol: string, network: string, contractAddress?: Array<string>, collectionName?: Array<string>, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, options?: AxiosRequestConfig) {
         return NFTApiFp(this.configuration).explorerListCollections(protocol, network, contractAddress, collectionName, sortBy, order, pageSize, pageToken, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2541,10 +3321,11 @@ export class NFTApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof NFTApi
      */
-    public explorerListEvents(protocol: string, network: string, contractAddress?: string, walletAddress?: string, tokenId?: number, eventType?: string, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, options?: any) {
+    public explorerListEvents(protocol: string, network: string, contractAddress?: string, walletAddress?: string, tokenId?: number, eventType?: string, sortBy?: string, order?: string, pageSize?: number, pageToken?: string, options?: AxiosRequestConfig) {
         return NFTApiFp(this.configuration).explorerListEvents(protocol, network, contractAddress, walletAddress, tokenId, eventType, sortBy, order, pageSize, pageToken, options).then((request) => request(this.axios, this.basePath));
     }
 }
+
 
 
 /**
@@ -2561,12 +3342,12 @@ export const PlatformsApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPlatformEndpoints: async (platform: string, network: string, options: any = {}): Promise<RequestArgs> => {
+        getPlatform: async (platform: string, network: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'platform' is not null or undefined
-            assertParamExists('getPlatformEndpoints', 'platform', platform)
+            assertParamExists('getPlatform', 'platform', platform)
             // verify required parameter 'network' is not null or undefined
-            assertParamExists('getPlatformEndpoints', 'network', network)
-            const localVarPath = `/{platform}/{network}/`
+            assertParamExists('getPlatform', 'network', network)
+            const localVarPath = `/v2/{platform}/{network}`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -2586,7 +3367,7 @@ export const PlatformsApiAxiosParamCreator = function (configuration?: Configura
 
 
     
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -2596,13 +3377,21 @@ export const PlatformsApiAxiosParamCreator = function (configuration?: Configura
             };
         },
         /**
-         * Provides a list of supported platforms and networks. 
-         * @summary Platforms overview
+         * Provides information about supported endpoints and generic platform information. 
+         * @summary Platform Info
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPlatformsList: async (options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/`;
+        getPlatformEndpoints: async (platform: string, network: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'platform' is not null or undefined
+            assertParamExists('getPlatformEndpoints', 'platform', platform)
+            // verify required parameter 'network' is not null or undefined
+            assertParamExists('getPlatformEndpoints', 'network', network)
+            const localVarPath = `/v1/{platform}/{network}/`
+                .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
+                .replace(`{${"network"}}`, encodeURIComponent(String(network)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2620,7 +3409,75 @@ export const PlatformsApiAxiosParamCreator = function (configuration?: Configura
 
 
     
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Provides a list of supported platforms and networks. 
+         * @summary Platforms overview
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPlatforms: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/v2/`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Provides a list of supported platforms and networks. 
+         * @summary Platforms overview
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPlatformsList: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/v1/`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -2647,7 +3504,19 @@ export const PlatformsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getPlatformEndpoints(platform: string, network: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PlatformDetail>> {
+        async getPlatform(platform: string, network: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PlatformDetail>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPlatform(platform, network, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Provides information about supported endpoints and generic platform information. 
+         * @summary Platform Info
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getPlatformEndpoints(platform: string, network: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PlatformDetail>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPlatformEndpoints(platform, network, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -2657,7 +3526,17 @@ export const PlatformsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getPlatformsList(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PlatformsOverview>> {
+        async getPlatforms(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PlatformsOverview>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPlatforms(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Provides a list of supported platforms and networks. 
+         * @summary Platforms overview
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getPlatformsList(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PlatformsOverview>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPlatformsList(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -2679,8 +3558,28 @@ export const PlatformsApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        getPlatform(platform: string, network: string, options?: any): AxiosPromise<PlatformDetail> {
+            return localVarFp.getPlatform(platform, network, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Provides information about supported endpoints and generic platform information. 
+         * @summary Platform Info
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         getPlatformEndpoints(platform: string, network: string, options?: any): AxiosPromise<PlatformDetail> {
             return localVarFp.getPlatformEndpoints(platform, network, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Provides a list of supported platforms and networks. 
+         * @summary Platforms overview
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPlatforms(options?: any): AxiosPromise<PlatformsOverview> {
+            return localVarFp.getPlatforms(options).then((request) => request(axios, basePath));
         },
         /**
          * Provides a list of supported platforms and networks. 
@@ -2710,7 +3609,20 @@ export class PlatformsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof PlatformsApi
      */
-    public getPlatformEndpoints(platform: string, network: string, options?: any) {
+    public getPlatform(platform: string, network: string, options?: AxiosRequestConfig) {
+        return PlatformsApiFp(this.configuration).getPlatform(platform, network, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Provides information about supported endpoints and generic platform information. 
+     * @summary Platform Info
+     * @param {string} platform Coin platform handle
+     * @param {string} network Which network to target. Available networks can be found with /{platform}
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PlatformsApi
+     */
+    public getPlatformEndpoints(platform: string, network: string, options?: AxiosRequestConfig) {
         return PlatformsApiFp(this.configuration).getPlatformEndpoints(platform, network, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2721,10 +3633,22 @@ export class PlatformsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof PlatformsApi
      */
-    public getPlatformsList(options?: any) {
+    public getPlatforms(options?: AxiosRequestConfig) {
+        return PlatformsApiFp(this.configuration).getPlatforms(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Provides a list of supported platforms and networks. 
+     * @summary Platforms overview
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PlatformsApi
+     */
+    public getPlatformsList(options?: AxiosRequestConfig) {
         return PlatformsApiFp(this.configuration).getPlatformsList(options).then((request) => request(this.axios, this.basePath));
     }
 }
+
 
 
 /**
@@ -2741,12 +3665,12 @@ export const SyncApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        currentBlockID: async (platform: string, network: string, options: any = {}): Promise<RequestArgs> => {
+        currentBlockID: async (platform: string, network: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'platform' is not null or undefined
             assertParamExists('currentBlockID', 'platform', platform)
             // verify required parameter 'network' is not null or undefined
             assertParamExists('currentBlockID', 'network', network)
-            const localVarPath = `/{platform}/{network}/sync/block_id`
+            const localVarPath = `/v2/{platform}/{network}/sync/block_id`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -2766,7 +3690,7 @@ export const SyncApiAxiosParamCreator = function (configuration?: Configuration)
 
 
     
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -2783,12 +3707,12 @@ export const SyncApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        currentBlockNumber: async (platform: string, network: string, options: any = {}): Promise<RequestArgs> => {
+        currentBlockNumber: async (platform: string, network: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'platform' is not null or undefined
             assertParamExists('currentBlockNumber', 'platform', platform)
             // verify required parameter 'network' is not null or undefined
             assertParamExists('currentBlockNumber', 'network', network)
-            const localVarPath = `/{platform}/{network}/sync/block_number`
+            const localVarPath = `/v2/{platform}/{network}/sync/block_number`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -2808,7 +3732,7 @@ export const SyncApiAxiosParamCreator = function (configuration?: Configuration)
 
 
     
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -2835,7 +3759,7 @@ export const SyncApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async currentBlockID(platform: string, network: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+        async currentBlockID(platform: string, network: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.currentBlockID(platform, network, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -2847,7 +3771,7 @@ export const SyncApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async currentBlockNumber(platform: string, network: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<number>> {
+        async currentBlockNumber(platform: string, network: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<number>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.currentBlockNumber(platform, network, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -2902,7 +3826,7 @@ export class SyncApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof SyncApi
      */
-    public currentBlockID(platform: string, network: string, options?: any) {
+    public currentBlockID(platform: string, network: string, options?: AxiosRequestConfig) {
         return SyncApiFp(this.configuration).currentBlockID(platform, network, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2915,10 +3839,11 @@ export class SyncApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof SyncApi
      */
-    public currentBlockNumber(platform: string, network: string, options?: any) {
+    public currentBlockNumber(platform: string, network: string, options?: AxiosRequestConfig) {
         return SyncApiFp(this.configuration).currentBlockNumber(platform, network, options).then((request) => request(this.axios, this.basePath));
     }
 }
+
 
 
 /**
@@ -2928,6 +3853,53 @@ export class SyncApi extends BaseAPI {
 export const TransactionsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * Get a fee estimation in decimals from the network. If supported by the platform, the number of blocks used to make the estimation can be customized by the confirmed_within_blocks query parameter. 
+         * @summary Get fee estimate
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {number} [confirmedWithinBlocks] The number of blocks you would like the transaction to be processed within. Lower numbers produce higher fees. 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        estimateFee: async (platform: string, network: string, confirmedWithinBlocks?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'platform' is not null or undefined
+            assertParamExists('estimateFee', 'platform', platform)
+            // verify required parameter 'network' is not null or undefined
+            assertParamExists('estimateFee', 'network', network)
+            const localVarPath = `/v2/{platform}/{network}/tx/estimate_fee`
+                .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
+                .replace(`{${"network"}}`, encodeURIComponent(String(network)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (confirmedWithinBlocks !== undefined) {
+                localVarQueryParameter['confirmed_within_blocks'] = confirmedWithinBlocks;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Get a fee estimation in decimals from the ubiquity fee estimation service. Currently supported for Bitcoin and Ethereum. Endpoint will return 3 fee estimations fast, medium and slow 
          * @summary Get fee estimate
          * @param {string} platform Coin platform handle
@@ -2935,12 +3907,12 @@ export const TransactionsApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        feeEstimate: async (platform: string, network: string, options: any = {}): Promise<RequestArgs> => {
+        feeEstimate: async (platform: string, network: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'platform' is not null or undefined
             assertParamExists('feeEstimate', 'platform', platform)
             // verify required parameter 'network' is not null or undefined
             assertParamExists('feeEstimate', 'network', network)
-            const localVarPath = `/{platform}/{network}/tx/estimate_fee`
+            const localVarPath = `/v1/{platform}/{network}/tx/estimate_fee`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -2960,7 +3932,7 @@ export const TransactionsApiAxiosParamCreator = function (configuration?: Config
 
 
     
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -2978,14 +3950,14 @@ export const TransactionsApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTx: async (platform: string, network: string, id: string, options: any = {}): Promise<RequestArgs> => {
+        getTx: async (platform: string, network: string, id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'platform' is not null or undefined
             assertParamExists('getTx', 'platform', platform)
             // verify required parameter 'network' is not null or undefined
             assertParamExists('getTx', 'network', network)
             // verify required parameter 'id' is not null or undefined
             assertParamExists('getTx', 'id', id)
-            const localVarPath = `/{platform}/{network}/tx/{id}`
+            const localVarPath = `/v2/{platform}/{network}/tx/{id}`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)))
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
@@ -3006,7 +3978,7 @@ export const TransactionsApiAxiosParamCreator = function (configuration?: Config
 
 
     
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -3025,7 +3997,7 @@ export const TransactionsApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTxByHashAndIndex: async (platform: string, network: string, id: string, index: number, options: any = {}): Promise<RequestArgs> => {
+        getTxByHashAndIndex: async (platform: string, network: string, id: string, index: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'platform' is not null or undefined
             assertParamExists('getTxByHashAndIndex', 'platform', platform)
             // verify required parameter 'network' is not null or undefined
@@ -3034,7 +4006,7 @@ export const TransactionsApiAxiosParamCreator = function (configuration?: Config
             assertParamExists('getTxByHashAndIndex', 'id', id)
             // verify required parameter 'index' is not null or undefined
             assertParamExists('getTxByHashAndIndex', 'index', index)
-            const localVarPath = `/{platform}/{network}/tx/{id}/{index}`
+            const localVarPath = `/v1/{platform}/{network}/tx/{id}/{index}`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)))
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)))
@@ -3056,7 +4028,7 @@ export const TransactionsApiAxiosParamCreator = function (configuration?: Config
 
 
     
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -3074,14 +4046,14 @@ export const TransactionsApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTxConfirmations: async (platform: string, network: string, id: string, options: any = {}): Promise<RequestArgs> => {
+        getTxConfirmations: async (platform: string, network: string, id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'platform' is not null or undefined
             assertParamExists('getTxConfirmations', 'platform', platform)
             // verify required parameter 'network' is not null or undefined
             assertParamExists('getTxConfirmations', 'network', network)
             // verify required parameter 'id' is not null or undefined
             assertParamExists('getTxConfirmations', 'id', id)
-            const localVarPath = `/{platform}/{network}/tx/{id}/confirmations`
+            const localVarPath = `/v1/{platform}/{network}/tx/{id}/confirmations`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)))
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
@@ -3102,7 +4074,7 @@ export const TransactionsApiAxiosParamCreator = function (configuration?: Config
 
 
     
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -3112,23 +4084,23 @@ export const TransactionsApiAxiosParamCreator = function (configuration?: Config
             };
         },
         /**
-         * Gets transactions from oldest to newest. This call uses pagination. 
-         * @summary Latest transactions of a protocol
+         * Get all transactions on the platform, starting with the lastest one. Each call returns a slice of the entire list. Use the returned continuation token to get the next part.
+         * @summary All Transactions
          * @param {string} platform Coin platform handle
          * @param {string} network Which network to target. Available networks can be found with /{platform}
-         * @param {'desc' | 'asc'} [order] Pagination order
+         * @param {GetTxsOrderEnum} [order] Pagination order
          * @param {string} [continuation] Continuation token from earlier response
          * @param {number} [limit] Max number of items to return in a response. Defaults to 25 and is capped at 100. 
          * @param {string} [assets] Comma-separated list of asset paths to filter. If the list is empty, or all elements are empty, this filter has no effect.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTxs: async (platform: string, network: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options: any = {}): Promise<RequestArgs> => {
+        getTxs: async (platform: string, network: string, order?: GetTxsOrderEnum, continuation?: string, limit?: number, assets?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'platform' is not null or undefined
             assertParamExists('getTxs', 'platform', platform)
             // verify required parameter 'network' is not null or undefined
             assertParamExists('getTxs', 'network', network)
-            const localVarPath = `/{platform}/{network}/txs`
+            const localVarPath = `/v2/{platform}/{network}/txs`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -3164,7 +4136,7 @@ export const TransactionsApiAxiosParamCreator = function (configuration?: Config
 
 
     
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
@@ -3182,14 +4154,14 @@ export const TransactionsApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        txSend: async (platform: string, network: string, signedTx: SignedTx, options: any = {}): Promise<RequestArgs> => {
+        txSend: async (platform: string, network: string, signedTx: SignedTx, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'platform' is not null or undefined
             assertParamExists('txSend', 'platform', platform)
             // verify required parameter 'network' is not null or undefined
             assertParamExists('txSend', 'network', network)
             // verify required parameter 'signedTx' is not null or undefined
             assertParamExists('txSend', 'signedTx', signedTx)
-            const localVarPath = `/{platform}/{network}/tx/send`
+            const localVarPath = `/v2/{platform}/{network}/tx/send`
                 .replace(`{${"platform"}}`, encodeURIComponent(String(platform)))
                 .replace(`{${"network"}}`, encodeURIComponent(String(network)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -3211,7 +4183,7 @@ export const TransactionsApiAxiosParamCreator = function (configuration?: Config
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(signedTx, localVarRequestOptions, configuration)
@@ -3232,6 +4204,19 @@ export const TransactionsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = TransactionsApiAxiosParamCreator(configuration)
     return {
         /**
+         * Get a fee estimation in decimals from the network. If supported by the platform, the number of blocks used to make the estimation can be customized by the confirmed_within_blocks query parameter. 
+         * @summary Get fee estimate
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {number} [confirmedWithinBlocks] The number of blocks you would like the transaction to be processed within. Lower numbers produce higher fees. 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async estimateFee(platform: string, network: string, confirmedWithinBlocks?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.estimateFee(platform, network, confirmedWithinBlocks, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * Get a fee estimation in decimals from the ubiquity fee estimation service. Currently supported for Bitcoin and Ethereum. Endpoint will return 3 fee estimations fast, medium and slow 
          * @summary Get fee estimate
          * @param {string} platform Coin platform handle
@@ -3239,7 +4224,7 @@ export const TransactionsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async feeEstimate(platform: string, network: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FeeEstimate>> {
+        async feeEstimate(platform: string, network: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FeeEstimate>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.feeEstimate(platform, network, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -3252,7 +4237,7 @@ export const TransactionsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getTx(platform: string, network: string, id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Tx>> {
+        async getTx(platform: string, network: string, id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Tx>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getTx(platform, network, id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -3266,7 +4251,7 @@ export const TransactionsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getTxByHashAndIndex(platform: string, network: string, id: string, index: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TxOutput>> {
+        async getTxByHashAndIndex(platform: string, network: string, id: string, index: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TxOutput>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getTxByHashAndIndex(platform, network, id, index, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -3279,23 +4264,23 @@ export const TransactionsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getTxConfirmations(platform: string, network: string, id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TxConfirmation>> {
+        async getTxConfirmations(platform: string, network: string, id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TxConfirmation>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getTxConfirmations(platform, network, id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Gets transactions from oldest to newest. This call uses pagination. 
-         * @summary Latest transactions of a protocol
+         * Get all transactions on the platform, starting with the lastest one. Each call returns a slice of the entire list. Use the returned continuation token to get the next part.
+         * @summary All Transactions
          * @param {string} platform Coin platform handle
          * @param {string} network Which network to target. Available networks can be found with /{platform}
-         * @param {'desc' | 'asc'} [order] Pagination order
+         * @param {GetTxsOrderEnum} [order] Pagination order
          * @param {string} [continuation] Continuation token from earlier response
          * @param {number} [limit] Max number of items to return in a response. Defaults to 25 and is capped at 100. 
          * @param {string} [assets] Comma-separated list of asset paths to filter. If the list is empty, or all elements are empty, this filter has no effect.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getTxs(platform: string, network: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TxPage>> {
+        async getTxs(platform: string, network: string, order?: GetTxsOrderEnum, continuation?: string, limit?: number, assets?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TxPage>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getTxs(platform, network, order, continuation, limit, assets, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -3308,7 +4293,7 @@ export const TransactionsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async txSend(platform: string, network: string, signedTx: SignedTx, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TxReceipt>> {
+        async txSend(platform: string, network: string, signedTx: SignedTx, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TxReceipt>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.txSend(platform, network, signedTx, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -3322,6 +4307,18 @@ export const TransactionsApiFp = function(configuration?: Configuration) {
 export const TransactionsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = TransactionsApiFp(configuration)
     return {
+        /**
+         * Get a fee estimation in decimals from the network. If supported by the platform, the number of blocks used to make the estimation can be customized by the confirmed_within_blocks query parameter. 
+         * @summary Get fee estimate
+         * @param {string} platform Coin platform handle
+         * @param {string} network Which network to target. Available networks can be found with /{platform}
+         * @param {number} [confirmedWithinBlocks] The number of blocks you would like the transaction to be processed within. Lower numbers produce higher fees. 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        estimateFee(platform: string, network: string, confirmedWithinBlocks?: number, options?: any): AxiosPromise<string> {
+            return localVarFp.estimateFee(platform, network, confirmedWithinBlocks, options).then((request) => request(axios, basePath));
+        },
         /**
          * Get a fee estimation in decimals from the ubiquity fee estimation service. Currently supported for Bitcoin and Ethereum. Endpoint will return 3 fee estimations fast, medium and slow 
          * @summary Get fee estimate
@@ -3371,18 +4368,18 @@ export const TransactionsApiFactory = function (configuration?: Configuration, b
             return localVarFp.getTxConfirmations(platform, network, id, options).then((request) => request(axios, basePath));
         },
         /**
-         * Gets transactions from oldest to newest. This call uses pagination. 
-         * @summary Latest transactions of a protocol
+         * Get all transactions on the platform, starting with the lastest one. Each call returns a slice of the entire list. Use the returned continuation token to get the next part.
+         * @summary All Transactions
          * @param {string} platform Coin platform handle
          * @param {string} network Which network to target. Available networks can be found with /{platform}
-         * @param {'desc' | 'asc'} [order] Pagination order
+         * @param {GetTxsOrderEnum} [order] Pagination order
          * @param {string} [continuation] Continuation token from earlier response
          * @param {number} [limit] Max number of items to return in a response. Defaults to 25 and is capped at 100. 
          * @param {string} [assets] Comma-separated list of asset paths to filter. If the list is empty, or all elements are empty, this filter has no effect.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTxs(platform: string, network: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any): AxiosPromise<TxPage> {
+        getTxs(platform: string, network: string, order?: GetTxsOrderEnum, continuation?: string, limit?: number, assets?: string, options?: any): AxiosPromise<TxPage> {
             return localVarFp.getTxs(platform, network, order, continuation, limit, assets, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3408,6 +4405,20 @@ export const TransactionsApiFactory = function (configuration?: Configuration, b
  */
 export class TransactionsApi extends BaseAPI {
     /**
+     * Get a fee estimation in decimals from the network. If supported by the platform, the number of blocks used to make the estimation can be customized by the confirmed_within_blocks query parameter. 
+     * @summary Get fee estimate
+     * @param {string} platform Coin platform handle
+     * @param {string} network Which network to target. Available networks can be found with /{platform}
+     * @param {number} [confirmedWithinBlocks] The number of blocks you would like the transaction to be processed within. Lower numbers produce higher fees. 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TransactionsApi
+     */
+    public estimateFee(platform: string, network: string, confirmedWithinBlocks?: number, options?: AxiosRequestConfig) {
+        return TransactionsApiFp(this.configuration).estimateFee(platform, network, confirmedWithinBlocks, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Get a fee estimation in decimals from the ubiquity fee estimation service. Currently supported for Bitcoin and Ethereum. Endpoint will return 3 fee estimations fast, medium and slow 
      * @summary Get fee estimate
      * @param {string} platform Coin platform handle
@@ -3416,7 +4427,7 @@ export class TransactionsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TransactionsApi
      */
-    public feeEstimate(platform: string, network: string, options?: any) {
+    public feeEstimate(platform: string, network: string, options?: AxiosRequestConfig) {
         return TransactionsApiFp(this.configuration).feeEstimate(platform, network, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -3430,7 +4441,7 @@ export class TransactionsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TransactionsApi
      */
-    public getTx(platform: string, network: string, id: string, options?: any) {
+    public getTx(platform: string, network: string, id: string, options?: AxiosRequestConfig) {
         return TransactionsApiFp(this.configuration).getTx(platform, network, id, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -3445,7 +4456,7 @@ export class TransactionsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TransactionsApi
      */
-    public getTxByHashAndIndex(platform: string, network: string, id: string, index: number, options?: any) {
+    public getTxByHashAndIndex(platform: string, network: string, id: string, index: number, options?: AxiosRequestConfig) {
         return TransactionsApiFp(this.configuration).getTxByHashAndIndex(platform, network, id, index, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -3459,16 +4470,16 @@ export class TransactionsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TransactionsApi
      */
-    public getTxConfirmations(platform: string, network: string, id: string, options?: any) {
+    public getTxConfirmations(platform: string, network: string, id: string, options?: AxiosRequestConfig) {
         return TransactionsApiFp(this.configuration).getTxConfirmations(platform, network, id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * Gets transactions from oldest to newest. This call uses pagination. 
-     * @summary Latest transactions of a protocol
+     * Get all transactions on the platform, starting with the lastest one. Each call returns a slice of the entire list. Use the returned continuation token to get the next part.
+     * @summary All Transactions
      * @param {string} platform Coin platform handle
      * @param {string} network Which network to target. Available networks can be found with /{platform}
-     * @param {'desc' | 'asc'} [order] Pagination order
+     * @param {GetTxsOrderEnum} [order] Pagination order
      * @param {string} [continuation] Continuation token from earlier response
      * @param {number} [limit] Max number of items to return in a response. Defaults to 25 and is capped at 100. 
      * @param {string} [assets] Comma-separated list of asset paths to filter. If the list is empty, or all elements are empty, this filter has no effect.
@@ -3476,7 +4487,7 @@ export class TransactionsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TransactionsApi
      */
-    public getTxs(platform: string, network: string, order?: 'desc' | 'asc', continuation?: string, limit?: number, assets?: string, options?: any) {
+    public getTxs(platform: string, network: string, order?: GetTxsOrderEnum, continuation?: string, limit?: number, assets?: string, options?: AxiosRequestConfig) {
         return TransactionsApiFp(this.configuration).getTxs(platform, network, order, continuation, limit, assets, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -3490,9 +4501,18 @@ export class TransactionsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TransactionsApi
      */
-    public txSend(platform: string, network: string, signedTx: SignedTx, options?: any) {
+    public txSend(platform: string, network: string, signedTx: SignedTx, options?: AxiosRequestConfig) {
         return TransactionsApiFp(this.configuration).txSend(platform, network, signedTx, options).then((request) => request(this.axios, this.basePath));
     }
 }
+
+/**
+ * @export
+ */
+export const GetTxsOrderEnum = {
+    Desc: 'desc',
+    Asc: 'asc'
+} as const;
+export type GetTxsOrderEnum = typeof GetTxsOrderEnum[keyof typeof GetTxsOrderEnum];
 
 
